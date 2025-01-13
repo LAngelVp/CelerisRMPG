@@ -28,7 +28,7 @@ class PagosClientes(Variables):
         d = df.copy()
 
         #Eliminamos las columnas que no se van a ocupar.
-        d.drop({'Hora Pago', 'Referencia', 'Días Plazo', 'DocumentoMSC', 'Observaciones Pago', 'Referencia Forma de Pago', 'Sucursal Responsable'}, axis=1, inplace=True)
+        d.drop({'Hora Pago', 'Referencia', 'Días Plazo', 'DocumentoMSC', 'Observaciones Pago', 'Referencia Forma de Pago', 'Sucursal Responsable', 'Folio Interno Factura'}, axis=1, inplace=True)
         #d = d.rename(columns={'Tipo_Docto.':'Tipo Docto'})
 
         # damos formato a todas las cabeceras de las columnas.

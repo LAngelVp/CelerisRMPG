@@ -115,27 +115,29 @@ class Inventario(Variables):
 
         df_inventarioCosteadoxDia.insert(12, "ClassAlmacen", df_inventarioCosteadoxDia.pop("ClassAlmacen"))
 
-        df_inventarioCosteadoxDia.loc[df_inventarioCosteadoxDia["Almacén"].str.contains("Infant"), "ClassAlmacen"] = "Inventario de Seguridad"
+        df_inventarioCosteadoxDia.loc[df_inventarioCosteadoxDia["Almacén"].str.lower().str.contains("infan"), "ClassAlmacen"] = "Inventario de Seguridad"
 
 
-        df_inventarioCosteadoxDia.loc[df_inventarioCosteadoxDia["Almacén"].str.contains("MX"), "ClassAlmacen"] = "Inventario de Seguridad"
+        df_inventarioCosteadoxDia.loc[df_inventarioCosteadoxDia["Almacén"].str.lower().str.contains("mx"), "ClassAlmacen"] = "Inventario de Seguridad"
 
-        df_inventarioCosteadoxDia.loc[df_inventarioCosteadoxDia["Almacén"].str.contains("KW45/55"), "ClassAlmacen"] = "Inventario de Seguridad"
+        df_inventarioCosteadoxDia.loc[df_inventarioCosteadoxDia["Almacén"].str.lower().str.contains("kw45"), "ClassAlmacen"] = "Inventario de Seguridad"
         
-        df_inventarioCosteadoxDia.loc[df_inventarioCosteadoxDia["Almacén"].str.contains("T380"), "ClassAlmacen"] = "Inventario de Seguridad"
+        df_inventarioCosteadoxDia.loc[df_inventarioCosteadoxDia["Almacén"].str.lower().str.contains("t380"), "ClassAlmacen"] = "Inventario de Seguridad"
         
-        df_inventarioCosteadoxDia.loc[df_inventarioCosteadoxDia["Almacén"].str.contains("T680"), "ClassAlmacen"] = "Inventario de Seguridad"
+        df_inventarioCosteadoxDia.loc[df_inventarioCosteadoxDia["Almacén"].str.lower().str.contains("t680"), "ClassAlmacen"] = "Inventario de Seguridad"
         
-        df_inventarioCosteadoxDia.loc[df_inventarioCosteadoxDia["Almacén"].str.contains("DAF"), "ClassAlmacen"] = "Inventario de Seguridad"
+        df_inventarioCosteadoxDia.loc[df_inventarioCosteadoxDia["Almacén"].str.lower().str.contains("daf"), "ClassAlmacen"] = "Inventario de Seguridad"
 
-        df_inventarioCosteadoxDia.loc[df_inventarioCosteadoxDia["Almacén"].str.contains("Servicio Express"), "ClassAlmacen"] = "Inventario de Seguridad"
+        df_inventarioCosteadoxDia.loc[df_inventarioCosteadoxDia["Almacén"].str.lower().str.contains("servicio express"), "ClassAlmacen"] = "Inventario de Seguridad"
+        
+        df_inventarioCosteadoxDia.loc[df_inventarioCosteadoxDia["Almacén"].str.lower().str.contains("ultrashift"), "ClassAlmacen"] = "Inventario de Seguridad"
 
-        df_inventarioCosteadoxDia.loc[(df_inventarioCosteadoxDia["Almacén"].str.contains("Rescates")) | 
-                                     (df_inventarioCosteadoxDia["Almacén"].str.contains("Rescate")), "ClassAlmacen"] = "Inventario de Seguridad"
+        df_inventarioCosteadoxDia.loc[(df_inventarioCosteadoxDia["Almacén"].str.lower().str.contains("rescates")) | 
+                                     (df_inventarioCosteadoxDia["Almacén"].str.lower().str.contains("rescate")), "ClassAlmacen"] = "Inventario de Seguridad"
 
 
-        df_inventarioCosteadoxDia.loc[(df_inventarioCosteadoxDia["Almacén"].str.contains("Consigna")) | 
-                                     ( df_inventarioCosteadoxDia["Almacén"].str.contains("Consignas")), "ClassAlmacen"] = "Consigna"
+        df_inventarioCosteadoxDia.loc[(df_inventarioCosteadoxDia["Almacén"].str.lower().str.contains("consigna")) | 
+                                     ( df_inventarioCosteadoxDia["Almacén"].str.lower().str.contains("consignas")), "ClassAlmacen"] = "Consigna"
 
         # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc2, df_inventarioCosteadoxDia, self.concesionario)

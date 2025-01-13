@@ -33,6 +33,7 @@ class KenworthConnect():
     
     def InventarioKREIKWESTE(self):
         InventarioKWESTEKREI().InventarioKWESTE_KREI()
+        
 #REFACCIONES
     def RefaccionesKREIKWSUR(self):
         RefaccionesKWESTEKREI().RefaccionesKWSUR_KREI()

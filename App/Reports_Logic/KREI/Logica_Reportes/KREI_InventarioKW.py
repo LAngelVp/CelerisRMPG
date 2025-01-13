@@ -48,26 +48,28 @@ class InventarioKWESTEKREI(Variables):
 
         df2["ClassAlmacen"] = "Inventario"
 
-        df2.loc[df2["Almacén"].str.contains("Infant"), "ClassAlmacen"] = "Inventario de Seguridad"
+        df2.loc[df2["Almacén"].str.lower().str.contains("infan"), "ClassAlmacen"] = "Inventario de Seguridad"
 
-        df2.loc[df2["Almacén"].str.contains("MX"), "ClassAlmacen"] = "Inventario de Seguridad"
+        df2.loc[df2["Almacén"].str.lower().str.contains("mx"), "ClassAlmacen"] = "Inventario de Seguridad"
         
-        df2.loc[df2["Almacén"].str.contains("T380"), "ClassAlmacen"] = "Inventario de Seguridad"
+        df2.loc[df2["Almacén"].str.lower().str.contains("t380"), "ClassAlmacen"] = "Inventario de Seguridad"
         
-        df2.loc[df2["Almacén"].str.contains("T680"), "ClassAlmacen"] = "Inventario de Seguridad"
+        df2.loc[df2["Almacén"].str.lower().str.contains("t680"), "ClassAlmacen"] = "Inventario de Seguridad"
         
-        df2.loc[df2["Almacén"].str.contains("DAF"), "ClassAlmacen"] = "Inventario de Seguridad"
+        df2.loc[df2["Almacén"].str.lower().str.contains("daf"), "ClassAlmacen"] = "Inventario de Seguridad"
 
-        df2.loc[df2["Almacén"].str.contains("KW45/55"), "ClassAlmacen"] = "Inventario de Seguridad"
+        df2.loc[df2["Almacén"].str.lower().str.contains("kw45"), "ClassAlmacen"] = "Inventario de Seguridad"
 
-        df2.loc[df2["Almacén"].str.contains("Servicio Express"), "ClassAlmacen"] = "Inventario de Seguridad"
+        df2.loc[df2["Almacén"].str.lower().str.contains("servicio express"), "ClassAlmacen"] = "Inventario de Seguridad"
+        
+        df2.loc[df2["Almacén"].str.lower().str.contains("ultrashift"), "ClassAlmacen"] = "Inventario de Seguridad"
 
-        df2.loc[(df2["Almacén"].str.contains("Rescates")) | 
-                                     (df2["Almacén"].str.contains("Rescate")), "ClassAlmacen"] = "Inventario de Seguridad"
+        df2.loc[(df2["Almacén"].str.lower().str.contains("rescates")) | 
+                                    (df2["Almacén"].str.lower().str.contains("rescate")), "ClassAlmacen"] = "Inventario de Seguridad"
 
 
-        df2.loc[(df2["Almacén"].str.contains("Consigna")) | 
-                                     ( df2["Almacén"].str.contains("Consignas")), "ClassAlmacen"] = "Consigna"
+        df2.loc[(df2["Almacén"].str.lower().str.contains("consigna")) | 
+                                    ( df2["Almacén"].str.contains("consignas")), "ClassAlmacen"] = "Consigna"
 
         columnas_bol=df2.select_dtypes(include=bool).columns.tolist()
         df2[columnas_bol] = df2[columnas_bol].astype(str)
@@ -110,26 +112,28 @@ class InventarioKWESTEKREI(Variables):
 
         df2["ClassAlmacen"] = "Inventario"
 
-        df2.loc[df2["Almacén"].str.contains("Infant"), "ClassAlmacen"] = "Inventario de Seguridad"
+        df2.loc[df2["Almacén"].str.lower().str.contains("infan"), "ClassAlmacen"] = "Inventario de Seguridad"
 
-        df2.loc[df2["Almacén"].str.contains("T380"), "ClassAlmacen"] = "Inventario de Seguridad"
+        df2.loc[df2["Almacén"].str.lower().str.contains("mx"), "ClassAlmacen"] = "Inventario de Seguridad"
         
-        df2.loc[df2["Almacén"].str.contains("T680"), "ClassAlmacen"] = "Inventario de Seguridad"
+        df2.loc[df2["Almacén"].str.lower().str.contains("t380"), "ClassAlmacen"] = "Inventario de Seguridad"
         
-        df2.loc[df2["Almacén"].str.contains("DAF"), "ClassAlmacen"] = "Inventario de Seguridad"
+        df2.loc[df2["Almacén"].str.lower().str.contains("t680"), "ClassAlmacen"] = "Inventario de Seguridad"
+        
+        df2.loc[df2["Almacén"].str.lower().str.contains("daf"), "ClassAlmacen"] = "Inventario de Seguridad"
 
-        df2.loc[df2["Almacén"].str.contains("MX"), "ClassAlmacen"] = "Inventario de Seguridad"
+        df2.loc[df2["Almacén"].str.lower().str.contains("kw45"), "ClassAlmacen"] = "Inventario de Seguridad"
 
-        df2.loc[df2["Almacén"].str.contains("KW45/55"), "ClassAlmacen"] = "Inventario de Seguridad"
+        df2.loc[df2["Almacén"].str.lower().str.contains("servicio express"), "ClassAlmacen"] = "Inventario de Seguridad"
+        
+        df2.loc[df2["Almacén"].str.lower().str.contains("ultrashift"), "ClassAlmacen"] = "Inventario de Seguridad"
 
-        df2.loc[df2["Almacén"].str.contains("Servicio Express"), "ClassAlmacen"] = "Inventario de Seguridad"
-
-        df2.loc[(df2["Almacén"].str.contains("Rescates")) | 
-                                     (df2["Almacén"].str.contains("Rescate")), "ClassAlmacen"] = "Inventario de Seguridad"
+        df2.loc[(df2["Almacén"].str.lower().str.contains("rescates")) | 
+                                    (df2["Almacén"].str.lower().str.contains("rescate")), "ClassAlmacen"] = "Inventario de Seguridad"
 
 
-        df2.loc[(df2["Almacén"].str.contains("Consigna")) | 
-                                     ( df2["Almacén"].str.contains("Consignas")), "ClassAlmacen"] = "Consigna"
+        df2.loc[(df2["Almacén"].str.lower().str.contains("consigna")) | 
+                                    ( df2["Almacén"].str.contains("consignas")), "ClassAlmacen"] = "Consigna"
 
         columnas_bol=df2.select_dtypes(include=bool).columns.tolist()
         df2[columnas_bol] = df2[columnas_bol].astype(str)
