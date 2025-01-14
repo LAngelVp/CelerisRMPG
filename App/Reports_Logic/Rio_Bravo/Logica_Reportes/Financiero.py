@@ -90,7 +90,7 @@ class ResultadosFinancieros(Variables):
             )
 
             departamento = df_unidades_facturadas_ordenado["Modelo"].apply(lambda x: self.obtenerDepartamento(x))
-            col_numero_articulo = "CH-" + df_unidades_facturadas_ordenado["Numarticulo"].map(str)
+            col_numero_articulo = "UN-" + df_unidades_facturadas_ordenado["Numarticulo"].map(str)
             col_modelo = "AM" + df_unidades_facturadas_ordenado["Modelo"].map(str)
 
             df_unidades_facturadas_ordenado["Numarticulo"] = col_numero_articulo
