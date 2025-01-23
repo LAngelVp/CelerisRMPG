@@ -51,6 +51,6 @@ class KenworthConnect():
 
     def ResultadosFinancierosEsteKREI(self):
         ResultadosFinancierosKREI().ReporteFinancieroKWESTE_KREI()
-    
+        
     def ResultadosFinancierosSurKREI(self):
         ResultadosFinancierosKREI().ReporteFinancieroKWSUR_KREI()

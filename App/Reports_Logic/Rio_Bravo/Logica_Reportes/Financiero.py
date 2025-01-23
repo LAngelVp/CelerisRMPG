@@ -22,6 +22,8 @@ class ResultadosFinancieros(Variables):
             "Sucursal",
             "Numarticulo",
             "idCliente",
+            "NomDepto",
+            "CondicionUnidad",
             "NombreCte",
             "idClienteAsignatario",
             "NombreCteAsignatario",
@@ -51,7 +53,7 @@ class ResultadosFinancieros(Variables):
         df = df.replace(to_replace=';', value='-', regex=True)
         
         # creamos la tabla pivote, con el fin de obtener las unidades facturadas
-        pivot = pd.pivot_table(df, index=['Numarticulo', 'Modelo', 'Sucursal', 'idCliente', 'NombreCte', 'idClienteAsignatario', 'NombreCteAsignatario', 'NumCategoria', 'Vendedor'], values=['cantidad', 'Venta', 'NC Bonif', 'VentasNetas', 'CostoTotal', 'UtilidadBruta', '% Margen Conc', 'Compras', 'VtasInternas', 'NCreddeProv', 'NCargodeProv',	'ProvNCargoCargo',	'ProvNCargoAbono',	'ProvNCredCargo',	'ProvNCredAbono',	'NotaCargoCte'
+        pivot = pd.pivot_table(df, index=['Numarticulo', 'Modelo', 'Sucursal', 'idCliente', 'NombreCte', 'idClienteAsignatario', 'NombreCteAsignatario', 'NumCategoria', 'Vendedor', 'NomDepto', 'CondicionUnidad'], values=['cantidad', 'Venta', 'NC Bonif', 'VentasNetas', 'CostoTotal', 'UtilidadBruta', '% Margen Conc', 'Compras', 'VtasInternas', 'NCreddeProv', 'NCargodeProv',	'ProvNCargoCargo',	'ProvNCargoAbono',	'ProvNCredCargo',	'ProvNCredAbono',	'NotaCargoCte'
         ],  aggfunc='sum')
         
 
@@ -89,7 +91,7 @@ class ResultadosFinancieros(Variables):
                 allow_duplicates=False
             )
 
-            departamento = df_unidades_facturadas_ordenado["Modelo"].apply(lambda x: self.obtenerDepartamento(x))
+            departamento = df_unidades_facturadas_ordenado["CondicionUnidad"].apply(lambda x: self.obtenerDepartamento(x))
             col_numero_articulo = "UN-" + df_unidades_facturadas_ordenado["Numarticulo"].map(str)
             col_modelo = "AM" + df_unidades_facturadas_ordenado["Modelo"].map(str)
 
@@ -124,13 +126,15 @@ class ResultadosFinancieros(Variables):
 
             columnas_bol=df_unidades_facturadas_ordenado.select_dtypes(include=bool).columns.tolist()
             df_unidades_facturadas_ordenado[columnas_bol] = df_unidades_facturadas_ordenado[columnas_bol].astype(str)
+            
+            df_unidades_facturadas_ordenado.drop(['NomDepto', 'CondicionUnidad'], axis=1, inplace=True)
 
             # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
             self.variables.guardar_datos_dataframe(self.nombre_doc, df_unidades_facturadas_ordenado, self.concesionario)
         
     def obtenerDepartamento(self, valor):
-            currentYear = datetime.now().year
-            if (valor < currentYear):
+            # currentYear = datetime.now().year
+            if (valor.lower() == "usado"):
                 return "Unidades Seminuevas"
             else:
                 return "Unidades Nuevas"

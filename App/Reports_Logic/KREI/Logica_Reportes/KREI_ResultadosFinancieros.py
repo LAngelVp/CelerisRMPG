@@ -15,6 +15,8 @@ class ResultadosFinancierosKREI(Variables):
         self.columnas = [
             "Numarticulo",
             "idCliente",
+            "NomDepto",
+            "CondicionUnidad",
             "NombreCte",
             "idClienteAsignatario",
             "NombreCteAsignatario",
@@ -47,7 +49,7 @@ class ResultadosFinancierosKREI(Variables):
         df.columns = df.columns.str.replace(" ", "_")
         
         # creamos la tabla pivote, con el fin de obtener las unidades facturadas
-        pivot = pd.pivot_table(df, index=['Numarticulo', 'Modelo', 'Sucursal', 'idCliente', 'NombreCte', 'idClienteAsignatario', 'NombreCteAsignatario', 'NumCategoria', 'Vendedor'], values=['cantidad', 'Venta', 'NC_Bonif', 'VentasNetas', 'CostoTotal', 'UtilidadBruta', '%_Margen_Conc', 'Compras', 'VtasInternas', 'NCreddeProv', 'NCargodeProv',	'ProvNCargoCargo',	'ProvNCargoAbono',	'ProvNCredCargo',	'ProvNCredAbono',	'NotaCargoCte'
+        pivot = pd.pivot_table(df, index=['Numarticulo', 'Modelo', 'Sucursal', 'idCliente', 'NombreCte', 'idClienteAsignatario', 'NombreCteAsignatario', 'NumCategoria', 'Vendedor', 'NomDepto', 'CondicionUnidad'], values=['cantidad', 'Venta', 'NC_Bonif', 'VentasNetas', 'CostoTotal', 'UtilidadBruta', '%_Margen_Conc', 'Compras', 'VtasInternas', 'NCreddeProv', 'NCargodeProv',	'ProvNCargoCargo',	'ProvNCargoAbono',	'ProvNCredCargo',	'ProvNCredAbono',	'NotaCargoCte'
         ],  aggfunc='sum')
 
         # copiamos la tabla pivote en una nueva variable
@@ -74,7 +76,7 @@ class ResultadosFinancierosKREI(Variables):
                     allow_duplicates=True
                 )
             
-            departamento = df_unidades_facturadas_ordenado["Modelo"].apply(lambda x: self.obtenerDepartamento(x))
+            departamento = df_unidades_facturadas_ordenado["CondicionUnidad"].apply(lambda x: self.obtenerDepartamento(x))
 
             df_unidades_facturadas_ordenado.insert(
                 loc = 1,
@@ -117,6 +119,8 @@ class ResultadosFinancierosKREI(Variables):
 
             columnas_bol=df_unidades_facturadas_ordenado.select_dtypes(include=bool).columns.tolist()
             df_unidades_facturadas_ordenado[columnas_bol] = df_unidades_facturadas_ordenado[columnas_bol].astype(str)
+            
+            df_unidades_facturadas_ordenado.drop(['NomDepto', 'CondicionUnidad'], axis=1, inplace=True)
 
             df_unidades_facturadas_ordenado.columns = df_unidades_facturadas_ordenado.columns.str.replace("_", " ")
 
@@ -132,7 +136,7 @@ class ResultadosFinancierosKREI(Variables):
         df.columns = df.columns.str.replace(" ", "_")
         
         # creamos la tabla pivote, con el fin de obtener las unidades facturadas
-        pivot = pd.pivot_table(df, index=['Numarticulo', 'Modelo', 'Sucursal', 'idCliente', 'NombreCte', 'idClienteAsignatario', 'NombreCteAsignatario', 'NumCategoria', 'Vendedor'], values=['cantidad', 'Venta', 'NC_Bonif', 'VentasNetas', 'CostoTotal', 'UtilidadBruta', '%_Margen_Conc', 'Compras', 'VtasInternas', 'NCreddeProv', 'NCargodeProv',	'ProvNCargoCargo',	'ProvNCargoAbono',	'ProvNCredCargo',	'ProvNCredAbono',	'NotaCargoCte'
+        pivot = pd.pivot_table(df, index=['Numarticulo', 'Modelo', 'Sucursal', 'idCliente', 'NombreCte', 'idClienteAsignatario', 'NombreCteAsignatario', 'NumCategoria', 'Vendedor', 'NomDepto', 'CondicionUnidad'], values=['cantidad', 'Venta', 'NC_Bonif', 'VentasNetas', 'CostoTotal', 'UtilidadBruta', '%_Margen_Conc', 'Compras', 'VtasInternas', 'NCreddeProv', 'NCargodeProv',	'ProvNCargoCargo',	'ProvNCargoAbono',	'ProvNCredCargo',	'ProvNCredAbono',	'NotaCargoCte'
         ],  aggfunc='sum')
 
         # copiamos la tabla pivote en una nueva variable
@@ -158,8 +162,7 @@ class ResultadosFinancierosKREI(Variables):
                     value = "KW SUR",
                     allow_duplicates=True
                 )
-            
-            departamento = df_unidades_facturadas_ordenado["Modelo"].apply(lambda x: self.obtenerDepartamento(x))
+            departamento = df_unidades_facturadas_ordenado["CondicionUnidad"].apply(lambda x: self.obtenerDepartamento(x))
 
             df_unidades_facturadas_ordenado.insert(
                 loc = 1,
@@ -202,6 +205,8 @@ class ResultadosFinancierosKREI(Variables):
 
             columnas_bol=df_unidades_facturadas_ordenado.select_dtypes(include=bool).columns.tolist()
             df_unidades_facturadas_ordenado[columnas_bol] = df_unidades_facturadas_ordenado[columnas_bol].astype(str)
+            
+            df_unidades_facturadas_ordenado.drop(['NomDepto', 'CondicionUnidad'], axis=1, inplace=True)
 
             df_unidades_facturadas_ordenado.columns = df_unidades_facturadas_ordenado.columns.str.replace("_", " ")
 
@@ -210,8 +215,8 @@ class ResultadosFinancierosKREI(Variables):
 
 
     def obtenerDepartamento(self,valor):
-            currentYear = self.variables.fecha_hoy.year
-            if (valor < currentYear):
+            # currentYear = self.variables.fecha_hoy.year
+            if (valor.lower() == "usado"):
                 return "SEMINUEVAS"
             else:
                 return "NUEVAS"
