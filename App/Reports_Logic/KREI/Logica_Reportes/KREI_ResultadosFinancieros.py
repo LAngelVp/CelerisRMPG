@@ -95,7 +95,7 @@ class ResultadosFinancierosKREI(Variables):
             Margen = df_unidades_facturadas_ordenado["UtilidadBruta"] / df_unidades_facturadas_ordenado["VentasNetas"]
 
             df_unidades_facturadas_ordenado.insert(
-                loc = 16,
+                loc = 18,
                 column = "Margen(%)",
                 value = Margen,
                 allow_duplicates = True
@@ -104,7 +104,7 @@ class ResultadosFinancierosKREI(Variables):
             Fecha = self.variables.date_movement_config_document()
 
             df_unidades_facturadas_ordenado.insert(
-                loc = 26,
+                loc = 28,
                 column = "Fecha",
                 value = Fecha,
                 allow_duplicates = True
@@ -181,7 +181,7 @@ class ResultadosFinancierosKREI(Variables):
             Margen = df_unidades_facturadas_ordenado["UtilidadBruta"] / df_unidades_facturadas_ordenado["VentasNetas"]
 
             df_unidades_facturadas_ordenado.insert(
-                loc = 16,
+                loc = 18,
                 column = "Margen(%)",
                 value = Margen,
                 allow_duplicates = True
@@ -190,7 +190,7 @@ class ResultadosFinancierosKREI(Variables):
             Fecha = self.variables.date_movement_config_document()
 
             df_unidades_facturadas_ordenado.insert(
-                loc = 26,
+                loc = 28,
                 column = "Fecha",
                 value = Fecha,
                 allow_duplicates = True
