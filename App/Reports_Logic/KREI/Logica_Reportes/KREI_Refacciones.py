@@ -35,19 +35,19 @@ class RefaccionesKWESTEKREI(Variables):
                     df_nuevo = self.variables.global_date_format_dmy_mexican(df_nuevo, column_name)
                 else:
                     pass
-                
-        df_con_dolares = df_nuevo.merge(self.dolares, on='Fecha', how='left')
-        df_con_dolares["Subtotal Dolares"] = np.divide(df_con_dolares['Subtotal'], df_con_dolares['Valor'])
-        df_con_dolares["Margen Dolares"] = np.divide(df_con_dolares['Margen'], df_con_dolares['Valor'])
-        df_con_dolares = df_con_dolares.rename(columns = {'Valor' : 'Valor Dólar'})
+        if self.dolares is not None:
+            df_nuevo = df_nuevo.merge(self.dolares, on='Fecha', how='left')
+            df_nuevo["Subtotal Dolares"] = np.divide(df_nuevo['Subtotal'], df_nuevo['Valor'])
+            df_nuevo["Margen Dolares"] = np.divide(df_nuevo['Margen'], df_nuevo['Valor'])
+            df_nuevo = df_nuevo.rename(columns = {'Valor' : 'Valor Dólar'})
 
-        columnas_bol=df_con_dolares.select_dtypes(include=bool).columns.tolist()
+        columnas_bol=df_nuevo.select_dtypes(include=bool).columns.tolist()
 
-        df_con_dolares[columnas_bol] = df_con_dolares[columnas_bol].astype(str)
+        df_nuevo[columnas_bol] = df_nuevo[columnas_bol].astype(str)
         
 
         # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
-        self.variables.guardar_datos_dataframe(self.nombre_doc, df_con_dolares, self.concesionario)
+        self.variables.guardar_datos_dataframe(self.nombre_doc, df_nuevo, self.concesionario)
 
 
     def RefaccionesKWSUR_KREI(self):
@@ -69,14 +69,14 @@ class RefaccionesKWESTEKREI(Variables):
                     df_nuevo = self.variables.global_date_format_dmy_mexican(df_nuevo, column_name)
                 else:
                     pass
-
-        df_con_dolares = df_nuevo.merge(self.dolares, on='Fecha', how='left')
-        df_con_dolares["Subtotal Dolares"] = np.divide(df_con_dolares['Subtotal'], df_con_dolares['Valor'])
-        df_con_dolares["Margen Dolares"] = np.divide(df_con_dolares['Margen'], df_con_dolares['Valor'])
-        df_con_dolares = df_con_dolares.rename(columns = {'Valor' : 'Valor Dólar'})
-                
-        columnas_bol=df_con_dolares.select_dtypes(include=bool).columns.tolist()
-        df_con_dolares[columnas_bol] = df_con_dolares[columnas_bol].astype(str)
+        if self.dolares is not None:
+            df_nuevo = df_nuevo.merge(self.dolares, on='Fecha', how='left')
+            df_nuevo["Subtotal Dolares"] = np.divide(df_nuevo['Subtotal'], df_nuevo['Valor'])
+            df_nuevo["Margen Dolares"] = np.divide(df_nuevo['Margen'], df_nuevo['Valor'])
+            df_nuevo = df_nuevo.rename(columns = {'Valor' : 'Valor Dólar'})
+        
+        columnas_bol=df_nuevo.select_dtypes(include=bool).columns.tolist()
+        df_nuevo[columnas_bol] = df_nuevo[columnas_bol].astype(str)
 
         # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
-        self.variables.guardar_datos_dataframe(self.nombre_doc, df_con_dolares, self.concesionario)
+        self.variables.guardar_datos_dataframe(self.nombre_doc, df_nuevo, self.concesionario)

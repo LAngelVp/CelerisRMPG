@@ -9,7 +9,6 @@ import pandas as pd
 
 class Mensajes_Alertas:
     def __init__(self=None, titulo=None, mensaje=None, icono = None,  texto_detallado=None, botones=[("Aceptar",QMessageBox.StandardButton.Ok)]):
-        app = QApplication(sys.argv)
         self.Titutlo = titulo
         self.Mensaje = mensaje
         self.Icono = icono if icono is not None else QMessageBox.Icon.Information

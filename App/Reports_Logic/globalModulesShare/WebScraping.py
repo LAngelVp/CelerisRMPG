@@ -5,7 +5,8 @@ from io import StringIO
 from urllib3.exceptions import InsecureRequestWarning
 from .ContenedorVariables import Variables
 from .mensajes_alertas import Mensajes_Alertas
-from PyQt6.QtWidgets import QMessageBox
+import tkinter as tk
+from tkinter import messagebox
 class Web_scraping:
     def __init__(self):
         self.fecha_inicial = None
@@ -24,15 +25,13 @@ class Web_scraping:
         df = self.procesar_dolares()
         
         if df is None:
-            Mensajes_Alertas(
-                    "Error",
-                    f"No se logro obtener informacion del DOF.\n",
-                    QMessageBox.Icon.Warning,
-                    "Existen circunstancias en las que no se puede lograr obtener información de los dolares del DOF, ya sea por errores en la conexión de interner o por que la plataforma del DOF esta fallando. \nPuedes esperar 1 min y volverlo a intentar.",
-                    botones=[
-                        ("Aceptar", self.Aceptar_callback)
-                    ]
-                ).mostrar
+            root = tk.Tk()
+            root.withdraw()
+            messagebox.showerror("Error al obtener los dolares en el DOF", 
+                         "No se logró obtener la información del DOF. Puede ser por problemas de conexión o fallos en la plataforma. Intente más tarde.")
+            
+            # Cerrar la aplicación de Tkinter
+            root.quit()
             return None
         
         # Crear el rango de fechas completo
@@ -98,7 +97,6 @@ class Web_scraping:
                     df.reset_index(drop=True, inplace=True)
                     if 'Fecha' in df.columns:
                         df["Fecha"] = pd.to_datetime(df['Fecha'], dayfirst=True)
-                    print(df)
                     return df
                 else:
                     return None
