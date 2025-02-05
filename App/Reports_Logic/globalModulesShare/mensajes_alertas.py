@@ -1,13 +1,15 @@
 import os
 import json
+import sys
 # from Reports_Logic.globalModulesShare.resources import *
-from PyQt6.QtWidgets import QMessageBox, QPushButton
+from PyQt6.QtWidgets import QApplication, QMessageBox, QPushButton
 from PyQt6.QtGui import QIcon
 
 import pandas as pd
 
 class Mensajes_Alertas:
     def __init__(self=None, titulo=None, mensaje=None, icono = None,  texto_detallado=None, botones=[("Aceptar",QMessageBox.StandardButton.Ok)]):
+        app = QApplication(sys.argv)
         self.Titutlo = titulo
         self.Mensaje = mensaje
         self.Icono = icono if icono is not None else QMessageBox.Icon.Information

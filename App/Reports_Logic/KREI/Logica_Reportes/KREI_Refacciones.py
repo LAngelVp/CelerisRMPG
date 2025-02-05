@@ -35,7 +35,7 @@ class RefaccionesKWESTEKREI(Variables):
                     df_nuevo = self.variables.global_date_format_dmy_mexican(df_nuevo, column_name)
                 else:
                     pass
-        
+                
         df_con_dolares = df_nuevo.merge(self.dolares, on='Fecha', how='left')
         df_con_dolares["Subtotal Dolares"] = np.divide(df_con_dolares['Subtotal'], df_con_dolares['Valor'])
         df_con_dolares["Margen Dolares"] = np.divide(df_con_dolares['Margen'], df_con_dolares['Valor'])
