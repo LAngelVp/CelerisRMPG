@@ -38,10 +38,8 @@ class KenworthConnect():
     
     def ResultadosFinancieros(self):
         ResultadosFinancieros()
-
     def InventarioDeUnidades(self):
         InventarioUnidades()
-
     def TrabajosPorEstado(self):
         TrabajosPorEstado()
 

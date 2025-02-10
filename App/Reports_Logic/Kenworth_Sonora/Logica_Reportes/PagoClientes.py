@@ -23,7 +23,7 @@ class PagosDeClientes(Variables):
         #copiamos la data para no afectar la original.
 
         #Eliminamos las columnas que no se van a ocupar.
-        df.drop({'Hora Pago', 'Referencia', 'Días Plazo', 'DocumentoMSC', 'Observaciones Pago', 'Referencia Forma de Pago', 'Sucursal Responsable'}, axis=1, inplace=True)
+        df.drop({'Hora Pago', 'Referencia', 'Días Plazo', 'DocumentoMSC', 'Observaciones Pago', 'Referencia Forma de Pago', 'Sucursal Responsable', 'Folio Interno Factura'}, axis=1, inplace=True)
         df = df.rename(columns={'Tipo Docto.':'Tipo Docto'})
 
         # damos formato a todas las cabeceras de las columnas.
@@ -59,8 +59,6 @@ class PagosDeClientes(Variables):
 
         columnas_bol=df.select_dtypes(include=bool).columns.tolist()
         df[columnas_bol] = df[columnas_bol].astype(str)
-
-        df["Objetivo"] = ""
 
         df.columns = df.columns.str.replace(' ', '_')
         # df_completo = df.query("~(Tipo_Docto == ['Factura de Egreso', 'Facturas de Activo Fijo'])")

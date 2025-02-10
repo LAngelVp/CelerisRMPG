@@ -16,17 +16,15 @@ class ResultadosFinancieros(Variables):
         self.variables = Variables()
             
         columnas = [
-            "Sucursal",
             "Numarticulo",
+            "Sucursal",
+            "Modelo",
             "idCliente",
-            "NomDepto",
-            "CondicionUnidad",
             "NombreCte",
             "idClienteAsignatario",
             "NombreCteAsignatario",
             "Vendedor",
             "NumCategoria",
-            "Modelo",
             "cantidad",
             "Venta",
             "NC_Bonif",
@@ -41,7 +39,9 @@ class ResultadosFinancieros(Variables):
             "ProvNCargoAbono",
             "ProvNCredCargo",
             "ProvNCredAbono",
-            "NotaCargoCte"
+            "NotaCargoCte",
+            "InteresesPP",
+            "CondicionUnidad",
         ]
 
         # OBTENEMOS LA RUTA DEL ARCHIVO Y PARSEAMOS SU CONTENIDO Y SUS CABECERAS.
@@ -52,7 +52,7 @@ class ResultadosFinancieros(Variables):
         df.columns = df.columns.str.replace(" ", "_")
         
          # creamos la tabla pivote, con el fin de obtener las unidades facturadas
-        pivot = pd.pivot_table(df, index=['Numarticulo', 'Modelo', 'Sucursal', 'idCliente', 'NombreCte', 'idClienteAsignatario', 'NombreCteAsignatario', 'NumCategoria', 'Vendedor', 'NomDepto', 'CondicionUnidad'], values=['cantidad', 'Venta', 'NC_Bonif', 'VentasNetas', 'CostoTotal', 'UtilidadBruta', '%_Margen_Conc', 'Compras', 'VtasInternas', 'NCreddeProv', 'NCargodeProv',	'ProvNCargoCargo',	'ProvNCargoAbono',	'ProvNCredCargo',	'ProvNCredAbono',	'NotaCargoCte'
+        pivot = pd.pivot_table(df, index=['Numarticulo', 'Modelo', 'Sucursal', 'idCliente', 'NombreCte', 'idClienteAsignatario', 'NombreCteAsignatario', 'NumCategoria', 'Vendedor', 'CondicionUnidad'], values=['cantidad', 'Venta', 'NC_Bonif', 'VentasNetas', 'CostoTotal', 'UtilidadBruta', '%_Margen_Conc', 'Compras', 'VtasInternas', 'NCreddeProv', 'NCargodeProv',	'ProvNCargoCargo',	'ProvNCargoAbono',	'ProvNCredCargo',	'ProvNCredAbono',	'NotaCargoCte', 'InteresesPP'
         ],  aggfunc='sum')
 
         # copiamos la tabla pivote en una nueva variable
@@ -71,15 +71,8 @@ class ResultadosFinancieros(Variables):
             self.variables.guardar_datos_dataframe(self.nombre_doc, df_unidades_facturadas_ordenado, self.concesionario)
 
         else:
-
             df_unidades_facturadas_ordenado.insert(
-                loc = 1,
-                column = "ZonaVenta",
-                value = df_unidades_facturadas_ordenado["Sucursal"],
-                allow_duplicates=True
-            )
-            df_unidades_facturadas_ordenado.insert(
-                loc = 16,
+                loc = 15,
                 column = "Margen(%)",
                 value = df_unidades_facturadas_ordenado["UtilidadBruta"] / df_unidades_facturadas_ordenado["VentasNetas"],
                 allow_duplicates = True
@@ -95,14 +88,15 @@ class ResultadosFinancieros(Variables):
                 allow_duplicates = False
             )
 
-            col_numero_articulo =df_unidades_facturadas_ordenado["Numarticulo"].map(str)
-            col_modelo =df_unidades_facturadas_ordenado["Modelo"].map(str)
+            col_numero_articulo ="CH-" + df_unidades_facturadas_ordenado["Numarticulo"].map(str)
+            col_modelo ="AM-" + df_unidades_facturadas_ordenado["Modelo"].map(str)
 
             df_unidades_facturadas_ordenado["Numarticulo"] = col_numero_articulo
             df_unidades_facturadas_ordenado["Modelo"] = col_modelo
 
 
             df_unidades_facturadas_ordenado["Fecha"] = self.variables.date_movement_config_document().replace(day=1)
+            df_unidades_facturadas_ordenado["Mes"] = self.variables.nombre_mes_actual_abreviado()
             df_unidades_facturadas_ordenado["Ciudad"] = "Pendiente"
             df_unidades_facturadas_ordenado["Estado"] = "Pendiente"
 
@@ -121,7 +115,7 @@ class ResultadosFinancieros(Variables):
             columnas_bol=df_unidades_facturadas_ordenado.select_dtypes(include=bool).columns.tolist()
             df_unidades_facturadas_ordenado[columnas_bol] = df_unidades_facturadas_ordenado[columnas_bol].astype(str)
             
-            df_unidades_facturadas_ordenado.drop(['NomDepto', 'CondicionUnidad'], axis=1, inplace=True)
+            df_unidades_facturadas_ordenado.drop(['CondicionUnidad'], axis=1, inplace=True)
 
             # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
             self.variables.guardar_datos_dataframe(self.nombre_doc, df_unidades_facturadas_ordenado, self.concesionario)
@@ -129,6 +123,6 @@ class ResultadosFinancieros(Variables):
     def obtenerDepartamento(self, valor):
         # currentYear = datetime.now().year
         if (valor.lower() == "usado"):
-            return "Unidades Seminuevas"
+            return "VENTA DE UNIDADES USADAS"
         else:
-            return "Unidades Nuevas"
+            return "VENTA DE UNIDADES NUEVAS"
