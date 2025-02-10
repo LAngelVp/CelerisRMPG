@@ -814,9 +814,16 @@ border-top-right-radius: 10px;
      </property>
      <addaction name="actionObjetivos_Mensuales"/>
     </widget>
+    <widget class="QMenu" name="menuClasificacionDeVendedores">
+     <property name="title">
+      <string>Clasificación de vendedores</string>
+     </property>
+     <addaction name="actionRefaccionesYServicio"/>
+    </widget>
     <addaction name="menuPagoClientes"/>
     <addaction name="actionFechaMovimiento"/>
     <addaction name="actionDirecciones_de_envio"/>
+    <addaction name="menuClasificacionDeVendedores"/>
    </widget>
    <addaction name="menuOPCIONES"/>
   </widget>
@@ -843,6 +850,11 @@ border-top-right-radius: 10px;
   <action name="actionDirecciones_de_envio">
    <property name="text">
     <string>Direcciones de envio</string>
+   </property>
+  </action>
+  <action name="actionRefaccionesYServicio">
+   <property name="text">
+    <string>Refacciones y Servicio</string>
    </property>
   </action>
  </widget>

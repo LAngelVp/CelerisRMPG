@@ -116,7 +116,7 @@ font-weight: bold;</string>
          <enum>QTabWidget::North</enum>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <property name="elideMode">
          <enum>Qt::ElideLeft</enum>
@@ -152,7 +152,11 @@ font-weight: bold;</string>
               </widget>
              </item>
              <item row="0" column="1" colspan="3">
-              <widget class="QLineEdit" name="ledit_idrefacciones"/>
+              <widget class="QLineEdit" name="ledit_idrefacciones">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
              </item>
              <item row="0" column="4">
               <widget class="QLabel" name="lbl_lbl_sucu">
@@ -256,6 +260,12 @@ font-weight: bold;</string>
                <property name="styleSheet">
                 <string notr="true"/>
                </property>
+               <property name="sizeAdjustPolicy">
+                <enum>QAbstractScrollArea::AdjustToContents</enum>
+               </property>
+               <attribute name="horizontalHeaderMinimumSectionSize">
+                <number>200</number>
+               </attribute>
                <column>
                 <property name="text">
                  <string>Id</string>
@@ -318,7 +328,11 @@ font-weight: bold;</string>
               </widget>
              </item>
              <item row="0" column="1" colspan="2">
-              <widget class="QLineEdit" name="ledit_idservicio"/>
+              <widget class="QLineEdit" name="ledit_idservicio">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
              </item>
              <item row="0" column="3">
               <widget class="QLabel" name="lbl_lbl_nombre_servicio">

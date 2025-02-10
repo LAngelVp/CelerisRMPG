@@ -14,6 +14,7 @@ from ..globalModulesShare.ContenedorVariables import Variables
 from .Kenworth_Connect import *
 from ..globalModulesShare.Home_rutas import *
 from ..globalModulesShare.mensajes_alertas import Mensajes_Alertas
+from .VendedoresSonora import VendedoresSonoraController
 
 class Home_KenworthSonora(QMainWindow):
     closed = pyqtSignal()
@@ -66,6 +67,7 @@ class Home_KenworthSonora(QMainWindow):
         self.ui.actionObjetivos_Mensuales.triggered.connect(self.ObjetivosPagoClientes)
         self.ui.actionFechaMovimiento.triggered.connect(self.FechaMovimiento)
         self.ui.actionDirecciones_de_envio.triggered.connect(self.direcciones_envio)
+        self.ui.actionRefaccionesYServicio.triggered.connect(self.clasificacionVendedores)
 
 
         # señales del hilo
@@ -82,12 +84,15 @@ class Home_KenworthSonora(QMainWindow):
     def closeEvent(self, event):
         super().closeEvent(event)
         self.closed.emit()
-        
-
 
     def direcciones_envio(self):
         self.ventana_rutas = rutas()
         self.ventana_rutas.show()
+
+    def clasificacionVendedores(self):
+        self.ventana_vendedores = VendedoresSonoraController()
+        self.ventana_vendedores.show()
+        
 
     def ObjetivosPagoClientes(self):
         self.ventana_obj = ClassPrincipalObjPagos()
