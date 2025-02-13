@@ -74,7 +74,7 @@ class Vendedores(QWidget):
         try:
             self.ui.ledit_idservicio.setText(id)
             id_objeto = {"id" : id}
-            elementos = creacion_json(self.variables.help_directory, self.variables.nombre_documento_clasificacion_vendedores_servicio_kwe,id_objeto).obtener_datos_json_por_id
+            elementos = creacion_json(self.variables.help_directory, self.variables.nombre_documento_clasificacion_vendedores_servicio_sonora,id_objeto).obtener_datos_json_por_id
             self.ui.ledit_nombrevendedor_servicio.setText(elementos["Vendedor"])
             self.ui.ledit_depaventa_servicio.setText(elementos["Depa_Venta"])
             self.ui.ledit_depa_servicio.setText(elementos["Depa"])

@@ -28,6 +28,10 @@ class VendedoresSonoraController(QWidget):
 #comment: Botones
         self.ui.btn_aceptar_vendedores.clicked.connect(self.funcion_aceptar)
         
+#señales:
+        self.ui.tabla_vendedoresrefacciones.itemClicked.connect(self.click_celda_tabla_refacciones)
+        self.ui.tabla_vendedoresrefacciones_servicio.itemClicked.connect(self.click_celda_tabla_servicio)
+        
 #comment: Variables locales
         self.acciones_por_pestaña = {
             0 : {
@@ -42,11 +46,61 @@ class VendedoresSonoraController(QWidget):
             },
         }
         
-        
+    def click_celda_tabla_refacciones(self, elemento):
+        if self.ui.rb_agregar.isChecked():
+            return
+        fila = elemento.row()
+        columna = elemento.column()
+        if columna == 0:
+            id_elemento = self.ui.tabla_vendedoresrefacciones.item(fila, columna - 0).text()
+        else:
+            pass
+        try:
+            self.ui.ledit_idrefacciones.setText(id_elemento)
+            id_objeto = {"id":id_elemento}
+            elementos = creacion_json(self.variables.help_directory, self.variables.nombre_documento_clasificacion_vendedores_refacciones_sonora, id_objeto).obtener_datos_json_por_id
+            self.ui.ledit_nombrevendedor.setText(elementos["vendedor"])
+            self.ui.ledit_sucursal.setText(elementos["sucursal"])
+            self.ui.ledit_cargo.setText(elementos["jerarquia"])
+            self.ui.ledit_depaventa.setText(elementos["depto venta"])
+            self.ui.ledit_depa.setText(elementos["departamento"])
+        except:
+            pass
+    def click_celda_tabla_servicio(self, elemento):
+        if (self.ui.rb_agregar_servicio.isChecked()):
+            return
+        fila = elemento.row()
+        columna = elemento.column()
+        if columna == 0:
+            id = self.ui.tabla_vendedoresrefacciones_servicio.item(fila, columna - 0).text()
+        else:
+            pass
+        try:
+            self.ui.ledit_idservicio.setText(id)
+            id_objeto = {"id" : id}
+            elementos = creacion_json(self.variables.help_directory, self.variables.nombre_documento_clasificacion_vendedores_servicio_kwe,id_objeto).obtener_datos_json_por_id
+            self.ui.ledit_nombrevendedor_servicio.setText(elementos["Vendedor"])
+            self.ui.ledit_depaventa_servicio.setText(elementos["Depa_Venta"])
+            self.ui.ledit_depa_servicio.setText(elementos["Depa"])
+        except:
+            pass
     def obtener_ventana_activa(self):
         ventana_activa = self.ui.Vendedores_Refacciones.currentIndex()
         return ventana_activa
         
     def funcion_aceptar(self):
         ventana_activa = self.obtener_ventana_activa()
+        
+    def actualizar_vendedores_refacciones(self):
+        pass
+    def agregar_vendedores_refacciones(self):
+        pass
+    def eliminar_vendedores_refacciones(self):
+        pass
+    def actualizar_vendedores_servicio(self):
+        pass
+    def agregar_vendedores_servicio(self):
+        pass
+    def eliminar_vendedores_servicio(self):
+        pass
         

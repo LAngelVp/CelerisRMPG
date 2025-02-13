@@ -50,7 +50,9 @@ class Variables:
         self.document_saving_paths_file = 'DocumentSavingPaths.json'
         self.movement_date_document_file = 'DateMovemment.json'
         self.vendor_service_departments_file = 'Vendedores_servicio_departamentos.json'
+        self.clasificacion_vendedores_servicio_sonora = 'Clasificacion_vendedores_servicio_sonora.json'
         self.vendor_parts_departments_file = 'Vendedores_refacciones_departamentos.json'
+        self.clasificacion_vendedores_refacciones_sonora = "Clasificacion_vendedores_refacciones_sonora.json"
         self.large_clients_parts_file = 'clientes_grandes.json'
         self.parts_brands_file = 'marcas_refacciones.json'
 
@@ -99,7 +101,9 @@ class Variables:
         self.movement_date_document = os.path.join(self.help_directory,  self.movement_date_document_file).replace('\\','/')
         #kwe
         self.nombre_documento_clasificacion_vendedores_servicio_kwe = os.path.join(self.help_directory, self.vendor_service_departments_file).replace('\\','/')
+        self.nombre_documento_clasificacion_vendedores_servicio_sonora = os.path.join(self.help_directory, self.clasificacion_vendedores_servicio_sonora).replace('\\','/')
         self.nombre_documento_clasificacion_vendedores_refacciones_kwe = os.path.join(self.help_directory, self.vendor_parts_departments_file).replace('\\','/')
+        self.nombre_documento_clasificacion_vendedores_refacciones_sonora = os.path.join(self.help_directory, self.clasificacion_vendedores_refacciones_sonora).replace('\\','/')
         self.tamaño_clientes_refacciones_kwe = os.path.join(self.help_directory, self.large_clients_parts_file).replace('\\','/')
         self.marcas_refacciones_kwe = os.path.join(self.help_directory, self.parts_brands_file).replace('\\','/')
 
