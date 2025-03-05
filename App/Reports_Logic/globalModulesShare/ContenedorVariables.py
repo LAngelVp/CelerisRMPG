@@ -254,6 +254,9 @@ class Variables:
     def clasificacion_vendedores_departamentos_refacciones(self):
         documento = pd.read_json(self.nombre_documento_clasificacion_vendedores_refacciones_kwe)
         return documento
+    def clasificacion_vendedores_departamentos_refacciones_sonora(self):
+        documento = pd.read_json(self.nombre_documento_clasificacion_vendedores_refacciones_sonora)
+        return documento
     def clasificacion_tamaño_clientes_refacciones(self):
         documento = pd.read_json(self.tamaño_clientes_refacciones_kwe)
         return documento
@@ -262,6 +265,9 @@ class Variables:
         return documento
     def vendedores_y_depas_este_servicio(self):
         documento = pd.read_json(self.nombre_documento_clasificacion_vendedores_servicio_kwe)
+        return documento
+    def vendedores_y_depas_este_servicio_sonora(self):
+        documento = pd.read_json(self.nombre_documento_clasificacion_vendedores_servicio_sonora)
         return documento
     
 #COMMENT: ACTUALIZAMOS LA FECHA MOVIMIENTO A FECHA ACTUAL AL ABRIR LA VENTANA

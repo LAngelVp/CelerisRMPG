@@ -14,7 +14,7 @@ from ..globalModulesShare.ContenedorVariables import Variables
 from .Kenworth_Connect import *
 from ..globalModulesShare.Home_rutas import *
 from ..globalModulesShare.mensajes_alertas import Mensajes_Alertas
-from .VendedoresSonora import VendedoresSonoraController
+from .VendedoresSonora import *
 
 class Home_KenworthSonora(QMainWindow):
     closed = pyqtSignal()
@@ -90,7 +90,7 @@ class Home_KenworthSonora(QMainWindow):
         self.ventana_rutas.show()
 
     def clasificacionVendedores(self):
-        self.ventana_vendedores = VendedoresSonoraController()
+        self.ventana_vendedores = VendedoresSonora()
         self.ventana_vendedores.show()
         
 

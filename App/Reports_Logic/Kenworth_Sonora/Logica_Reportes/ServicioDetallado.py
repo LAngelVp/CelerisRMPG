@@ -14,9 +14,10 @@ class ServicioDetallado(Variables):
 
         self.variables = Variables()
         # array_columns = ['ObjRefacc','ObjUBTRef','ObjMO', 'ObjUTBMO','Clasificacion Cliente']
-        array_columns2 = ['DepaVenta', 'Depa']
         array_Garantia = ["KENWORTH MEXICANA", "PACCAR PARTS MEXICO", "DISTRIBUIDORA MEGAMAK"]
         array_PLM = ["PACCAR FINANCIAL MEXICO", "PACLEASE MEXICANA"]
+        
+        self.json_vendedores = self.variables.vendedores_y_depas_este_servicio_sonora()
 
         self.nombre_doc = "SDS.xlsx"
         path = os.path.join(self.variables.ruta_Trabajos_kwsonora,self.nombre_doc)
@@ -39,16 +40,6 @@ class ServicioDetallado(Variables):
 
         df.insert(3,"Clasificacion Cliente","CLIENTES GENERALES",allow_duplicates=False)
 
-        y = 20
-        for i in array_columns2:
-            df.insert(
-                loc = y,
-                column = i,
-                value = '',
-                allow_duplicates = False
-            )
-            y = y+1
-
         df["Cliente"].fillna("", inplace=True)
         #CLASIFICACION DEL CLIENTE (NORMAL)
         df.loc[df["Cliente"].str.contains("KENWORTH") & ~df["Cliente"].str.contains("KENWORTH MEXICANA") & ~df["Cliente"].str.contains("KENWORTH DISTRIBUIDORA DE SONORA"), "Clasificacion Cliente"] = "CONCESIONARIOS"
@@ -64,43 +55,23 @@ class ServicioDetallado(Variables):
         df["Unidad"] = unidad
         df["Número Orden"] = numero_orden
 
-        # clasificacion del vendedor
-        # "TALLER"
-        # Depa Venta
-        # obregon
-        df.loc[df["Vendedor"] == "TALLER OBREGON", "DepaVenta"] = "Taller"
-        df.loc[df["Vendedor"] == "MANUEL BELTRAN", "DepaVenta"] = "Taller"
-        df.loc[df["Vendedor"] == "MEDINA OCHOA FRANCISCO JAVIER", "DepaVenta"] = "Taller"
-        # Hermosillo
-        df.loc[df["Vendedor"] == "TALLER HERMOSILLO", "DepaVenta"] = "Taller"
-        # Nogales
-        df.loc[df["Vendedor"] == "TALLER NOGALES", "DepaVenta"] = "Taller"
-        # Rene Alejandro
-        df.loc[df["Vendedor"] == "RENE ALEJANDRO ACOSTA VALENZUELA", "DepaVenta"] = "Taller"
-        # Baldenegro Arvayo
-        df.loc[df["Vendedor"] == "BALDENEGRO ARVAYO MIGUEL BAUDELIO", "DepaVenta"] = "Taller"
-
-        # Depa
-        #COMMENT: Obregon
-        df.loc[df["Vendedor"] == "TALLER OBREGON" , "Depa"] = "Taller Obregon"
-        df.loc[df["Vendedor"] == "MANUEL BELTRAN" , "Depa"] = "Taller Obregon"
-        df.loc[df["Vendedor"] == "MEDINA OCHOA FRANCISCO JAVIER" , "Depa"] = "Taller Obregon"
-        # Hermosillo
-        df.loc[df["Vendedor"] == "TALLER HERMOSILLO", "Depa"] = "Taller Hermosillo"
-        # Nogales
-        df.loc[df["Vendedor"] == "TALLER NOGALES", "Depa"] = "Taller Nogales"
-        # Rene Alejandro
-        df.loc[df["Vendedor"] == "RENE ALEJANDRO ACOSTA VALENZUELA", "Depa"] = "Taller Nogales"
-        # Baldenegro Arvayo
-        df.loc[df["Vendedor"] == "BALDENEGRO ARVAYO MIGUEL BAUDELIO", "Depa"] = "Taller Hermosillo"
-
-        # "CARROCERIA"
-        # Depa Venta
-        df.loc[df["Vendedor"] == "CARROCERIA HERMOSILLO", "DepaVenta"] = "Carroceria"
-        df.loc[df["Vendedor"] == "TALLER DE CARR. Y PINT.", "DepaVenta"] = "Carroceria"
-        # Depa
-        df.loc[df["Vendedor"] == "CARROCERIA HERMOSILLO", "Depa"] = "Carroceria Hermosillo"
-        df.loc[df["Vendedor"] == "TALLER DE CARR. Y PINT.", "Depa"] = "Carroceria Hermosillo"
+        df[["Depa Venta", "Depa"]] = df.apply(
+            lambda fila: pd.Series(self.obtener(fila["Vendedor"])), axis=1
+        )
+        
+        #COMMENT: MOVEMOS LAS COLUMNAS DE DEPARTAMENTO
+        columna_depaventa = df.pop("Depa Venta")
+        columna_depa = df.pop("Depa")
+        df.insert(
+            20,
+            "Departamento Venta",
+            columna_depaventa
+        )
+        df.insert(
+            21,
+            "Depa",
+            columna_depa
+        )
 
         for column_name in df.columns:
                 if "fecha" in column_name.lower():
@@ -117,3 +88,15 @@ class ServicioDetallado(Variables):
         # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc, df, self.concesionario)
 
+    #COMMENT_FUNCTION: FUNCION PARA CLASIFICAR VENDEDORES EN SUS DEPARTAMENTOS
+    def obtener(self, vendedor):
+        for index, fila in self.json_vendedores.iterrows():
+            vendedor_actual = fila["Vendedor"]
+            departamento_venta = fila["Depa_Venta"]
+            departamento = fila["Depa"]
+
+            if vendedor == vendedor_actual:
+                return departamento_venta, departamento
+
+        #COMMENT: SI NO ENCUENTRA VALORES, RETORNE VACIO
+        return "", ""

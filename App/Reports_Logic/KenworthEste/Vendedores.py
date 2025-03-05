@@ -74,7 +74,7 @@ class Vendedores(QWidget):
         try:
             self.ui.ledit_idservicio.setText(id)
             id_objeto = {"id" : id}
-            elementos = creacion_json(self.variables.help_directory, self.variables.nombre_documento_clasificacion_vendedores_servicio_sonora,id_objeto).obtener_datos_json_por_id
+            elementos = creacion_json(self.variables.help_directory, self.variables.nombre_documento_clasificacion_vendedores_servicio_kwe,id_objeto).obtener_datos_json_por_id
             self.ui.ledit_nombrevendedor_servicio.setText(elementos["Vendedor"])
             self.ui.ledit_depaventa_servicio.setText(elementos["Depa_Venta"])
             self.ui.ledit_depa_servicio.setText(elementos["Depa"])
@@ -152,11 +152,11 @@ class Vendedores(QWidget):
 #COMMENT:VERIFICA QUE ACCION ESTA SELECCIONADA EN LA PESTAÑA ACTIVA
             for accion, funcion in self.acciones_por_pestañas[tipo_ventana].items():
                 if getattr(self.ui, f"rb_{accion}").isChecked() and accion == "agregar": #COMMENTLINE: METODO PARA AGREGAR REFACCIONES
-                    nombre = self.ui.ledit_nombrevendedor.text()
-                    sucursal = self.ui.ledit_sucursal.text()
-                    departamento_venta = self.ui.ledit_depaventa.text()
-                    departamento = self.ui.ledit_depa.text()
-                    cargo = self.ui.ledit_cargo.text()
+                    nombre = self.ui.ledit_nombrevendedor.text().strip()
+                    sucursal = self.ui.ledit_sucursal.text().strip()
+                    departamento_venta = self.ui.ledit_depaventa.text().strip()
+                    departamento = self.ui.ledit_depa.text().strip()
+                    cargo = self.ui.ledit_cargo.text().strip()
                     if (nombre and sucursal and departamento_venta and departamento and cargo):
                         funcion(nombre, sucursal,departamento_venta,departamento,cargo)
                     else:
@@ -172,24 +172,24 @@ class Vendedores(QWidget):
                     self.lineas_en_blanco()
                     self.Actualizar_tablas()
                 elif getattr(self.ui,f'rb_{accion}').isChecked() and accion == "eliminar": #COMMENTLINE: METODO PARA ELIMINAR REFACCIONES
-                    indice = self.ui.ledit_idrefacciones.text()
+                    indice = self.ui.ledit_idrefacciones.text().strip()
                     funcion(indice)
                     self.lineas_en_blanco()
                     self.Actualizar_tablas()
                 elif getattr(self.ui, f'rb_{accion}').isChecked() and accion == "actualizar": #COMMENTLINE: METODO PARA ACTUALIZAR REFACCIONES
-                    indice = self.ui.ledit_idrefacciones.text()
-                    nombre = self.ui.ledit_nombrevendedor.text()
-                    sucursal = self.ui.ledit_sucursal.text()
-                    departamento_venta = self.ui.ledit_depaventa.text()
-                    departamento = self.ui.ledit_depa.text()
-                    cargo = self.ui.ledit_cargo.text()
+                    indice = self.ui.ledit_idrefacciones.text().strip()
+                    nombre = self.ui.ledit_nombrevendedor.text().strip()
+                    sucursal = self.ui.ledit_sucursal.text().strip()
+                    departamento_venta = self.ui.ledit_depaventa.text().strip()
+                    departamento = self.ui.ledit_depa.text().strip()
+                    cargo = self.ui.ledit_cargo.text().strip()
                     funcion(indice, nombre, sucursal,departamento_venta,departamento,cargo)
                     self.lineas_en_blanco()
                     self.Actualizar_tablas()
                 if getattr(self.ui, f"rb_{accion}").isChecked() and accion == "agregar_servicio": #COMMENTLINE: METODO PARA AGREGAR SERVICIO
-                    nombre = self.ui.ledit_nombrevendedor_servicio.text()
-                    departamento_venta = self.ui.ledit_depaventa_servicio.text()
-                    departamento = self.ui.ledit_depa_servicio.text()
+                    nombre = self.ui.ledit_nombrevendedor_servicio.text().strip()
+                    departamento_venta = self.ui.ledit_depaventa_servicio.text().strip()
+                    departamento = self.ui.ledit_depa_servicio.text().strip()
                     if (nombre and departamento_venta and departamento):
                         funcion(nombre,departamento_venta,departamento)
                     else:
@@ -205,15 +205,15 @@ class Vendedores(QWidget):
                     self.lineas_en_blanco()
                     self.Actualizar_tablas()
                 elif getattr(self.ui,f'rb_{accion}').isChecked() and accion == "eliminar_servicio": #COMMENTLINE: METODO PARA ELIMINAR SERVICIO
-                    indice = self.ui.ledit_idservicio.text()
+                    indice = self.ui.ledit_idservicio.text().strip()
                     funcion(indice)
                     self.lineas_en_blanco()
                     self.Actualizar_tablas()
                 elif getattr(self.ui, f'rb_{accion}').isChecked() and accion == "actualizar_servicio": #COMMENTLINE: METODO PARA ACTUALIZAR SERVICIO
-                    indice = self.ui.ledit_idservicio.text()
-                    nombre = self.ui.ledit_nombrevendedor_servicio.text()
-                    departamento_venta = self.ui.ledit_depaventa_servicio.text()
-                    departamento = self.ui.ledit_depa_servicio.text()
+                    indice = self.ui.ledit_idservicio.text().strip()
+                    nombre = self.ui.ledit_nombrevendedor_servicio.text().strip()
+                    departamento_venta = self.ui.ledit_depaventa_servicio.text().strip()
+                    departamento = self.ui.ledit_depa_servicio.text().strip()
                     funcion(indice, nombre,departamento_venta,departamento)
                     self.lineas_en_blanco()
                     self.Actualizar_tablas()
@@ -302,13 +302,3 @@ class funciones_vendedores_servicio(Variables):
     def eliminar_vendedores_servicio(self, indice):
         elemento_eliminar = {"id" : indice}
         creacion_json(self.variables.help_directory, self.variables.nombre_documento_clasificacion_vendedores_servicio_kwe,elemento_eliminar).eliminar_datos_json
-
-
-
-        
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = Vendedores()
-    window.show()
-    sys.exit(app.exec_())
