@@ -109,10 +109,7 @@ class KenworthConnect():
     def VentasPerdidasVillahermosa(self):
         VentasPerdidas().venta_perdida_villahermosa()
     def VentasPerdidasCoatzacoalcos(self):
-        try:
-            VentasPerdidas().venta_perdida_coatzacoalcos()
-        except Exception as e:
-            print(e)
+        VentasPerdidas().venta_perdida_coatzacoalcos()
     def VentasPerdidasMerida(self):
         VentasPerdidas().venta_perdida_merida()
     def VentasPerdidasOaxaca(self):

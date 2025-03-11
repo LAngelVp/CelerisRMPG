@@ -175,7 +175,9 @@ class VentasPerdidas(Variables):
             if "fecha" in column_name.lower():
                 df = self.variables.global_date_format_america(df, column_name)
 
-        df["Mes"] = df["Fecha"].apply(lambda x:self.variables.nombre_mes_base_columna(x))
+        df["Mes"] = df["Fecha"].apply(lambda x:self.variables.nombre_mes_completo_base_columna(x))
+        
+        df["Año"] = df["Fecha"].apply(lambda x:self.variables.nombre_año_completo_base_columna(x))
         
         df.insert(0, "VP", 1, allow_duplicates=False)
 

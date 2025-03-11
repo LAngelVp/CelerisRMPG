@@ -417,6 +417,17 @@ class trabajohilo(QThread):
             "ICR.xlsx" :KenworthConnect().InventarioCosteado,
             "IUR.xlsx" : KenworthConnect().InventarioDeUnidades,
             "RFR.xlsx" : KenworthConnect().ResultadosFinancieros,
+            "VPNLM.xls" : KenworthConnect().VentasPerdidasNuevoLaredoMatriz,
+            "VPR.xls" : KenworthConnect().VentasPerdidasReynosa,
+            "VPM.xls" : KenworthConnect().VentasPerdidasMatamoros,
+            "VPPN.xls" : KenworthConnect().VentasPerdidasPiedrasNegras,
+            "VPNLA.xls" : KenworthConnect().VentasPerdidasNuevoLaredoAeropuerto,
+            "VPPR.xls" : KenworthConnect().VentasPerdidasPozaRica,
+            "VPVH.xls" : KenworthConnect().VentasPerdidasValleHermoso,
+            "VPTRPN.xls" : KenworthConnect().VentasPerdidasTrpNava,
+            "VPTRPR.xls" : KenworthConnect().VentasPerdidasTrpReynosa,
+            "VPTRPNL.xls" : KenworthConnect().VentasPerdidasTrpNuevoLaredo,
+            "VPTRPA.xls" : KenworthConnect().VentasPerdidasTrpAcuña,
         }
         #-----------------------------------------------
         while True:

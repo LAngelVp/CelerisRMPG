@@ -200,6 +200,14 @@ class Variables:
         mes = valor.strftime(f'%b-%y').replace(".","").lower()
         return mes
     
+    def nombre_mes_completo_base_columna(self, valor):
+        mes = valor.strftime(f'%B').replace(".","").capitalize()
+        return mes
+    
+    def nombre_año_completo_base_columna(self, valor):
+        año = valor.strftime(f'%Y').replace(".","")
+        return año
+    
     def parse_date_safe(self, date_str):
         try:
             # Parsear la cadena a un objeto datetime

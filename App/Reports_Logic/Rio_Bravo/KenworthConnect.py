@@ -5,6 +5,7 @@
 #--------------------
 # CLASE INTERMEDIARIA ENTRE EL FRONT Y EL BACK PANDAS
 #---------------------
+import traceback
 import sys
 import os
 import shutil
@@ -21,6 +22,8 @@ from .Logica_Reportes.Trabajos_Por_Estado import TrabajosPorEstado
 from .Logica_Reportes.InventarioCosteado import InventarioCosteado
 from .Logica_Reportes.InventarioUnidades import InventarioUnidades
 from .Logica_Reportes.Financiero import ResultadosFinancieros
+# VENTAS PERDIDAS--------------
+from .Logica_Reportes.VentasPerdidas import VentasPerdidas
 #___________________________________________________
 
 class KenworthConnect():
@@ -72,3 +75,26 @@ class KenworthConnect():
 # RESULTADOS FINANCIEROS
     def ResultadosFinancieros(self):
         ResultadosFinancieros()
+# VENTAS PERDIDAS
+    def VentasPerdidasNuevoLaredoMatriz(self):
+        VentasPerdidas().venta_perdida_nuevo_laredo_matriz()
+    def VentasPerdidasReynosa(self):
+        VentasPerdidas().venta_perdida_reynosa()
+    def VentasPerdidasMatamoros(self):
+        VentasPerdidas().venta_perdida_matamoros()
+    def VentasPerdidasPiedrasNegras(self):
+        VentasPerdidas().venta_perdida_piedras_negras()
+    def VentasPerdidasNuevoLaredoAeropuerto(self):
+        VentasPerdidas().venta_perdida_nuevo_laredo_aeropuerto()
+    def VentasPerdidasPozaRica(self):
+        VentasPerdidas().venta_perdida_poza_rica()
+    def VentasPerdidasValleHermoso(self):
+        VentasPerdidas().venta_perdida_valle_hermoso()
+    def VentasPerdidasTrpNava(self):
+        VentasPerdidas().venta_perdida_trp_nava()
+    def VentasPerdidasTrpReynosa(self):
+        VentasPerdidas().venta_perdida_trp_reynosa()
+    def VentasPerdidasTrpNuevoLaredo(self):
+        VentasPerdidas().venta_perdida_trp_nuevo_laredo()
+    def VentasPerdidasTrpAcuña(self):
+        VentasPerdidas().venta_perdida_trp_acuña()
