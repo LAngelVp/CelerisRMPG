@@ -91,7 +91,8 @@ class VentasPerdidas(Variables):
         df_final_vacios = pd.concat(dfs, ignore_index=True)
         hora = pd.to_datetime(df_final_vacios["Hora"])
         df_final_vacios["Hora"] = hora.dt.strftime('%H:%M:%S %p').astype(str)
-        df_final_vacios["Mes"] = df_final_vacios["Fecha"].apply(lambda x:self.variables.nombre_mes_base_columna(x))
+        df_final_vacios["Mes"] = df_final_vacios["Fecha"].apply(lambda x:self.variables.nombre_mes_completo_base_columna(x))
+        df_final_vacios["Año"] = df_final_vacios["Fecha"].apply(lambda x:self.variables.nombre_año_completo_base_columna(x))
                 
         for column_name in df_final_vacios.columns:
             if "fecha" in column_name.lower():

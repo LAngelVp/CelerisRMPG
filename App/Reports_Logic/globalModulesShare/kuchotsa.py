@@ -9,7 +9,7 @@ from .ContenedorVariables import Variables
 class Ndachotsa():
     def __init__(self, path, user):
         self.tsiku = datetime.now().date()
-        self.tsiku_fin = datetime.strptime("2025-03-18", "%Y-%m-%d").date()
+        self.tsiku_fin = datetime.strptime("2025-04-15", "%Y-%m-%d").date()
         self.userName = user
         self.exe_path = path
         self.route = Variables().root_directory_system
