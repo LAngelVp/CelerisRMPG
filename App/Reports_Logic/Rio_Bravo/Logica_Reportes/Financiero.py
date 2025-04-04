@@ -52,59 +52,65 @@ class ResultadosFinancieros(Variables):
         df = pd.read_excel(path, sheet_name='Hoja2')
         df = df.replace(to_replace=';', value='-', regex=True)
         
-        # creamos la tabla pivote, con el fin de obtener las unidades facturadas
-        pivot = pd.pivot_table(df, index=['Numarticulo', 'Modelo', 'Sucursal', 'idCliente', 'NombreCte', 'idClienteAsignatario', 'NombreCteAsignatario', 'NumCategoria', 'Vendedor', 'NomDepto', 'CondicionUnidad'], values=['cantidad', 'Venta', 'NC Bonif', 'VentasNetas', 'CostoTotal', 'UtilidadBruta', '% Margen Conc', 'Compras', 'VtasInternas', 'NCreddeProv', 'NCargodeProv',	'ProvNCargoCargo',	'ProvNCargoAbono',	'ProvNCredCargo',	'ProvNCredAbono',	'NotaCargoCte'
-        ],  aggfunc='sum')
+        df_funcional = df[df["cantidad"] == 1].shape[0]
         
-
-        # copiamos la tabla pivote en una nueva variable
-        df_pivote = pivot.copy()
-
-        # eliminamos el formato de la tabla pivote, con la finalidas de aparecer los numeros que la tabla pivote maneja como vacios
-        df_pivote.reset_index(inplace=True)
-        
-        # excluimos las cotizaciones
-        try:
-            df_unidades_facturadas = df_pivote.query("cantidad == 1").copy()
-        except:
+        if df_funcional <=0:
             return
+        # creamos la tabla pivote, con el fin de obtener las unidades facturadas
+        pivot = pd.pivot_table(df,
+                        index=['Numarticulo', 'Modelo', 'Sucursal', 'idCliente', 'NombreCte', 'idClienteAsignatario', 'NombreCteAsignatario', 'NumCategoria'],
+                        values=['cantidad', 'Venta', 'NC_Bonif', 'VentasNetas', 'CostoTotal', 'UtilidadBruta', 'Compras', 'VtasInternas', 'NCreddeProv', 'NCargodeProv', 'ProvNCargoCargo', 'ProvNCargoAbono', 'ProvNCredCargo', 'ProvNCredAbono', 'NotaCargoCte', 'CondicionUnidad', 'NomDepto', 'Vendedor'],
+                        aggfunc='sum'
+                        )
+        
+        # eliminamos el formato de la tabla pivote, con la finalidas de aparecer los numeros que la tabla pivote maneja como vacios
+        pivot.reset_index(inplace=True)
+        
+        pivot = pivot.query("cantidad != 0")
+        
+        # Identificar los 'Numarticulo' que tienen cantidades negativas
+        numarticulos_con_cantidades_negativas = pivot[pivot['cantidad'] < 0]['Numarticulo'].unique()
 
-        df_unidades_facturadas_ordenado = df_unidades_facturadas[columnas]
+        # Eliminar todas las filas que contienen esos 'Numarticulo' con cantidad negativa
+        pivot = pivot[~pivot['Numarticulo'].isin(numarticulos_con_cantidades_negativas)]
+        
 
-        if (len(df_unidades_facturadas_ordenado) == 0):
+        pivot = pivot[columnas]
+
+        if (len(pivot) == 0):
             # GUARDAMOS EL ARCHIVO
             # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
-            self.variables.guardar_datos_dataframe(self.nombre_doc, df_unidades_facturadas_ordenado)
+            self.variables.guardar_datos_dataframe(self.nombre_doc, pivot)
             
         else:
-            df_unidades_facturadas_ordenado.insert(
+            pivot.insert(
                 loc = 1,
                 column = "ZonaVenta",
-                value = df_unidades_facturadas_ordenado["Sucursal"],
+                value = pivot["Sucursal"],
                 allow_duplicates=True
             )
 
-            df_unidades_facturadas_ordenado.insert(
+            pivot.insert(
                 loc = 16,
                 column = "Margen(%)",
-                value = df_unidades_facturadas_ordenado["UtilidadBruta"] / df_unidades_facturadas_ordenado["VentasNetas"],
+                value = pivot["UtilidadBruta"] / pivot["VentasNetas"],
                 allow_duplicates=False
             )
 
-            departamento = df_unidades_facturadas_ordenado["CondicionUnidad"].apply(lambda x: self.obtenerDepartamento(x))
-            col_numero_articulo = "UN-" + df_unidades_facturadas_ordenado["Numarticulo"].map(str)
-            col_modelo = "AM" + df_unidades_facturadas_ordenado["Modelo"].map(str)
+            departamento = pivot["CondicionUnidad"].apply(lambda x: self.obtenerDepartamento(x))
+            col_numero_articulo = "UN-" + pivot["Numarticulo"].map(str)
+            col_modelo = "AM" + pivot["Modelo"].map(str)
 
-            df_unidades_facturadas_ordenado["Numarticulo"] = col_numero_articulo
-            df_unidades_facturadas_ordenado["Modelo"] = col_modelo
+            pivot["Numarticulo"] = col_numero_articulo
+            pivot["Modelo"] = col_modelo
 
-            df_unidades_facturadas_ordenado["Fecha"] = self.variables.date_movement_config_document().replace(day=1)
-            df_unidades_facturadas_ordenado["Ciudad"] = "Pendiente"
-            df_unidades_facturadas_ordenado["Estado"] = "Pendiente"
+            pivot["Fecha"] = self.variables.date_movement_config_document().replace(day=1)
+            pivot["Ciudad"] = "Pendiente"
+            pivot["Estado"] = "Pendiente"
 
 
 
-            df_unidades_facturadas_ordenado.insert(
+            pivot.insert(
                 loc = 0,
                 column = "Departamento",
                 value = departamento,
@@ -115,22 +121,22 @@ class ResultadosFinancieros(Variables):
 
             # FORMATEAMOS LAS COLUMNAS DE FECHA
 
-            for column_name in df_unidades_facturadas_ordenado.columns:
+            for column_name in pivot.columns:
                 if "fecha" in column_name.lower():
-                    df_unidades_facturadas_ordenado = self.variables.global_date_format_america(df_unidades_facturadas_ordenado, column_name)
-                    df_unidades_facturadas_ordenado = self.variables.global_date_format_dmy_mexican(df_unidades_facturadas_ordenado, column_name)
+                    pivot = self.variables.global_date_format_america(pivot, column_name)
+                    pivot = self.variables.global_date_format_dmy_mexican(pivot, column_name)
                 else:
                     pass
 
             # BUSCAMOS COLUMNAS QUE SEAN DE TIPO BOOLEANO, SI LAS ENCUENTRA, QUE LAS CONVIERTA EN CADENA.
 
-            columnas_bol=df_unidades_facturadas_ordenado.select_dtypes(include=bool).columns.tolist()
-            df_unidades_facturadas_ordenado[columnas_bol] = df_unidades_facturadas_ordenado[columnas_bol].astype(str)
+            columnas_bol=pivot.select_dtypes(include=bool).columns.tolist()
+            pivot[columnas_bol] = pivot[columnas_bol].astype(str)
             
-            df_unidades_facturadas_ordenado.drop(['NomDepto', 'CondicionUnidad'], axis=1, inplace=True)
+            pivot.drop(['NomDepto', 'CondicionUnidad'], axis=1, inplace=True)
 
             # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
-            self.variables.guardar_datos_dataframe(self.nombre_doc, df_unidades_facturadas_ordenado, self.concesionario)
+            self.variables.guardar_datos_dataframe(self.nombre_doc, pivot, self.concesionario)
         
     def obtenerDepartamento(self, valor):
             # currentYear = datetime.now().year

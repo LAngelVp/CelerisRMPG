@@ -136,8 +136,8 @@ class Inventario(Variables):
                                      (df_inventarioCosteadoxDia["Almacén"].str.lower().str.contains("rescate")), "ClassAlmacen"] = "Inventario de Seguridad"
 
 
-        df_inventarioCosteadoxDia.loc[(df_inventarioCosteadoxDia["Almacén"].str.lower().str.contains("consigna")) | 
-                                     ( df_inventarioCosteadoxDia["Almacén"].str.lower().str.contains("consignas")), "ClassAlmacen"] = "Consigna"
+        df_inventarioCosteadoxDia.loc[(df_inventarioCosteadoxDia["Almacén"].str.lower().str.contains("con m")) | 
+                                     ( df_inventarioCosteadoxDia["Almacén"].str.lower().str.contains("consig")), "ClassAlmacen"] = "Consigna"
 
         # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc2, df_inventarioCosteadoxDia, self.concesionario)

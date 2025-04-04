@@ -88,10 +88,7 @@ class InventarioCosteado(Variables):
         #mandamos a llamar a la clasificacion por Almacen.
         df_inventarioCosteadoxDia["ClasSF"] = df_inventarioCosteadoxDia.apply(lambda fila:self.ClasSF_Almacen(fila["Almacén"],fila["TipoDocumento"], fila["ClasSF"]),axis=1)
 
-        #creamoa la columna de marca
-        # df_inventarioCosteadoxDia["Marca"] = ""
-        # #creamos la del mes
-        # df_inventarioCosteadoxDia["Mes"] = self.variables.nombre_mes_actual_abreviado()
+        df_inventarioCosteadoxDia["Mes"] = self.variables.nombre_mes_actual_abreviado()
 
         #convertir la fecha a formato "dia/mes/año"
         df_inventarioCosteadoxDia= self.variables.global_date_format_america(df_inventarioCosteadoxDia, "Fecha_Dias")

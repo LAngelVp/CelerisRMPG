@@ -68,8 +68,8 @@ class InventarioKWESTEKREI(Variables):
                                     (df2["Almacén"].str.lower().str.contains("rescate")), "ClassAlmacen"] = "Inventario de Seguridad"
 
 
-        df2.loc[(df2["Almacén"].str.lower().str.contains("consigna")) | 
-                                    ( df2["Almacén"].str.contains("consignas")), "ClassAlmacen"] = "Consigna"
+        df2.loc[(df2["Almacén"].str.lower().str.contains("con m")) | 
+                                     ( df2["Almacén"].str.lower().str.contains("consig")), "ClassAlmacen"] = "Consigna"
 
         columnas_bol=df2.select_dtypes(include=bool).columns.tolist()
         df2[columnas_bol] = df2[columnas_bol].astype(str)
