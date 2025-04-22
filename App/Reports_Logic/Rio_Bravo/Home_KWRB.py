@@ -18,6 +18,7 @@ from ..ventanaspy.V_KWRB import *
 from ..globalModulesShare.Home_rutas import *
 from ..globalModulesShare.mensajes_alertas import Mensajes_Alertas
 import subprocess
+import traceback
 class Home_KWRB(QMainWindow):
     closed = pyqtSignal()
     def __init__(self):
@@ -207,16 +208,27 @@ class Home_KWRB(QMainWindow):
         self.nombreArchivoTrabajando(textoVacio)
 #-------------------------------------------------
 
-    def mensajeArchivoErroneo(self, mensaje):
-        Mensajes_Alertas(
-            "Errores durante el proceso",
-            f'Los documentos que no se lograron procesar son:\n{mensaje}\nLa ruta de los errores es:\n {self.variables.ruta_errores_kwrb}',
-            QMessageBox.Icon.Critical,
-            "Cuando el sistema muestra un error como este, existen algunos factores que se tienen que tomar en cuenta:\n1.- El nombre del documento no tiene la nomenclatura correcta.\n2.- El documento original no contiene las columnas a trabajar o su contendo es incorrecto.\n3.- EL documento no es el correcto o esta corrupto.",
-            botones=[
-                ("Aceptar", self.Aceptar_callback)
-            ]
-        ).mostrar
+    def mensajeArchivoErroneo(self, mensaje, detalle = None):
+        if detalle is None:
+            Mensajes_Alertas(
+                "Errores durante el proceso",
+                f'Los documentos que no se lograron procesar son:\n{mensaje}\nLa ruta de los errores es:\n {self.variables.ruta_errores_kwrb}',
+                QMessageBox.Icon.Critical,
+                f"Cuando el sistema muestra un error como este, existen algunos factores que se tienen que tomar en cuenta:\n1.- El nombre del documento no tiene la nomenclatura correcta.\n2.- El documento original no contiene las columnas a trabajar o su contendo es incorrecto.\n3.- EL documento no es el correcto o esta corrupto.",
+                botones=[
+                    ("Aceptar", self.Aceptar_callback)
+                ]
+            ).mostrar
+        else:
+            Mensajes_Alertas(
+                "Errores durante el proceso",
+                f'Los documentos que no se lograron procesar son:\n{mensaje}\nLa ruta de los errores es:\n {self.variables.ruta_errores_kwrb}',
+                QMessageBox.Icon.Critical,
+                f"Cuando el sistema muestra un error como este, existen algunos factores que se tienen que tomar en cuenta:\n1.- El nombre del documento no tiene la nomenclatura correcta.\n2.- El documento original no contiene las columnas a trabajar o su contendo es incorrecto.\n3.- EL documento no es el correcto o esta corrupto.\nDetalles del error:\n{detalle}",
+                botones=[
+                    ("Aceptar", self.Aceptar_callback)
+                ]
+            ).mostrar
         self.Show_Data_Trabajos()
         self.Show_Data_Procesado()
 
@@ -391,13 +403,14 @@ class Home_KWRB(QMainWindow):
 class trabajohilo(QThread):
 # agregamos una variable de tipo señal
     signal = pyqtSignal()
-    signalDocumentosErroneos = pyqtSignal(str)
+    signalDocumentosErroneos = pyqtSignal(str, str)
     signalShowTrabajos = pyqtSignal()
     signalShowProcesados = pyqtSignal()
     signalNombreArchivo =  pyqtSignal(str)
     def __init__(self):
         super().__init__()
         self.variables = Variables()
+        self.mensaje_del_error = None
 
 
     def run(self):
@@ -449,6 +462,7 @@ class trabajohilo(QThread):
                         except Exception as e:
                             array_errores.append(nombre_archivo)
                             self.Comprobacion_Errores(nombre_archivo)
+                            self.mensaje_del_error = traceback.format_exc()
                             self.signalShowTrabajos.emit()
                             self.signalShowProcesados.emit()
                             continue
@@ -466,7 +480,10 @@ class trabajohilo(QThread):
                 for i in array_errores:
                     mensaje += f'{x}.-{i}\n'
                     x += 1
-                self.signalDocumentosErroneos.emit(mensaje)
+                if self.mensaje_del_error is not None:
+                    self.signalDocumentosErroneos.emit(mensaje, self.mensaje_del_error)
+                else:
+                    self.signalDocumentosErroneos.emit(mensaje, None)
                 continue
             self.signalShowTrabajos.emit()
             self.signalShowProcesados.emit()

@@ -52,7 +52,7 @@ class InicioSesion(QWidget):
         self.ui.label.setStyleSheet("color:#000000;")
 
 
-        self.ejecuta = os.path.join(os.path.dirname(__file__), 'chromedriver',  'chromedriver.exe')
+        # self.ejecuta = os.path.join(os.path.dirname(__file__), 'chromedriver',  'chromedriver.exe')
         
         
         if not os.path.exists(self.variables.help_directory):
@@ -60,15 +60,15 @@ class InicioSesion(QWidget):
         else:
             pass
 
-        objeto_driver = {
-            'nombre' : 'chromedriver',
-            'ruta' : self.ejecuta
-        } 
-        if os.path.exists(os.path.join(self.variables.help_directory,"ruta_driver.json")):
-            pass
-        else:
-            creacion_json(self.variables.help_directory,"ruta_driver.json", objeto_driver).agregar_json
-        self.excepsion()
+        # objeto_driver = {
+        #     'nombre' : 'chromedriver',
+        #     'ruta' : self.ejecuta
+        # } 
+        # if os.path.exists(os.path.join(self.variables.help_directory,"ruta_driver.json")):
+        #     pass
+        # else:
+        #     creacion_json(self.variables.help_directory,"ruta_driver.json", objeto_driver).agregar_json
+        # self.excepsion()
 
     def cerrar(self):
         self.close()

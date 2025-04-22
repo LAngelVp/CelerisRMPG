@@ -82,8 +82,4 @@ class PrincipalWindow(QMainWindow):
                 self.move(new_pos.toPoint())
 
 
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    ventana_principal = PrincipalWindow()
-    ventana_principal.show()
-    sys.exit(app.exec())
+
