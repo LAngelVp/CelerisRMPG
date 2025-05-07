@@ -800,6 +800,7 @@ border-top-right-radius: 10px;
      </widget>
      <addaction name="menuPagos_de_facturas_de_clientes"/>
      <addaction name="actionDepartamentos"/>
+     <addaction name="actionClasificarDepartamentosDeVendedoresVentasPerdidas"/>
     </widget>
     <addaction name="menuPagosClientes"/>
     <addaction name="actionFechaMovimiento"/>
@@ -840,6 +841,11 @@ border-top-right-radius: 10px;
   <action name="actionDepartamentos">
    <property name="text">
     <string>Departamentos</string>
+   </property>
+  </action>
+  <action name="actionClasificarDepartamentosDeVendedoresVentasPerdidas">
+   <property name="text">
+    <string>Clasificar departamentos de vendedores (ventas perdidas)</string>
    </property>
   </action>
  </widget>

@@ -51,7 +51,6 @@ class InicioSesion(QWidget):
         self.ui.txt_usuarioPassword.setStyleSheet("color:#000000;")
         self.ui.label.setStyleSheet("color:#000000;")
 
-
         # self.ejecuta = os.path.join(os.path.dirname(__file__), 'chromedriver',  'chromedriver.exe')
         
         
@@ -126,6 +125,7 @@ class InicioSesion(QWidget):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    # app.setStyle("Fusion")
     ventana_principal = InicioSesion()
     ventana_principal.show()
     sys.exit(app.exec())
