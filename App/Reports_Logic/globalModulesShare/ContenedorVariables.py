@@ -55,6 +55,7 @@ class Variables:
         self.clasificacion_vendedores_refacciones_sonora = "Clasificacion_vendedores_refacciones_sonora.json"
         self.large_clients_parts_file = 'clientes_grandes.json'
         self.parts_brands_file = 'marcas_refacciones.json'
+        self.departamentos_vendedores_ventas_perdidas = "vendedores_ventas_perdidas.json"
 
 #-----------------------------------------------------------
 #comment: root directory system
