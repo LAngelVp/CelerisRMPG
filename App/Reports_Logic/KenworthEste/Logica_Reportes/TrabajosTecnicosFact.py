@@ -14,7 +14,7 @@ class TrabajosTecnicosProcess:
         self.concesionario = Concesionarios().concesionarioEste
         self.variables = Variables()
         #COMMENT: VARIABLE AUXIALIARES PARA EL CODIGO
-        self.nombre_doc = "SDTE.xlsx"
+        self.nombre_doc = "SDET.xlsx"
         self.clientes_plm = ["PACCAR FINANCIAL MEXICO", "PACLEASE MEXICANA"]
         self.clientes_garantia = ["KENWORTH MEXICANA", "PACCAR PARTS MEXICO", "DISTRIBUIDORA MEGAMAK"]
         self.columnas_after_cliente = ['ObjRefacc','ObjUBTRef','ObjMO', 'ObjUTBMO', 'Clasificacion Cliente']
@@ -174,10 +174,10 @@ class TrabajosTecnicosProcess:
         columna_un = "UN-" + trab["Serie Unidad"].astype(str)
         trab["Número Orden"] = columna_os
         trab["Serie Unidad"] = columna_un
-        trab = trab.merge(self.servicio[["Número Orden", "Depa"]], on="Número Orden", how="left")
+        trab = trab.merge(self.servicio_data[["Número Orden", "Depa"]], on="Número Orden", how="left")
         self.trabajos_data = trab.copy()
         
-        self.variables.guardar_datos_dataframe(self.nombre_doc, self.trabajos, self.concesionario)
+        self.variables.guardar_datos_dataframe(self.nombre_doc, self.trabajos_data, self.concesionario)
         
 
 #//////////////////////////////////////////////////////////////////////////////////////
