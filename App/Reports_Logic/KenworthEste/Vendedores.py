@@ -122,6 +122,7 @@ class Vendedores(QWidget):
                     celda = self.ui.tabla_vendedoresrefacciones.item(fila, columna)
                     if celda:
                         celda.setFlags(celda.flags() & ~Qt.ItemFlag.ItemIsEditable)
+                        
         elif (self.obtener_tab_activo() == 1):
             self.datos_json = creacion_json(self.variables.help_directory, self.variables.nombre_documento_clasificacion_vendedores_servicio_kwe).comprobar_existencia
             self.ui.tabla_vendedoresrefacciones_servicio.clearContents()

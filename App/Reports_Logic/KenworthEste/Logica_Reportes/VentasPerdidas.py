@@ -137,7 +137,7 @@ class VentasPerdidas(Variables):
         df["Venta Perdida"] = col_venta_perdida_concat
 
         # Cargar la información de vendedores
-        vendedores = pd.read_json(os.path.join(self.variables.help_directory, "VendedoresVP.json"))
+        vendedores = pd.read_json(os.path.join(self.variables.help_directory, self.variables.departamentos_vendedores_ventas_perdidas))
         df.insert(12, column="Departamento", value="", allow_duplicates=False)
 
         # Mapear los departamentos
