@@ -19,11 +19,22 @@ from .Logica_Reportes.Refacciones import *
 from .Logica_Reportes.Financiero import *
 from .Logica_Reportes.Contabilidad import FactSitic_document, Nota_credito_retenido, FactSat_document
 from .Logica_Reportes.VentasPerdidas import VentasPerdidas
+from .Logica_Reportes.TrabajosTecnicosFact import TrabajosTecnicosProcess
 #-----------------------------------
 
 #CLASE
 class KenworthConnect():
+    def __init__(self):
+        self.trabajos_tecnico_fact = TrabajosTecnicosProcess()
     # este sera el apartado en donde se colocaran las funciones que conectaran al back.
+    
+    #COMMENT: TRABAJOS POR TECNICO FACT
+    def TrabajosPorTecnicoFactServicio(self):
+        self.trabajos_tecnico_fact.servicio_detallado()
+    def TrabajosPorTecnicoFactTrabajos(self):
+        self.trabajos_tecnico_fact.trabajos()
+        
+        
     def Credito(self):
         Credito()
     #:------------------------------------------------------
@@ -96,6 +107,11 @@ class KenworthConnect():
             FactSat_document().Nota_de_credito
         except Exception as e:
             print(e)
+            
+
+        
+            
+#COMMENT: VENTAS PERDIDAS
     def VentasPerdidasMatriz(self):
         VentasPerdidas().venta_perdida_matriz()
     def VentasPerdidasTrebol(self):
