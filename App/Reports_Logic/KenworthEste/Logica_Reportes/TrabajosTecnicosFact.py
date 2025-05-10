@@ -177,6 +177,10 @@ class TrabajosTecnicosProcess:
         trab = trab.merge(self.servicio_data[["Número Orden", "Depa"]], on="Número Orden", how="left")
         self.trabajos_data = trab.copy()
         
+        for column_name in self.trabajos_data.columns:
+            if "fecha" in column_name.lower():
+                self.trabajos_data = self.variables.global_date_format_dmy_mexican(self.trabajos_data, column_name)
+        
         self.variables.guardar_datos_dataframe(self.nombre_doc, self.trabajos_data, self.concesionario)
         
 
