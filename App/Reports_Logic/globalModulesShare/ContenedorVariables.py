@@ -188,6 +188,10 @@ class Variables:
         mes_actual_nombre = calendar.month_name[mes_actual].capitalize()
         return mes_actual_nombre
     
+    def year_completo(self):
+        year_actual = self.date_movement_config_document().year
+        return year_actual
+    
     def nombre_mes_actual_abreviado(self):
         mes_actual = self.date_movement_config_document()
         mes_abreviado = mes_actual.strftime(f'%b-%y').replace(".","").lower()

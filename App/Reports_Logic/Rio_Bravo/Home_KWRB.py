@@ -430,6 +430,7 @@ class trabajohilo(QThread):
             "ICR.xlsx" :KenworthConnect().InventarioCosteado,
             "IUR.xlsx" : KenworthConnect().InventarioDeUnidades,
             "RFR.xlsx" : KenworthConnect().ResultadosFinancieros,
+            "AMR.xlsx" : KenworthConnect().ContabilidadConector,
             "VPNLM.xls" : KenworthConnect().VentasPerdidasNuevoLaredoMatriz,
             "VPR.xls" : KenworthConnect().VentasPerdidasReynosa,
             "VPM.xls" : KenworthConnect().VentasPerdidasMatamoros,

@@ -22,6 +22,7 @@ from .Logica_Reportes.Trabajos_Por_Estado import TrabajosPorEstado
 from .Logica_Reportes.InventarioCosteado import InventarioCosteado
 from .Logica_Reportes.InventarioUnidades import InventarioUnidades
 from .Logica_Reportes.Financiero import ResultadosFinancieros
+from .Logica_Reportes.Contabilidad import ContabilidadAnalisis
 # VENTAS PERDIDAS--------------
 from .Logica_Reportes.VentasPerdidas import VentasPerdidas
 #___________________________________________________
@@ -75,6 +76,10 @@ class KenworthConnect():
 # RESULTADOS FINANCIEROS
     def ResultadosFinancieros(self):
         ResultadosFinancieros()
+        
+    def ContabilidadConector(self):
+        ContabilidadAnalisis().anexos_moimientos_gastos()
+        
 # VENTAS PERDIDAS
     def VentasPerdidasNuevoLaredoMatriz(self):
         VentasPerdidas().venta_perdida_nuevo_laredo_matriz()
