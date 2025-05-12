@@ -73,13 +73,6 @@ class ResultadosFinancieros(Variables):
             self.variables.guardar_datos_dataframe(self.nombre_doc, df_unidades_facturadas_ordenado, self.concesionario)
 
         else:
-            # df_unidades_facturadas_ordenado.insert(
-            #     loc = 1,
-            #     column = "ZonaVenta",
-            #     value = df_unidades_facturadas_ordenado["Sucursal"],
-            #     allow_duplicates=True
-            # )
-
             df_unidades_facturadas_ordenado.insert(
                 loc = 15,
                 column = "Margen(%)",
@@ -95,12 +88,7 @@ class ResultadosFinancieros(Variables):
             df_unidades_facturadas_ordenado["Modelo"] = col_modelo
 
             df_unidades_facturadas_ordenado["Fecha"] = self.variables.date_movement_config_document()
-            df_unidades_facturadas_ordenado["Ciudad"] = ""
-            df_unidades_facturadas_ordenado["Estado"] = ""
-            df_unidades_facturadas_ordenado["Status"] = ""
-            df_unidades_facturadas_ordenado["Mes"] = self.variables.nombre_mes()
-            df_unidades_facturadas_ordenado["Latitud"] = ""
-            df_unidades_facturadas_ordenado["Longitud"] = ""
+            
 
 
             df_unidades_facturadas_ordenado.insert(
@@ -157,6 +145,25 @@ class ResultadosFinancieros(Variables):
             df_unidades_facturadas_ordenado[columnas_bol] = df_unidades_facturadas_ordenado[columnas_bol].astype(str)
             
             df_unidades_facturadas_ordenado.drop(['NomDepto', 'CondicionUnidad'], axis=1, inplace=True)
+            
+            df_unidades_facturadas_ordenado = self.clientes_financiero_merge(df_unidades_facturadas_ordenado)
+            df_unidades_facturadas_ordenado["Status"] = ""
+            df_unidades_facturadas_ordenado["Mes"] = self.variables.nombre_mes()
+            df_unidades_facturadas_ordenado["colum_vacia"] = ""
+            df_unidades_facturadas_ordenado["colum_vacia2"] = ""
+            df_unidades_facturadas_ordenado = self.coordenadas_financiero_merge(df_unidades_facturadas_ordenado)
+            
+            
+            df_unidades_facturadas_ordenado["Sucursal"] = df_unidades_facturadas_ordenado["Sucursal"].replace("Matriz Cordoba", "Venta Parada")
+            df_unidades_facturadas_ordenado["Sucursal"] = df_unidades_facturadas_ordenado["Sucursal"].replace("Tuxtla1", "Chiapas")
+            
+            df_unidades_facturadas_ordenado.loc[df_unidades_facturadas_ordenado["Sucursal"] == "Matriz Cordoba", "Zona Vta"] = "Cordoba/Orizaba"
+            df_unidades_facturadas_ordenado.loc[df_unidades_facturadas_ordenado["Sucursal"] == "Oaxaca", "Zona Vta"] = "Oaxaca"
+            df_unidades_facturadas_ordenado.loc[df_unidades_facturadas_ordenado["Sucursal"] == "Chiapas", "Zona Vta"] = "Tuxtla Guitierrez"
+            df_unidades_facturadas_ordenado.loc[df_unidades_facturadas_ordenado["Sucursal"] == "Veracruz", "Zona Vta"] = "Veracruz/Xalapa"
+            df_unidades_facturadas_ordenado.loc[df_unidades_facturadas_ordenado["Sucursal"] == "Villahermosa", "Zona Vta"] = "Villa/Coatza/Campeche"
+            
+            
 
             # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
             self.variables.guardar_datos_dataframe(self.nombre_doc, df_unidades_facturadas_ordenado, self.concesionario)
@@ -167,3 +174,14 @@ class ResultadosFinancieros(Variables):
                 return "Venta de Unidades Usadas"
             else:
                 return "Venta de Unidades Nuevas"
+    
+    def coordenadas_financiero_merge(self, data):
+        coordenadas = pd.read_json(os.path.join(self.variables.help_directory, self.variables.coordenadas_financiero))
+        nuevo_data =  data.merge(coordenadas[["Sucursal", "SucursalMap", "Latitud", "Longitud"]], on="Sucursal", how="left")
+        return nuevo_data
+    
+    def clientes_financiero_merge(self, data):
+        clientes = pd.read_json(os.path.join(self.variables.help_directory, self.variables.clientes_financiero))
+        nuevo_data =  data.merge(clientes[["NombreCteAsignatario", "Ciudad", "Estado"]], on="NombreCteAsignatario", how="left")
+        return nuevo_data
+    

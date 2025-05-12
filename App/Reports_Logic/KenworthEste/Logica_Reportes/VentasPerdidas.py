@@ -41,7 +41,7 @@ class VentasPerdidas(Variables):
     def venta_perdida_trebol(self):
         if self.df_final.empty:
             self.comprobar_existencia_ventasperdidas()
-        documento = "VPTR  EBOL.xls"
+        documento = "VPTREBOL.xls"
         self.comprobar_documento(documento)
         self.guardar_todo()
     def venta_perdida_veracruz(self):

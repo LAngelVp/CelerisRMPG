@@ -19,9 +19,9 @@ class VentasPerdidas(Variables):
             {"archivo" : "VPPN.xls", "sucursal" : "PIEDRAS NEGRAS"},
             {"archivo" : "VPNLA.xls", "sucursal" : "NUEVO LAREDO (AEROPUERTO)"},
             {"archivo" : "VPPR.xls", "sucursal" : "POZA RICA"},
-            {"archivo" : "VPVH.xls", "sucursal" : "VALLEHERMOSO"},
+            {"archivo" : "VPVH.xls", "sucursal" : "VALLE HERMOSO"},
             {"archivo" : "VPTRPN.xls", "sucursal" : "TRP NAVA"},
-            {"archivo" : "VPTRPR.xls", "sucursal" : "TRP POZA RICA"},
+            {"archivo" : "VPTRPR.xls", "sucursal" : "TRP REYNOSA"},
             {"archivo" : "VPTRPNL.xls", "sucursal" : "TRP NUEVO LAREDO"},
             {"archivo" : "VPTRPA.xls", "sucursal" : "TRP ACUÑA"},
         ]

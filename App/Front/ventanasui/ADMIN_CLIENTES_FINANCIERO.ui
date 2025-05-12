@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>clientes_financiero_contenedor</class>
+ <widget class="QWidget" name="clientes_financiero_contenedor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>598</width>
+    <height>397</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">[objectName*=&quot;contenedor&quot;]{
+background-color: rgb(223, 223, 223);
+}
+[objectName*=&quot;txt&quot;]{
+background-color: rgb(255, 255, 255);
+border-radius: 4px;
+border-bottom:1px solid  rgb(0, 0, 0);
+font-size: 14px;
+font-family:Arial;
+	color: rgb(0, 0, 0);
+}
+[objectName*=&quot;txt&quot;]:hover{
+border-bottom:2px solid rgb(0, 0, 241);
+}
+[objectName*=&quot;txt&quot;]:focus{
+border-bottom:2px solid rgb(0, 0, 241);
+}
+#txt_buscador{
+border: 1px solid rgb(0, 96, 144)
+}
+#txt_buscador:hover{
+border:2px solid rgb(0, 0, 241);
+}
+#txt_buscador:focus{
+border: 2px solid rgb(0, 138, 0)
+}
+[objectName*=&quot;btn&quot;]{
+font-family: Arial;
+font-size: 14px;
+font-weight:bold;
+background-color: rgb(74, 148, 222);
+border-radius: 2px;
+padding: 2px 0px;
+}
+[objectName*=&quot;btn&quot;]:hover{
+background-color: rgb(65, 131, 197);
+}
+[objectName*=&quot;btn&quot;]:pressed{
+background-color: rgb(55, 111, 167);
+}
+[objectName*=&quot;tabla&quot;]{
+background-color: rgb(255, 255, 255);
+color: rgb(0, 0, 0);
+font-family: Arial;
+font-size: 12px;
+}</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <widget class="QFrame" name="contenedor">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>8</number>
+        </property>
+        <property name="bottomMargin">
+         <number>10</number>
+        </property>
+        <item>
+         <widget class="QLineEdit" name="txt_nombrecliente">
+          <property name="placeholderText">
+           <string>Nombre del cliente</string>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="txt_ciudadcliente">
+          <property name="placeholderText">
+           <string>Ciudad del cliente</string>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="txt_estadocliente">
+          <property name="placeholderText">
+           <string>Estado del cliente</string>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="txt_buscador">
+          <property name="placeholderText">
+           <string>Buscar por nombre del cliente</string>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0">
+       <widget class="QTableView" name="tabla_clientes"/>
+      </item>
+      <item row="2" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QPushButton" name="btn_agregar">
+          <property name="text">
+           <string>Agregar</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_actualizar">
+          <property name="text">
+           <string>Actualizar</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_eliminar">
+          <property name="text">
+           <string>Eliminar</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

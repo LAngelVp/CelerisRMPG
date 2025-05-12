@@ -801,6 +801,7 @@ border-top-right-radius: 10px;
      <addaction name="menuPagos_de_facturas_de_clientes"/>
      <addaction name="actionDepartamentos"/>
      <addaction name="actionClasificarDepartamentosDeVendedoresVentasPerdidas"/>
+     <addaction name="actionAdminClientesDelFinanciero"/>
     </widget>
     <addaction name="menuPagosClientes"/>
     <addaction name="actionFechaMovimiento"/>
@@ -846,6 +847,11 @@ border-top-right-radius: 10px;
   <action name="actionClasificarDepartamentosDeVendedoresVentasPerdidas">
    <property name="text">
     <string>Clasificar departamentos de vendedores (ventas perdidas)</string>
+   </property>
+  </action>
+  <action name="actionAdminClientesDelFinanciero">
+   <property name="text">
+    <string>Admin. Clientes del Financiero</string>
    </property>
   </action>
  </widget>

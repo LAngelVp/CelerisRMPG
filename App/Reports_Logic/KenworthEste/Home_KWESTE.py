@@ -19,6 +19,7 @@ from ..ventanaspy.V_KWESTE import *
 from ..globalModulesShare.Home_rutas import *
 from .Vendedores import *
 from .Ventana_ventas_perdidasController import VentasPerdidasController
+from .Clientes_financieroController import ClientesFinancierController
 from ..globalModulesShare.mensajes_alertas import Mensajes_Alertas
 import subprocess
 
@@ -76,6 +77,7 @@ class Home_KWESTE(QMainWindow, QDialog):
         self.ventKWESTE.actionDirecciones_de_envio.triggered.connect(self.direcciones_envio)
         self.ventKWESTE.actionDepartamentos.triggered.connect(self.departamentos_vendedores)
         self.ventKWESTE.actionClasificarDepartamentosDeVendedoresVentasPerdidas.triggered.connect(self.ventana_ventas_perdidas)
+        self.ventKWESTE.actionAdminClientesDelFinanciero.triggered.connect(self.ventana_clientes_financiero)
 
         # señales del hilo
         self.Hilo.signal.connect(self.mensajeTrabajoTerminado)
@@ -96,6 +98,10 @@ class Home_KWESTE(QMainWindow, QDialog):
         pass
     def Ayuda_callback(self):
         open_new(self.variables.pdf)
+        
+    def ventana_clientes_financiero(self):
+        self.ventana_clientes_financiero = ClientesFinancierController()
+        self.ventana_clientes_financiero.show()
         
     def ventana_ventas_perdidas(self):
         self.ventas_perdidas = VentasPerdidasController()

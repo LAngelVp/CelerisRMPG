@@ -158,7 +158,7 @@ class TrabajosTecnicosProcess:
 #//////////////////////////////////////////////////////////////////////////////////////
 
         # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
-        self.servicio_data = d.copy()
+        self.servicio_data = d[["Número Orden", "Depa"]].drop_duplicates("Número Orden")
     
     def trabajos(self):
         print("PROCESANDO TTF")
@@ -174,7 +174,7 @@ class TrabajosTecnicosProcess:
         columna_un = "UN-" + trab["Serie Unidad"].astype(str)
         trab["Número Orden"] = columna_os
         trab["Serie Unidad"] = columna_un
-        trab = trab.merge(self.servicio_data[["Número Orden", "Depa"]], on="Número Orden", how="left")
+        trab =  trab.merge(self.servicio_data, on="Número Orden", how="left")
         self.trabajos_data = trab.copy()
         
         for column_name in self.trabajos_data.columns:
