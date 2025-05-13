@@ -88,8 +88,7 @@ class InicioSesion(QWidget):
             if self.drag_start_position is not None:
                 new_pos = event.globalPosition() - self.drag_start_position
                 self.move(new_pos.toPoint())
-    
-
+        
     def Ingresar(self):
         user = self.ui.txt_usuario.text()
         password = self.ui.txt_usuarioPassword.text()

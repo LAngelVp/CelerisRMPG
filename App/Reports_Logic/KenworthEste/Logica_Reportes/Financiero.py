@@ -157,7 +157,7 @@ class ResultadosFinancieros(Variables):
             df_unidades_facturadas_ordenado["Sucursal"] = df_unidades_facturadas_ordenado["Sucursal"].replace("Matriz Cordoba", "Venta Parada")
             df_unidades_facturadas_ordenado["Sucursal"] = df_unidades_facturadas_ordenado["Sucursal"].replace("Tuxtla1", "Chiapas")
             
-            df_unidades_facturadas_ordenado.loc[df_unidades_facturadas_ordenado["Sucursal"] == "Matriz Cordoba", "Zona Vta"] = "Cordoba/Orizaba"
+            df_unidades_facturadas_ordenado.loc[df_unidades_facturadas_ordenado["Sucursal"] == "Venta Parada", "Zona Vta"] = "Cordoba/Orizaba"
             df_unidades_facturadas_ordenado.loc[df_unidades_facturadas_ordenado["Sucursal"] == "Oaxaca", "Zona Vta"] = "Oaxaca"
             df_unidades_facturadas_ordenado.loc[df_unidades_facturadas_ordenado["Sucursal"] == "Chiapas", "Zona Vta"] = "Tuxtla Guitierrez"
             df_unidades_facturadas_ordenado.loc[df_unidades_facturadas_ordenado["Sucursal"] == "Veracruz", "Zona Vta"] = "Veracruz/Xalapa"
@@ -184,4 +184,5 @@ class ResultadosFinancieros(Variables):
         clientes = pd.read_json(os.path.join(self.variables.help_directory, self.variables.clientes_financiero))
         nuevo_data =  data.merge(clientes[["NombreCteAsignatario", "Ciudad", "Estado"]], on="NombreCteAsignatario", how="left")
         return nuevo_data
+
     
