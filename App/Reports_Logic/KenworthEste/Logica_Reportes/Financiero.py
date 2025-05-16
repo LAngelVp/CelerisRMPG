@@ -81,7 +81,7 @@ class ResultadosFinancieros(Variables):
             )
 
             departamento = df_unidades_facturadas_ordenado["CondicionUnidad"].apply(lambda x: self.obtenerDepartamento(x))
-            col_numero_articulo = "CH-" + df_unidades_facturadas_ordenado["Numarticulo"].map(str)
+            col_numero_articulo = "CH-" + df_unidades_facturadas_ordenado["Numarticulo"].astype(str).str.rstrip(".0")
             col_modelo = "AM" + df_unidades_facturadas_ordenado["Modelo"].map(str)
 
             df_unidades_facturadas_ordenado["Numarticulo"] = col_numero_articulo
@@ -177,11 +177,13 @@ class ResultadosFinancieros(Variables):
     
     def coordenadas_financiero_merge(self, data):
         coordenadas = pd.read_json(os.path.join(self.variables.help_directory, self.variables.coordenadas_financiero))
+        coordenadas = coordenadas.drop_duplicates(subset="Sucursal", keep="last")
         nuevo_data =  data.merge(coordenadas[["Sucursal", "SucursalMap", "Latitud", "Longitud"]], on="Sucursal", how="left")
         return nuevo_data
     
     def clientes_financiero_merge(self, data):
         clientes = pd.read_json(os.path.join(self.variables.help_directory, self.variables.clientes_financiero))
+        clientes = clientes.drop_duplicates(subset="NombreCteAsignatario", keep="last")
         nuevo_data =  data.merge(clientes[["NombreCteAsignatario", "Ciudad", "Estado"]], on="NombreCteAsignatario", how="left")
         return nuevo_data
 
