@@ -24,7 +24,7 @@ class InventarioCosteado(Variables):
         # INVENTARIO COSTEADO
         #---------------------------------------------------------------
         #obtener solo las celdas que vamos a trabajar.
-        df2 = df[df.columns[0:33]].copy()
+        df2 = df[df.columns[0:36]].copy()
         #insertar la columna de fecha actual, con el fin de sacar la antiguedad.
         df2.insert(loc=27,column="Fecha_Hoy",value=self.variables.date_movement_config_document(), allow_duplicates=False)
         #iterar en las cabeceras del dataframe para obtener las columnas de fecha.
