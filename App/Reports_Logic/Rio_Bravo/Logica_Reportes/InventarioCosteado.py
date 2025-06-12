@@ -62,6 +62,7 @@ class InventarioCosteado(Variables):
         #eliminar las columnas no necesarias.
         df2.drop(["Fecha_Hoy"], axis=1, inplace=True)
         #mandar el dataframe a una variable.
+        df2["Clasf. Por Evento Por Empresa"] = df2["Clasf. Por Evento Por Empresa"].fillna("-")
         df_inventarioCosteado = df2.copy()
 
         columnas_bol=df_inventarioCosteado.select_dtypes(include=bool).columns.tolist()
