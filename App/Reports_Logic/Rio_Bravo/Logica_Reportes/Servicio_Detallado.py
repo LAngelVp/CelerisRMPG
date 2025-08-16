@@ -108,7 +108,7 @@ class ServioDetallado(Variables):
         if sucursal == "MATAMOROS":
             return "Servicio Matamoros"
         elif sucursal == "NUEVO LAREDO (AEROPUERTO)":
-            return "Servicio NL Aereopuesto"
+            return "Servicio NL Aereopuerto"
         elif sucursal == "NUEVO LAREDO (MATRIZ)":
             return "Servicio NL Matriz"
         elif sucursal == "PIEDRAS NEGRAS":
@@ -121,15 +121,15 @@ class ServioDetallado(Variables):
         
     def clasificacion_taller_movil(self, sucursal):
         if sucursal == "NUEVO LAREDO (AEROPUERTO)":
-            return "Taller", "Taller NL Aereopuerto"
+            return "Taller", "TM NL Aereopuerto"
         if sucursal == "NUEVO LAREDO (MATRIZ)":
-            return "Taller", "Taller NL Matriz"
+            return "Taller", "TM NL Matriz"
         if sucursal == "MATAMOROS":
-            return "Taller", "Taller Matamoros"
+            return "Taller", "TM Matamoros"
         if sucursal == "PIEDRAS NEGRAS":
-            return "Taller", "Taller Piedras Negras"
+            return "Taller", "TM Piedras Negras"
         if sucursal == "REYNOSA":
-            return "Taller", "Taller Reynosa"
+            return "Taller", "TM Reynosa"
     
     def clasificacion_area(self, departamento_venta, departamento_detalle):
         if departamento_detalle == "REFACCIONES":
