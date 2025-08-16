@@ -14,7 +14,12 @@ class ServioDetallado(Variables):
         path = os.path.join(self.variables.ruta_Trabajos_kwrb, self.nombre_doc)
         df = pd.read_excel(path, sheet_name='Hoja2')
         df = df.replace(to_replace=';', value='-', regex=True)
-        # NOTE CREAMOS LAS 5 COLUMNAS DESPUES DE "CLIENTE"
+#NOTE : LISTA DE CLASIFICACION DE CLIENTES
+        lista_garantia = ["KENWORTH MEXICANA", "ALESSO", "PACCAR PARTS MEXICO"]
+        lista_plm = ["PACCAR FINANCIAL MEXICO", "PACLEASE MEXICANA"]
+# NOTE: LISTA DE TIPO SERVIIO (TALLER MOVIL)
+        tipo_servicio_taller_movil = ["TM", "Taller Movil"]
+# NOTE CREAMOS LAS 5 COLUMNAS DESPUES DE "CLIENTE"
         array_columns = ['ObjRefacc','ObjUBTRef','ObjMO', 'ObjUTBMO','Clasificacion Cliente']
 
         x = 3
@@ -34,10 +39,8 @@ class ServioDetallado(Variables):
                     allow_duplicates = False
                 )
             x = x+1
-
-
-        # NOTE CREAMOS LAS COLUMNAS DESPUES DE "VENDEDOR"
-        array_columns2 = ['DepaVenta', 'Depa']
+# NOTE CREAMOS LAS COLUMNAS DESPUES DE "VENDEDOR"
+        array_columns2 = ['Departamento Venta', 'Departamento']
         y = 22
         for i in array_columns2:
             df.insert(
@@ -47,192 +50,92 @@ class ServioDetallado(Variables):
                 allow_duplicates = False
             )
             y = y+1
-
-
-        # NOTE CLASIFICACIONES POR CLIENTE
-
-        # NOTE FILTAMOS CI
-        n = df['Cliente'].isnull()
-        ci = df[n].copy()
-        ci['Clasificacion Cliente'] = ci['Clasificacion Cliente'].replace('CLIENTES GENERALES', 'CI')
-        df.drop(df[df['Cliente'].isnull()].index, inplace=True)
-
-
-        # NOTE FILTRAMOS KENWORTH MENOS (KENWORTH MEXICANA)
-
-        n = df[df.Cliente.str.contains('KENWORTH')]
-        concesionarios = n[n['Cliente'] != 'KENWORTH MEXICANA'].copy()
-        concesionarios['Clasificacion Cliente'] = concesionarios['Clasificacion Cliente'].replace('CLIENTES GENERALES', 'CONCESIONARIOS')
-
-        # NOTE FILTRAMOS GARANTIA
-        n = df['Cliente'] == 'KENWORTH MEXICANA'
-        kenworth_m = df[n].copy()
-
-        n = df['Cliente'] == 'ALESSO'
-        alesso = df[n].copy()
-
-        n = df['Cliente'] == 'PACCAR PARTS MEXICO'
-        pcm = df[n].copy()
-
-        # NOTE CONCATENAMOS LOS FILTROS
-        garantia = pd.concat([kenworth_m, alesso, pcm], join = 'inner')
-        garantia['Clasificacion Cliente'] = garantia['Clasificacion Cliente'].replace('CLIENTES GENERALES', 'GARANTIA')
-
-        # NOTE FILTRAMOS PLM
-        n = df['Cliente'] == 'PACCAR FINANCIAL MEXICO'
-        pfm = df[n].copy()
-
-        n = df['Cliente'] == 'PACLEASE MEXICANA'
-        paclease = df[n].copy()
-
-        # NOTE CONCATENAMOS LOS FILTROS
-        plm = pd.concat([pfm,paclease], join='inner')
-        plm['Clasificacion Cliente'] = plm['Clasificacion Cliente'].replace('CLIENTES GENERALES', 'PLM')
-
-
-        # NOTE FILTRAMOS "CLIENTES GENERALES"
-        arr = ['KENWORTH', 'PACCAR PARTS MEXICO','ALESSO','PACCAR FINANCIAL MEXICO','PACLEASE MEXICANA']
-
-        clientes_generales = df[~df.Cliente.str.contains('|'.join(arr))].copy()
-        ## NOTE NO LE REALIZO EL REMPLAZO EN LA CLASIFICACION, POR QUE YA LO TRAE POR DEFECTO
-
-
-        # NOTE CONCATENAMOS LOS FILTROS GLOBALES
-        df2 = pd.concat([ci, concesionarios, garantia, plm,clientes_generales], join='inner')
-
-        # # NOTE CLASIFICACIONES DEL VENDEDOR
-
-        # # Sucursal	A	A
-        # # REYNOSA	Servicio	Servicio Reynosa
-        # # NUEVO LAREDO (AEROPUERTO)	Servicio	Servicio NL Aereopuerto
-        # # NUEVO LAREDO (MATRIZ)	Servicio	Servicio NL Matriz
-        # # PIEDRAS NEGRAS	Servicio	Servicio Piedras Negras
-        # # MATAMOROS	Servicio	Servicio Matamoros
-        # # ![image.png](attachment:image.png)
-        # # 
-        # # NOTE FILTROS PARA SERVICIO, ESTO ES A TODA LA DATA SIN FILTRAR OTRA COLUMNA.
-        n = (df2['Sucursal'] == 'REYNOSA')
-        reynosa = df2[n].copy()
-        reynosa['DepaVenta'] ='Servicio'
-        reynosa['Depa'] = 'Servicio Reynosa'
-
-        n = (df2['Sucursal'] == 'NUEVO LAREDO (AEROPUERTO)')
-        nla = df2[n].copy()
-        nla['DepaVenta'] = 'Servicio'
-        nla['Depa'] = 'Servicio NL Aereopuerto'
-
-        n = (df2['Sucursal'] == 'NUEVO LAREDO (MATRIZ)')
-        nlm = df2[n].copy()
-        nlm['DepaVenta'] = 'Servicio'
-        nlm['Depa'] = 'Servicio NL Matriz'
-
-        n = (df2['Sucursal'] == 'PIEDRAS NEGRAS')
-        pn = df2[n].copy()
-        pn['DepaVenta'] = 'Servicio'
-        pn['Depa'] = 'Servicio Piedras Negras'
-
-        n = (df2['Sucursal'] == 'MATAMOROS')
-        mata = df2[n].copy()
-        mata['DepaVenta'] = 'Servicio'
-        mata['Depa'] = 'Servicio Matamoros'
-        
-        n = (df2['Sucursal'] == 'POZA RICA')
-        PozaR = df2[n].copy()
-        PozaR['DepaVenta'] = 'Servicio'
-        PozaR['Depa'] = 'Servicio Poza Rica'
-
-        dfServicio = pd.concat([reynosa, nla, nlm, pn, mata, PozaR], join='inner')
-
-        # # NOTE FILTRAMOS LA COLUMNA DE 'TIPO SERVICIO' PARA CLASIFICAR LOS DEMAS DEPARTAMENTOS.
-
-        # # FILTRO Servicio TM		
-        # # Sucursal	A	A
-        # # REYNOSA	Taller Movil	TM Reynosa
-        # # NUEVO LAREDO (AEROPUERTO)	Taller Movil	TM NL Aereopuerto
-        # # MATAMOROS	Taller Movil	TM Matamoros
-        # # NUEVO LAREDO (MATRIZ)	Taller Movil	TM NL Matriz
-        # # ![image.png](attachment:image.png)
-
-        # # NOTE Cambiamos el titulo de la columna.
-        dfServicio = dfServicio.rename(columns={ 'Tipo Servicio': 'Tipop', 'Número Orden':'NO','Unidad':'U'})
-
-        # NOTE Mandamos a traer todo lo que sea TM
-
-        a = ['TM' ,'Taller Movil']
-
-        TM = dfServicio[dfServicio.Tipop.str.contains('|'.join(a), na=False)].copy()
-
-        # NOTE Creamos las clasificaciones de TM
-        n = (TM['Sucursal'] == 'REYNOSA')
-        tm_reynosa = TM[n].copy()
-        tm_reynosa['DepaVenta'] = 'Taller Movil'
-        tm_reynosa['Depa'] = "TM Reynosa"
-
-        n = (TM['Sucursal'] == 'NUEVO LAREDO (AEROPUERTO)')
-        tm_aeropuerto = TM[n].copy()
-        tm_aeropuerto['DepaVenta'] = 'Taller Movil'
-        tm_aeropuerto['Depa'] = "TM NL Aereopuerto"
-
-        n = (TM['Sucursal'] == 'MATAMOROS')
-        tm_mata = TM[n].copy()
-        tm_mata['DepaVenta'] = 'Taller Movil'
-        tm_mata['Depa'] = "TM Matamoros"
-
-        n = (TM['Sucursal'] == 'NUEVO LAREDO (MATRIZ)')
-        tm_nlm = TM[n].copy()
-        tm_nlm['DepaVenta'] = 'Taller Movil'
-        tm_nlm['Depa'] = "TM NL Matriz"
-
-
-        # NOTE Concatenamos las clasificaciones
-        df_tm = pd.concat([tm_reynosa, tm_aeropuerto, tm_mata, tm_nlm], join = 'inner').copy()
-
-        # # NOTE OBTENEMOS LA DATA DE LOS DOS TIPOS DE DEPARTAMENTOS
-        df_Ser = dfServicio[~dfServicio.Tipop.str.contains('|'.join(a), na=False)].copy()
-
-        df_Final = pd.concat([df_tm, df_Ser], join = 'inner').copy()
-
-        # # NOTE Regresamos el titulo de la columna a su nombre original
-        df_Final = df_Final.rename(columns={ 'Tipop': 'Tipo Servicio'})
-        # NOTE Creamos la columna con la fecha actual
-        # NOTE INTENTAMOS HACER LOS CAMBIOS DE FORMATO PARA LAS FECHAS EN PYTHON
-        df_Final.insert(
-                loc = 10,
-                column = 'Fecha Movimiento',
-                value = self.variables.date_movement_config_document(),
-                allow_duplicates = False
+        numero_orden = 'OS' + df["Número Orden"].astype(str).str.split(".").str[0].replace("nan","").fillna("")
+        df["Número Orden"] = numero_orden
+        df["Unidad"] = df["Unidad"].fillna("")
+        unidad = "UN-" + df["Unidad"]
+        df["Unidad"] = unidad
+# NOTE CLASIFICACIONES POR CLIENTE
+        df["Cliente"] = df["Cliente"].fillna("")
+        df.loc[df["Cliente"].str.contains("KENWORTH"), "Clasificacion Cliente"] = "CONCESIONARIOS"
+        df.loc[df["Cliente"] == "", "Clasificacion Cliente"] = "CI"
+        df.loc[df["Cliente"].str.contains("|".join(lista_plm)), "Clasificacion Cliente"] = "PLM"
+        df.loc[df["Cliente"].str.contains("|".join(lista_garantia)), "Clasificacion Cliente"] = "GARANTIA"
+        df["Departamento Venta"] = "Servicio"
+        df["Departamento"] = ""
+        df["Departamento"] = df.apply(lambda fila: self.clasificacion_servicio(fila["Sucursal"]), axis=1)
+        pattern = "|".join(tipo_servicio_taller_movil)
+        df[["Departamento Venta", "Departamento"]] = df.apply(
+            lambda fila: (
+                self.clasificacion_taller_movil(fila["Sucursal"]) 
+                if pd.Series(str(fila["Tipo Servicio"])).str.contains(pattern, case=False, regex=True).any()
+                else [fila["Departamento Venta"], fila["Departamento"]]
+            ),
+            axis=1,
+            result_type="expand"
+        )
+        df["Area"] = df.apply(
+            lambda fila : self.clasificacion_area(fila["Departamento Venta"], fila["DepartamentoDetalle"]),
+            axis=1
             )
-        for column_name in df_Final.columns:
-                if "fecha" in column_name.lower():
-                    df_Final = self.variables.global_date_format_america(df_Final, column_name)
-                    df_Final = self.variables.global_date_format_dmy_mexican(df_Final, column_name)
-                else:
-                    pass
-
-
-        df_Final.insert(
-            loc = 25,
-            column = "Número Orden",
-            value = 'OS' + df_Final['NO'].map(str).str.split('.').str[0],
-            allow_duplicates = False
+        df.insert(10,"Fecha Movimiento",self.variables.date_movement_config_document(),allow_duplicates=False)
+        columnas_bol=df.select_dtypes(include=bool).columns.tolist()
+        df[columnas_bol] = df[columnas_bol].astype(str)
+        df.drop(
+            [
+                "Hora Docto.",
+                "Fecha Cancelación",
+                "Id. Paquete",
+                "Paquete",
+                "Descripción Paquete",
+                "Cantidad Paquete",
+                "Subtotal Paquete",
+                "Saldo",
+            ],
+            axis=1,
+            inplace=True
         )
-        df_Final.insert(
-            loc = 28,
-            column = 'Unidad',
-            value = 'UN-' + df_Final['U'].map(str).str.split('.').str[0],
-            allow_duplicates = False
-        )
-        #------------
-        #note creamos la clasificacion de la columna de area
-        df_Final["Dias Laborales"] = "" # primero la columa de "dias laborales"
-        df_Final.loc[(df_Final["DepaVenta"] == "Taller Movil"), "Area"] = "MO Taller Movil"
-        df_Final.loc[(df_Final["DepaVenta"] == "Servicio"), "Area"] = "MO Servicio"
-        # ----------------
-        # NOTE ELIMINAMOS LAS COLUMNAS QUE NO SE OCUPAN
-        df_Final.drop(['Hora Docto.','NO','U','Fecha Cancelación','Id. Paquete','Paquete','Descripción Paquete','Cantidad Paquete',"Subtotal Paquete",'Saldo'], axis=1, inplace=True)
+        for column_name in df.columns:
+            if "fecha" in column_name.lower():
+                df = self.variables.global_date_format_america(df, column_name)
+                df = self.variables.global_date_format_dmy_mexican(df, column_name)
+                
+# COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
+        self.variables.guardar_datos_dataframe(self.nombre_doc, df, self.concesionario)
         
-        columnas_bol=df_Final.select_dtypes(include=bool).columns.tolist()
-        df_Final[columnas_bol] = df_Final[columnas_bol].astype(str)
+#NOTE : FUNCION PARA CLASIFICACION DE LOS DEPARTAMENTOS (SERVICIO)
+    def clasificacion_servicio(self, sucursal = None):
+        if sucursal == "MATAMOROS":
+            return "Servicio Matamoros"
+        elif sucursal == "NUEVO LAREDO (AEROPUERTO)":
+            return "Servicio NL Aereopuesto"
+        elif sucursal == "NUEVO LAREDO (MATRIZ)":
+            return "Servicio NL Matriz"
+        elif sucursal == "PIEDRAS NEGRAS":
+            return "Servicio Piedras Negras"
+        elif sucursal == "POZA RICA":
+            return "Servicio Poza Rica"
+        elif sucursal == "REYNOSA":
+            return "Servicio Reynosa"
+        return ""
         
-        # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
-        self.variables.guardar_datos_dataframe(self.nombre_doc, df_Final, self.concesionario)
+    def clasificacion_taller_movil(self, sucursal):
+        if sucursal == "NUEVO LAREDO (AEROPUERTO)":
+            return "Taller", "Taller NL Aereopuerto"
+        if sucursal == "NUEVO LAREDO (MATRIZ)":
+            return "Taller", "Taller NL Matriz"
+        if sucursal == "MATAMOROS":
+            return "Taller", "Taller Matamoros"
+        if sucursal == "PIEDRAS NEGRAS":
+            return "Taller", "Taller Piedras Negras"
+        if sucursal == "REYNOSA":
+            return "Taller", "Taller Reynosa"
+    
+    def clasificacion_area(self, departamento_venta, departamento_detalle):
+        if departamento_detalle == "REFACCIONES":
+            return "Null"
+        elif departamento_detalle == "TALLER DE SERVICIO" and departamento_venta == "Taller":
+            return "MO Taller"
+        elif departamento_detalle == "TALLER DE SERVICIO" and departamento_venta == "Servicio":
+            return "MO Servicio"
+        
