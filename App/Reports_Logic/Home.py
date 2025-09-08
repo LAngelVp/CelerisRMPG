@@ -13,7 +13,6 @@ from PyQt6.QtWidgets import QMainWindow
 from PyQt6.QtGui import QIcon, QPixmap
 # comment importamos concesionarios
 from  .Rio_Bravo.Home_KWRB import *
-from  .KenworthEste.Home_KWESTE import *
 from  .KREI.Home_KREI import *
 from  .Kenworth_Sonora.Home_KWSonora import *
 #-----------
@@ -37,9 +36,9 @@ class PrincipalWindow(QMainWindow):
         self.ui.btc_btc_cerrar.setIcon(QIcon(":Source/Icon_Close.png"))
         self.ui.btc_btc_minimizar.setIcon(QIcon(":Source/Icon_Minimize.png")) 
         self.ui.panel_encabezado.setStyleSheet("margin-top:5px;")
+        self.ui.btn_btn_kweste.hide()
         
         self.ui.btn_btn_kwrb.clicked.connect(self.abrirkwrb)
-        self.ui.btn_btn_kweste.clicked.connect(self.abrirkweste)
         self.ui.btn_btn_kwkrei.clicked.connect(self.abrirkwkrei)
         self.ui.btn_btn_kwsonora.clicked.connect(self.abrirkwsonora)
         self.ui.btc_btc_cerrar.clicked.connect(self.cerrar)
@@ -59,9 +58,6 @@ class PrincipalWindow(QMainWindow):
         self.ventana.show()
     def abrirkwkrei(self):
         self.ventana = Home_KREI()
-        self.ventana.show()
-    def abrirkweste(self):
-        self.ventana = Home_KWESTE()
         self.ventana.show()
     def abrirkwsonora(self):
         self.ventana = Home_KenworthSonora()
