@@ -173,7 +173,7 @@ class Home_KREI(QMainWindow, QDialog):
         self.Show_Data_Procesado()
 #-------------------------------------------------
 
-    def mensajeArchivoErroneo(self, mensaje, detalle):
+    def mensajeArchivoErroneo(self, mensaje = None, detalle = None):
         if detalle is None:
             Mensajes_Alertas(
                 "Errores durante el proceso",
@@ -386,7 +386,7 @@ class Home_KREI(QMainWindow, QDialog):
 class trabajohilo(QThread):
 # agregamos una variable de tipo señal
     signal = pyqtSignal()
-    signalDocumentosErroneos = pyqtSignal(str)
+    signalDocumentosErroneos = pyqtSignal(str, str)
     signalShowTrabajos = pyqtSignal()
     signalShowProcesados = pyqtSignal()
     signalNombreArchivo =  pyqtSignal(str)

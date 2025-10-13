@@ -225,8 +225,6 @@ class ResultadosFinancierosKREI(Variables):
             pivot[columnas_bol] = pivot[columnas_bol].astype(str)
             
             pivot.drop(['NomDepto', 'CondicionUnidad'], axis=1, inplace=True)
-            
-            pivot = pivot[columnas]
 
             pivot.columns = pivot.columns.str.replace("_", " ")
 
