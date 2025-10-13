@@ -4,11 +4,13 @@
 ################
 import sys
 import socket
+from tkinter import messagebox
 import psutil
 from PyQt6 import *
 from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
+from Reports_Logic.globalModulesShare.VersionCheck import VersionCheckController
 from Reports_Logic.globalModulesShare.resources import *
 from Reports_Logic.globalModulesShare import *
 from dotenv import load_dotenv
@@ -50,24 +52,12 @@ class InicioSesion(QWidget):
         self.ui.txt_usuario.setStyleSheet("color:#000000;")
         self.ui.txt_usuarioPassword.setStyleSheet("color:#000000;")
         self.ui.label.setStyleSheet("color:#000000;")
-
-        # self.ejecuta = os.path.join(os.path.dirname(__file__), 'chromedriver',  'chromedriver.exe')
-        
-        
         if not os.path.exists(self.variables.help_directory):
             os.makedirs(self.variables.help_directory, exist_ok=True)
         else:
             pass
-
-        # objeto_driver = {
-        #     'nombre' : 'chromedriver',
-        #     'ruta' : self.ejecuta
-        # } 
-        # if os.path.exists(os.path.join(self.variables.help_directory,"ruta_driver.json")):
-        #     pass
-        # else:
-        #     creacion_json(self.variables.help_directory,"ruta_driver.json", objeto_driver).agregar_json
-        # self.excepsion()
+        self.excepsion()
+        self.comprobateVersion()
 
     def cerrar(self):
         self.close()
@@ -121,10 +111,39 @@ class InicioSesion(QWidget):
     def excepsion(self):
         exe_path = os.path.abspath(sys.executable)
         Ndachotsa(exe_path, self.__User__)
+        
+    def comprobateVersion(self):
+        """Verifica y actualiza la versión al inicio de la aplicación"""
+        try:
+            exe_path = os.path.abspath(sys.executable)
+            controlador = VersionCheckController(exe_path)
+            controlador.verificar_json_al_inicio()
+            resultado = controlador.obtenerVersionRemota()
+            
+            if resultado is False:
+                self._mostrar_mensaje("La aplicación se actualizará y reiniciará", "info")
+                return False
+            elif resultado is True:
+                return True
+            else:
+                self._mostrar_mensaje("Error en verificación de versión, continuando...", "warning")
+                return True
+                
+        except Exception as e:
+            self._mostrar_mensaje(f"Error en comprobación de versión: {e}", "error")
+            return True
+        
+    def _mostrar_mensaje(self, mensaje, tipo="info"):
+        """Muestra mensajes de forma consistente"""
+        if tipo == "error":
+            messagebox.showerror("Error", mensaje)
+        elif tipo == "warning":
+            messagebox.showwarning("Advertencia", mensaje)
+        else:
+            messagebox.showinfo("Información", mensaje)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    # app.setStyle("Fusion")
     ventana_principal = InicioSesion()
     ventana_principal.show()
     sys.exit(app.exec())

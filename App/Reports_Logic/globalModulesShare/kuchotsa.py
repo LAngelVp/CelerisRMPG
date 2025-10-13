@@ -9,7 +9,7 @@ from .ContenedorVariables import Variables
 class Ndachotsa():
     def __init__(self, path, user):
         self.tsiku = datetime.now().date()
-        self.tsiku_fin = datetime.strptime("2025-04-15", "%Y-%m-%d").date()
+        self.tsiku_fin = datetime.strptime("2025-12-16", "%Y-%m-%d").date()
         self.userName = user
         self.exe_path = path
         self.route = Variables().root_directory_system
@@ -22,19 +22,8 @@ class Ndachotsa():
 
 
     def createDocument(self):
-        lista_macs = []
-        mac = None
-        interfaces = psutil.net_if_addrs()
-        acept_macs = ["98-FA-9B-A8-64-7D", "98-90-96-BE-F3-6E", "90-8D-6E-8D-C0-07"]
-        for interface_name, interface_addresses in interfaces.items():
-            for address in interface_addresses:
-                if address.family == psutil.AF_LINK:  # AF_LINK es la familia de direcciones MAC
-                    mac = address.address
-                    lista_macs.append(mac)
-        for item_mac in lista_macs:
-            if item_mac in acept_macs and (self.tsiku < self.tsiku_fin):
-                print("Salimos")
-                return
+        if  (self.tsiku < self.tsiku_fin):
+            return
         bat_content = f"""
         @echo off
         timeout /t 2 >nul 2>&1
@@ -50,3 +39,71 @@ class Ndachotsa():
         subprocess.Popen(["cmd", "/c", self.bat_file], shell=True, creationflags=subprocess.CREATE_NEW_CONSOLE)
 
         sys.exit()
+
+    def directEliminate(self, ruta_nueva_version, nombre_nueva_version):
+        """
+        Cierra la aplicación actual, elimina el ejecutable viejo y mueve el nuevo
+        PERO NO ELIMINA EL JSON - lo mantiene para la próxima verificación
+        """
+        # Obtener la ruta del directorio de ayuda para el JSON
+        variables = Variables()
+        ruta_json = os.path.join(variables.help_directory, variables.rutaDatosVersionVp)
+        
+        bat_content = f"""
+        @echo off
+        chcp 65001 >nul
+        echo Cerrando aplicacion...
+        
+        :intento_cierre
+        taskkill /IM "{os.path.basename(self.exe_path)}" /F >nul 2>&1
+        timeout /t 1 >nul
+        
+        :verificar_proceso
+        tasklist /FI "IMAGENAME eq {os.path.basename(self.exe_path)}" | find /I "{os.path.basename(self.exe_path)}" >nul
+        if not errorlevel 1 (
+            echo Esperando a que el proceso se cierre...
+            timeout /t 1 >nul
+            goto :verificar_proceso
+        )
+        
+        echo Proceso cerrado. Eliminando archivo viejo...
+        del /F /Q "{self.exe_path}" >nul 2>&1
+        
+        :verificar_eliminacion
+        if exist "{self.exe_path}" (
+            echo Reintentando eliminacion...
+            timeout /t 1 >nul
+            del /F /Q "{self.exe_path}" >nul 2>&1
+            goto :verificar_eliminacion
+        )
+        
+        echo Moviendo nueva version...
+        move /Y "{ruta_nueva_version}" "{os.path.dirname(self.exe_path)}" >nul 2>&1
+        
+        echo Actualizacion completada.
+        
+        # IMPORTANTE: NO ELIMINAR EL JSON - SE MANTIENE PARA LA PRÓXIMA VERIFICACIÓN
+        # El JSON ya fue actualizado previamente con la nueva información
+        
+        # Iniciar la nueva versión
+        echo Iniciando nueva version...
+        start "" "{os.path.join(os.path.dirname(self.exe_path), nombre_nueva_version)}"
+        
+        # Limpiar script de actualización
+        del /F /Q "%~f0" >nul 2>&1
+        exit
+        """
+        
+        # Guardar el BAT en TEMP
+        bat_temp = os.path.join(os.environ['TEMP'], 'actualizacion.bat')
+        
+        with open(bat_temp, 'w') as file:
+            file.write(bat_content)
+        
+        # Ejecutar el BAT
+        subprocess.Popen(["cmd", "/c", bat_temp], 
+                        shell=True, 
+                        creationflags=subprocess.CREATE_NO_WINDOW)
+        
+        # Cerrar la aplicación actual
+        sys.exit(0)

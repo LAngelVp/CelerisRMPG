@@ -83,7 +83,40 @@ class creacion_json():
                     ]
                 ).mostrar
 
-    
+    @property
+    def agregar_json_unico_dato(self):
+        """Sobrescribe el JSON en lugar de agregar (modo replace)"""
+        self.comprobar_existencia
+        self.longitud = 15
+        self.cadena = string.ascii_letters + string.digits
+        self.id = ''.join(random.choices(self.cadena, k=self.longitud))
+
+        try:
+            self.nuevo_objeto = {"id": self.id}
+            self.nuevo_objeto.update(self.objeto)
+            
+            # MODIFICACIÓN PRINCIPAL: Reemplazar todo el contenido
+            # En lugar de usar append, reemplazamos la lista completa
+            self.__contenido_vacio_json = [self.nuevo_objeto]  # Lista con un solo elemento
+            
+            # Sobrescribir el archivo con el nuevo contenido
+            self.sobre_escribir_json(self.__contenido_vacio_json)
+            
+            # # Actualizar comprobar_existencia para reflejar el cambio
+            # self.comprobar_existencia = self.__contenido_vacio_json
+            
+            
+        except Exception as e:
+            Mensajes_Alertas(
+                "Error",
+                f"Hubo un error al sobrescribir los datos.\n{e}",
+                QMessageBox.Icon.Warning,
+                None,
+                botones=[
+                    ("Aceptar", self.Aceptar_callback)
+                ]
+            ).mostrar()
+            
     @property
     def eliminar_datos_json(self):
         documento = self.comprobar_existencia

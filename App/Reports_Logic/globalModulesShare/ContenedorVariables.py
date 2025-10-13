@@ -58,6 +58,7 @@ class Variables:
         self.departamentos_vendedores_ventas_perdidas = "vendedores_ventas_perdidas.json"
         self.coordenadas_financiero = "coordenadas_financiero.json"
         self.clientes_financiero = "clientes_financiero.json"
+        documentoDatosVersionVp = "DataVersionVp.json"
 
 #-----------------------------------------------------------
 #comment: root directory system
@@ -98,6 +99,7 @@ class Variables:
 #-----------------------------------------------------------
 #comment: global documents
         self.help_directory = os.path.join(self.global_route_project, self.help_documents_directory).replace('\\','/')
+        self.rutaDatosVersionVp = os.path.join(self.help_directory, documentoDatosVersionVp).replace('\\', '/')
         self.customerPaymentGoals = os.path.join(self.help_directory, self.customer_payment_goals_file).replace('\\','/')
         self.documentSavingPaths = os.path.join(self.help_directory, self.document_saving_paths_file).replace('\\','/')
         #fecha movimiento
