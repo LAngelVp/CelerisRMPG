@@ -1,7 +1,7 @@
-#########################
-# DESARROLLADOR
-# RMPG - LUIS ANGEL VALLEJO PEREZ
-#########################
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 from decimal import Decimal
 from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
@@ -24,10 +24,8 @@ class OrdenesServicio(Variables):
         self.nombre_doc1 = 'OSR1.xlsx'
         path = os.path.join(self.variables.ruta_Trabajos_kwrb,self.nombre_doc)
 
-        # FIXME OBTENEMOS EL DOCUMENTO
         df = pd.read_excel(path, sheet_name='Hoja2')
         df = df.replace(to_replace=';', value='-', regex=True)
-        ## NOTE Copia
         df1 = df.copy()
         df1 = df1.rename(columns={ 'Número Orden': 'num', 'Unidad':'UNI'})
         df1.insert(loc = 0,column = 'OS',value = 'OS',allow_duplicates = False)
@@ -37,7 +35,6 @@ class OrdenesServicio(Variables):
         df1.drop(['OS', 'num', 'UN', 'UNI'], axis = 1, inplace=True)
 
         df1.insert(loc = 5, column = 'Clasificacion Cliente', value = 'CLIENTES GENERALES', allow_duplicates = False)
-        #Clasificamos por cliente
         kenworths_concesionarios = df1.query("Cliente.str.contains('KENWORTH') and not Cliente.str.contains('|'.join(@exceptoKenworth))", local_dict={'exceptoKenworth': exceptoKenworth}).copy()
         kenworths_concesionarios["Clasificacion Cliente"] = "CONCESIONARIOS"
 
@@ -60,7 +57,6 @@ class OrdenesServicio(Variables):
 
         df_clasificado_cliente = df_clasificado_cliente.rename(columns={'Clasificacion Cliente':'CL','Tipo Servicio':'Tipop'})
 
-        #Clasificamos por tipo servicio
         df_exceptoGarantia = df_clasificado_cliente.query("CL != ['GARANTIA']")
 
         df_soloGarantia = df_clasificado_cliente.query("CL == ['GARANTIA']")
@@ -115,5 +111,4 @@ class OrdenesServicio(Variables):
         
         df_clasificadoPorTiposervicio = df_clasificadoPorTiposervicio.iloc[:,:ultima_columna + 1]
 
-        # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc, df_clasificadoPorTiposervicio, self.concesionario)

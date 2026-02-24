@@ -1,7 +1,7 @@
-#########################
-# DESARROLLADOR
-# RMPG - LUIS ANGEL VALLEJO PEREZ
-#########################
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import sys
 import os
 import json
@@ -20,7 +20,6 @@ class VendedoresSonora(QWidget):
         super(VendedoresSonora,self).__init__()
         self.variables = Variables()
 
-#COMMENT: METTODOS POR PESTAÑA
         self.acciones_por_pestañas = {
             0: {
                 "actualizar": funciones_vendedores_refacciones().actualizar_vendedores_refacciones, 
@@ -33,36 +32,29 @@ class VendedoresSonora(QWidget):
                 "eliminar_servicio": funciones_vendedores_servicio().eliminar_vendedores_servicio
                 }
         }
-#{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}
-#COMMENT: CREAR LA VENTANA
         self.ui = Ui_Formulario_Vendedores()
         self.ui.setupUi(self)
         self.ui.Vendedores_Refacciones.setCurrentIndex(0)
         self.setWindowTitle("Clasificación de Vendedores")
         self.setWindowIcon(QIcon(":/Source/LOGO_KREI_3.ico"))
-        self.ui.tabla_vendedoresrefacciones.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)#COMMENTLINE: AMPLIAMOS LAS COLUMNAS AL ESPACIO DEL CONTENEDOR DE LA TABLA.
-        self.ui.tabla_vendedoresrefacciones_servicio.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch) #COMMENTLINE: AMPLIAMOS LAS COLUMNAS AL ESPACIO DEL CONTENEDOR DE LA TABLA.
+        self.ui.tabla_vendedoresrefacciones.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.ui.tabla_vendedoresrefacciones_servicio.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         
-        self.ui.btn_aceptar_vendedores.clicked.connect(self.comprobar_evento) #COMMENTLINE: CONECTAMOS LA FUNCION AL BOTON DE ACTUALIZAR.
-        self.ui.rb_agregar.toggled.connect(self.id_blanco) #COMMENTLINE: CONECTAMOS EL RADIOBUTTOM AL METODO PARA PONER EN BLANCO EL CAMPO DE ID.
-        self.ui.rb_agregar_servicio.toggled.connect(self.id_blanco) #COMMENTLINE: CONECTAMOS EL RADIOBUTTOM AL METODO PARA PONER EN BLANCO EL CAMPO DE ID.
-        self.ui.ledit_idrefacciones.setEnabled(False) #COMMENTLINE: INHABILITAMOS EL CAMPO DE ID_REFACCIONES.
-        self.ui.ledit_idservicio.setEnabled(False) #COMMENTLINE: INHABILITAMOS EL CAMPOR DE ID_SERVICIO.
-        self.ui.tabla_vendedoresrefacciones.itemClicked.connect(self.clic_celda_refacciones) #COMMENTLINE: CONECTAMOS EL EVENTO DE CLIC A LA TABLA DE REFACCIONES.
+        self.ui.btn_aceptar_vendedores.clicked.connect(self.comprobar_evento)
+        self.ui.rb_agregar.toggled.connect(self.id_blanco)
+        self.ui.rb_agregar_servicio.toggled.connect(self.id_blanco)
+        self.ui.ledit_idrefacciones.setEnabled(False)
+        self.ui.ledit_idservicio.setEnabled(False)
+        self.ui.tabla_vendedoresrefacciones.itemClicked.connect(self.clic_celda_refacciones)
         self.ui.tabla_vendedoresrefacciones_servicio.itemClicked.connect(self.clic_celda_servicio)
         self.ui.Vendedores_Refacciones.currentChanged.connect(self.Actualizar_tablas)
         self.Actualizar_tablas()
-#{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}
-
-#COMMENT: COLOCAR EN BLANCO EL CAMPO DE ID CUANDO SE SELECCIONE AGREGAR.
     def id_blanco(self):
         if self.ui.rb_agregar.isChecked():
             self.ui.ledit_idrefacciones.clear()
         elif self.ui.rb_agregar_servicio.isChecked():
             self.ui.ledit_idservicio.clear()
-#{{{{{{{{{}}}}}}}}}
 
-#COMMENT: OBTENER LOS DATOS AL DAR CLIC EN LA TABLA DE SERVICIO
     def clic_celda_servicio(self, item):
         if (self.ui.rb_agregar_servicio.isChecked()):
             return
@@ -81,9 +73,7 @@ class VendedoresSonora(QWidget):
             self.ui.ledit_depa_servicio.setText(elementos["Depa"])
         except:
             pass
-#{{{{{{{{{{{}}}}}}}}}}}
 
-#COMMENT: OBTENER LOS DATOS AL DAR CLIC EN LA TABLA DE REFACCIONES
     def clic_celda_refacciones(self, item):
         if (self.ui.rb_agregar.isChecked()):
             return
@@ -104,9 +94,7 @@ class VendedoresSonora(QWidget):
             self.ui.ledit_depa.setText(elementos["departamento"])
         except:
             pass
-#{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}
   
-#COMMENT: METODO PARA ACTUALIZAR LAS TABLAS
     def Actualizar_tablas(self, index = 0):
         if (self.obtener_tab_activo() == 0):
             self.datos_json = creacion_json(self.variables.help_directory, self.variables.nombre_documento_clasificacion_vendedores_refacciones_sonora).comprobar_existencia
@@ -138,21 +126,15 @@ class VendedoresSonora(QWidget):
                     celda = self.ui.tabla_vendedoresrefacciones_servicio.item(fila, columna)
                     if celda:
                         celda.setFlags(celda.flags() & ~Qt.ItemFlag.ItemIsEditable)
-#{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}
 
-#COMMENT: OBTENEMOS EL INDICE DE LA PESTAÑA
     def obtener_tab_activo(self):
         ventana_activa = self.ui.Vendedores_Refacciones.currentIndex()
         return ventana_activa
-#{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
-
-#COMMENT:COMPROBAMOS EL EVENTO AL PRESIONAR EL BOTON DE ACTUALIZAR
     def comprobar_evento(self):
         tipo_ventana = self.obtener_tab_activo()
         if tipo_ventana in self.acciones_por_pestañas:
-#COMMENT:VERIFICA QUE ACCION ESTA SELECCIONADA EN LA PESTAÑA ACTIVA
             for accion, funcion in self.acciones_por_pestañas[tipo_ventana].items():
-                if getattr(self.ui, f"rb_{accion}").isChecked() and accion == "agregar": #COMMENTLINE: METODO PARA AGREGAR REFACCIONES
+                if getattr(self.ui, f"rb_{accion}").isChecked() and accion == "agregar":
                     nombre = self.ui.ledit_nombrevendedor.text().strip()
                     sucursal = self.ui.ledit_sucursal.text().strip()
                     departamento_venta = self.ui.ledit_depaventa.text().strip()
@@ -164,7 +146,7 @@ class VendedoresSonora(QWidget):
                         Mensajes_Alertas(
                             "Datos Incompletos.",
                             "Para completar la operación, deberá de ingresar obligatoriamente todos los campos.",
-                            QMessageBox.Warning,  # Aquí se pasa el tipo de ícono
+                            QMessageBox.Warning,
                             "Algunos reportes necesitan de algunos apartados en especifico, es por ello que es necesario que se llenen todos los campos ",
                             botones = [
                                 ("Aceptar", self.aceptar_callback)
@@ -172,12 +154,12 @@ class VendedoresSonora(QWidget):
                         ).mostrar
                     self.lineas_en_blanco()
                     self.Actualizar_tablas()
-                elif getattr(self.ui,f'rb_{accion}').isChecked() and accion == "eliminar": #COMMENTLINE: METODO PARA ELIMINAR REFACCIONES
+                elif getattr(self.ui,f'rb_{accion}').isChecked() and accion == "eliminar":
                     indice = self.ui.ledit_idrefacciones.text().strip()
                     funcion(indice)
                     self.lineas_en_blanco()
                     self.Actualizar_tablas()
-                elif getattr(self.ui, f'rb_{accion}').isChecked() and accion == "actualizar": #COMMENTLINE: METODO PARA ACTUALIZAR REFACCIONES
+                elif getattr(self.ui, f'rb_{accion}').isChecked() and accion == "actualizar":
                     indice = self.ui.ledit_idrefacciones.text().strip()
                     nombre = self.ui.ledit_nombrevendedor.text().strip()
                     sucursal = self.ui.ledit_sucursal.text().strip()
@@ -187,7 +169,7 @@ class VendedoresSonora(QWidget):
                     funcion(indice, nombre, sucursal,departamento_venta,departamento,cargo)
                     self.lineas_en_blanco()
                     self.Actualizar_tablas()
-                if getattr(self.ui, f"rb_{accion}").isChecked() and accion == "agregar_servicio": #COMMENTLINE: METODO PARA AGREGAR SERVICIO
+                if getattr(self.ui, f"rb_{accion}").isChecked() and accion == "agregar_servicio":
                     nombre = self.ui.ledit_nombrevendedor_servicio.text().strip()
                     departamento_venta = self.ui.ledit_depaventa_servicio.text().strip()
                     departamento = self.ui.ledit_depa_servicio.text().strip()
@@ -197,7 +179,7 @@ class VendedoresSonora(QWidget):
                         Mensajes_Alertas(
                             "Datos Incompletos.",
                             "Para completar la operación, deberá de ingresar obligatoriamente todos los campos.",
-                            QMessageBox.Warning,  # Aquí se pasa el tipo de ícono
+                            QMessageBox.Warning,
                             "Algunos reportes necesitan de algunos apartados en especifico, es por ello que es necesario que se llenen todos los campos ",
                             botones = [
                                 ("Aceptar", self.aceptar_callback)
@@ -205,12 +187,12 @@ class VendedoresSonora(QWidget):
                         ).mostrar
                     self.lineas_en_blanco()
                     self.Actualizar_tablas()
-                elif getattr(self.ui,f'rb_{accion}').isChecked() and accion == "eliminar_servicio": #COMMENTLINE: METODO PARA ELIMINAR SERVICIO
+                elif getattr(self.ui,f'rb_{accion}').isChecked() and accion == "eliminar_servicio":
                     indice = self.ui.ledit_idservicio.text().strip()
                     funcion(indice)
                     self.lineas_en_blanco()
                     self.Actualizar_tablas()
-                elif getattr(self.ui, f'rb_{accion}').isChecked() and accion == "actualizar_servicio": #COMMENTLINE: METODO PARA ACTUALIZAR SERVICIO
+                elif getattr(self.ui, f'rb_{accion}').isChecked() and accion == "actualizar_servicio":
                     indice = self.ui.ledit_idservicio.text().strip()
                     nombre = self.ui.ledit_nombrevendedor_servicio.text().strip()
                     departamento_venta = self.ui.ledit_depaventa_servicio.text().strip()
@@ -218,9 +200,7 @@ class VendedoresSonora(QWidget):
                     funcion(indice, nombre,departamento_venta,departamento)
                     self.lineas_en_blanco()
                     self.Actualizar_tablas()
-#{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}                    
 
-#COMMENT: PONEMOS LOS CAMPOS DE TEXTO EN BLANCO                    
     def lineas_en_blanco(self):
         if(self.obtener_tab_activo()==0):
             self.ui.ledit_idrefacciones.clear()
@@ -237,9 +217,7 @@ class VendedoresSonora(QWidget):
 
     def aceptar_callback(self):
         pass
-#{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}
 
-#COMMENT:CLASE PARA LA LOGICA DE LA PESTAÑA DE REFACCIONES
 class funciones_vendedores_refacciones(Variables):
     def __init__(self):
         self.variables = Variables()
@@ -280,7 +258,6 @@ class funciones_vendedores_servicio(Variables):
     def __init__(self):
         self.variables = Variables()
         self.direccion_documento = os.path.join(self.variables.help_directory,self.variables.nombre_documento_clasificacion_vendedores_servicio_sonora)
-        #COMMENT: COMPROBAR LA EXISTENCIA DE LOS DOCUMENTOS        
         
     def actualizar_vendedores_servicio(self,indice, nombre,departamento_venta,departamento):
         id = {"id" : indice}

@@ -1,8 +1,7 @@
-#########################
-# DESARROLLADOR
-# RMPG - LUIS ANGEL VALLEJO PEREZ
-#########################
-# IMPORTACIONES
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import sys
 import os
 import shutil
@@ -20,14 +19,12 @@ from ..ventanaspy.V_KREI import *
 from ..globalModulesShare.mensajes_alertas import Mensajes_Alertas
 import subprocess
 import traceback
-#----------------------------------------
 
 class Home_KREI(QMainWindow, QDialog):
     closed = pyqtSignal()
     def __init__(self):
         super(Home_KREI,self).__init__()
         self.variables = Variables()
-        # variables a las rutas de los iconos e imagenes
         Icon_Cerrar = QIcon(":/Source/Icon_Close.png")
         Icon_Minimizar = QIcon(":/Source/Icon_Minimize.png")
         Icon_Help = QIcon(":/Source/Icon_Help.png")
@@ -37,15 +34,11 @@ class Home_KREI(QMainWindow, QDialog):
         logo = QPixmap(":/Source/LOGOKREI.png")
         self.setWindowIcon(QIcon(":/Source/LOGO_KREI_3.ico"))
         
-        # llamamos el metodo de creacion de carpetas
         self.Creacion_Carpetas()
-        # quitamos la barra superior
         self.setWindowFlags(self.windowFlags() | Qt.WindowType.FramelessWindowHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
-        # Crear la instancia de la ventana y configurarla
         self.Ventana = Ui_Kenworth_KREI()
         self.Ventana.setupUi(self)
-        # colocar los iconos e imagenes en su correspondiente elemento.
         self.Ventana.lblLogoKWKREI.setPixmap(logo)
         self.Ventana.btc_btc_Cerrar.setIcon(Icon_Cerrar)
         self.Ventana.btc_btc_Minimizar.setIcon(Icon_Minimizar)
@@ -56,9 +49,7 @@ class Home_KREI(QMainWindow, QDialog):
         self.Ventana.btn_btn_Comenzar.setIconSize(QtCore.QSize(24, 24))
         self.Ventana.btn_btn_Subir.setIcon(Icon_Upload)
         self.Ventana.btn_btn_Subir.setIconSize(QtCore.QSize(24, 24))
-        # creamos el hilo
         self.Hilo = trabajohilo()
-        #conexiones de los botones
         self.Ventana.btn_btn_Subir.clicked.connect(self.Cargar)
         self.Ventana.btn_btn_Comenzar.clicked.connect(self.ComenzarProceso)
         self.Ventana.btn_btn_Eliminar.clicked.connect(self.RemoveProcessed)
@@ -71,7 +62,6 @@ class Home_KREI(QMainWindow, QDialog):
 
         self.Ventana.actionFechaMovimiento.triggered.connect(self.FechaMovimiento)
 
-        # señales del hilo
         self.Hilo.signal.connect(self.mensajeTrabajoTerminado)
         self.Hilo.signalDocumentosErroneos.connect(self.mensajeArchivoErroneo)
         self.Hilo.signalNombreArchivo.connect(self.nombreArchivoTrabajando)
@@ -171,7 +161,6 @@ class Home_KREI(QMainWindow, QDialog):
         self.nombreArchivoTrabajando(textoVacio)
         self.Show_Data_Trabajos()
         self.Show_Data_Procesado()
-#-------------------------------------------------
 
     def mensajeArchivoErroneo(self, mensaje = None, detalle = None):
         if detalle is None:
@@ -197,8 +186,6 @@ class Home_KREI(QMainWindow, QDialog):
         self.Show_Data_Trabajos()
         self.Show_Data_Procesado()
 
-#--------------------------------------------
-# MOSTRAR NOMBRE DEL DOCUMENTO QUE SE ESTA TRABAJANDO
     def nombreArchivoTrabajando(self, nombre):
         if (nombre != ""):
             self.Ventana.lbl_TrabajandoCon.setText(f'Trabajando Con:')
@@ -208,9 +195,7 @@ class Home_KREI(QMainWindow, QDialog):
             self.Ventana.lbl_NombreReporte.setText(f'')
         self.Show_Data_Trabajos()
         self.Show_Data_Procesado()
-#--------------------------------------------
-#-------------------------------------------------------
-# EVENTOS DEL MOUSE
+
     def mousePressEvent(self, event):
         if event.buttons() & Qt.MouseButton.LeftButton:
             self.drag_start_position = event.globalPosition() - QPointF(self.pos())
@@ -220,9 +205,6 @@ class Home_KREI(QMainWindow, QDialog):
             if self.drag_start_position is not None:
                 new_pos = event.globalPosition() - self.drag_start_position
                 self.move(new_pos.toPoint())
-    # Apartado de funciones
-    #-------------------------
-    # mostrar el contenido de la carpeta en la tabla de trabajos.
     def Show_Data_Trabajos(self):
         archivos_para_mostrar = os.listdir(self.variables.ruta_Trabajos_krei)
         self.Ventana.Tabla_Cola.setRowCount(len(archivos_para_mostrar))
@@ -241,7 +223,6 @@ class Home_KREI(QMainWindow, QDialog):
         verticalHeader = self.Ventana.Tabla_Cola.verticalHeader()
         verticalHeader.setStyleSheet("background-color:#4096d8; color:#FFFFFF;")
 
-    # mostrar el contenido de la carpeta en la tabla de trabajos.
     def Show_Data_Procesado(self):
         archivos_para_mostrar = os.listdir(self.variables.ruta_exitosos_krei)
         self.Ventana.Tabla_Procesado.setRowCount(len(archivos_para_mostrar))
@@ -250,7 +231,7 @@ class Home_KREI(QMainWindow, QDialog):
         self.Ventana.Tabla_Procesado.setStyleSheet("color:#000000;")
         for fila, archivo in enumerate(archivos_para_mostrar):
             elemento = QTableWidgetItem(archivo)
-            elemento.setFlags(QtCore.Qt.ItemFlag.ItemIsSelectable | QtCore.Qt.ItemFlag.ItemIsEnabled)  # Bloqueamos la edición
+            elemento.setFlags(QtCore.Qt.ItemFlag.ItemIsSelectable | QtCore.Qt.ItemFlag.ItemIsEnabled)
             elemento.setForeground(QBrush(QColor(0, 0, 0)))
             self.Ventana.Tabla_Procesado.setItem(fila, 0, elemento)
         header = self.Ventana.Tabla_Procesado.horizontalHeader()
@@ -262,7 +243,6 @@ class Home_KREI(QMainWindow, QDialog):
 
 
     def Creacion_Carpetas(self):
-        # Rutas de las carpetas que se deben verificar/crear
         rutas_a_verificar = [
             self.variables.ruta_Trabajos_krei,
             self.variables.ruta_original_krei,
@@ -270,38 +250,30 @@ class Home_KREI(QMainWindow, QDialog):
             self.variables.ruta_exitosos_krei
         ]
         
-        # Verificar si todas las carpetas ya existen
         todas_existen = all(os.path.exists(ruta) for ruta in rutas_a_verificar)
         
         if todas_existen:
             pass
         else:
-            # Crear las carpetas que no existan
             for ruta in rutas_a_verificar:
                 if not os.path.exists(ruta):
                     os.makedirs(ruta, exist_ok=True)
             
 
-    # cerrar la ventana
     def Cerrar(self):
         self.close()
-    # minimizar la ventana
     def Minimizar(self):
         self.showMinimized()
-
-    # mostrar la data en las tablas
     
-    # cargar los archivos a la carpeta de trabajo
     def Cargar(self):
         self.Creacion_Carpetas()
         self.Show_Data_Trabajos()
         self.Show_Data_Procesado()
         ubicacion_carga = os.chdir(self.variables.route_kwkrei)
         options = QFileDialog().options()
-        # options |= QFileDialog.DontUseNativeDialog  # Evitar el uso del diálogo nativo del sistema operativo (opcional)
-        options |= QFileDialog.Option.ReadOnly  # Permite abrir los archivos solo en modo lectura (opcional)
-        options |= QFileDialog.Option.HideNameFilterDetails  # Ocultar detalles del filtro (opcional)
-        options |= QFileDialog.Option.DontResolveSymlinks  # No resolver enlaces simbólicos (opcional)
+        options |= QFileDialog.Option.ReadOnly
+        options |= QFileDialog.Option.HideNameFilterDetails
+        options |= QFileDialog.Option.DontResolveSymlinks
 
         selected_filter = "Hojas de Excel (*.xlsx);;Todos los archivos (*)"
         
@@ -334,9 +306,7 @@ class Home_KREI(QMainWindow, QDialog):
                 pass
         self.Show_Data_Trabajos()
         self.Show_Data_Procesado()
-#----------------------------------------        
-    # REALIZAR PROCESO
-    # HILO DEL TRABAJO DE " KWESTE "
+
     def ComenzarProceso(self):
         if self.Hilo.isRunning():
             self.Hilo.requestInterruption()
@@ -354,7 +324,6 @@ class Home_KREI(QMainWindow, QDialog):
                     pass
             else:
                 pass
-    # eliminamos los trabajos realizados de la carpeta de exitosos.
     def RemoveProcessed(self):
         self.Creacion_Carpetas()
         ruta_trabajos_procesados = os.listdir(self.variables.ruta_exitosos_krei)
@@ -365,12 +334,11 @@ class Home_KREI(QMainWindow, QDialog):
         self.Show_Data_Trabajos()
         self.Show_Data_Procesado()
 
-    # mostramos el apartado de ayuda
     def Ayuda(self):
         Mensajes_Alertas(
             "Información de Ayuda",
             'Si tienes problemas con la aplicación debido a que no sabes como guardar tus archivos de excel para que puedan ser transformados.\nPuedes ver el manual de usuario dando click en el boton de "Ver"',
-            QMessageBox.Icon.Information,  # Aquí se pasa el tipo de ícono
+            QMessageBox.Icon.Information,
             None,
             botones = [
                 ("Aceptar", self.Aceptar_callback),
@@ -382,9 +350,7 @@ class Home_KREI(QMainWindow, QDialog):
     def Ayuda_callback(self):
         open_new(self.variables.pdf)
 
-# CLASE DEL HILO----------------------
 class trabajohilo(QThread):
-# agregamos una variable de tipo señal
     signal = pyqtSignal()
     signalDocumentosErroneos = pyqtSignal(str, str)
     signalShowTrabajos = pyqtSignal()
@@ -398,8 +364,6 @@ class trabajohilo(QThread):
 
     def run(self):
         array_errores = []
-        #---------------------------------------
-        # diccionario de los archivos.
         diccionario_archivos = {
             "OSEKREI.xlsx" : KenworthConnect().OrdenesServicioKREIKWESTE,
             "OSSKREI.xlsx" : KenworthConnect().OrdenesServicioKREIKWSUR,
@@ -415,7 +379,6 @@ class trabajohilo(QThread):
             "RFSKREI.xlsx" : KenworthConnect().ResultadosFinancierosSurKREI
 
         }
-        #-----------------------------------------------
         while True:
             carpeta_de_trabajos = os.listdir(self.variables.ruta_Trabajos_krei)
             if not carpeta_de_trabajos:
@@ -462,8 +425,6 @@ class trabajohilo(QThread):
             self.signalShowTrabajos.emit()
             self.signalShowProcesados.emit()
 
-#--------------------------------------------------
-# COMPROBAR SI EXISTE EL DOCUMENTO ORIGINAL EN EL DESTINO
     def Comprobacion_Originales(self, file_name):
         ruta_origen = os.path.join(self.variables.ruta_Trabajos_krei, file_name)
         destino_archivoOriginal = os.path.join(self.variables.ruta_original_krei, file_name)
@@ -472,9 +433,7 @@ class trabajohilo(QThread):
         else:
             os.remove(destino_archivoOriginal)
             shutil.move(ruta_origen, self.variables.ruta_original_krei)
-#--------------------------------------------------
-#--------------------------------------------------
-# COMPRROBAR SI EXISTE EL DOCUMENTO ERRONEO EN EL DESTINO
+
     def Comprobacion_Errores(self, file_name):
         ruta_origen = os.path.join(self.variables.ruta_Trabajos_krei, file_name)
         destino_archivoOriginal = os.path.join(self.variables.ruta_errores_krei, file_name)
@@ -483,14 +442,10 @@ class trabajohilo(QThread):
         else:
             os.remove(destino_archivoOriginal)
             shutil.move(ruta_origen, self.variables.ruta_errores_krei)
-#--------------------------------------------------------
 
 
-# ------------------------------------------------------------------------
-# MANDAMOS A LLAMAR A LA VENTANA
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    # Crear una instancia de la clase MyDialog y mostrarla
     Ventana = Home_KREI()
     Ventana.show()
     sys.exit(app.exec_())

@@ -1,8 +1,7 @@
-#########################
-# DESARROLLADOR
-# RMPG - LUIS ANGEL VALLEJO PEREZ
-#########################
-# esta clase sera intermediaria entre el front con el back.
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 from .Logica_Reportes.SalidasEnVale import *
 from .Logica_Reportes.Credito import *
 from .Logica_Reportes.BackOrder import *
@@ -16,11 +15,8 @@ from .Logica_Reportes.PagoClientes import *
 from .Logica_Reportes.Refacciones import *
 from .Logica_Reportes.ServicioDetallado import *
 from .Logica_Reportes.VentasOrdenesServicio import *
-#-----------------------------------
 
-#CLASE
 class KenworthConnect():
-    # este sera el apartado en donde se colocaran las funciones que conectaran al back.
     def __init__(self):
         pass
 

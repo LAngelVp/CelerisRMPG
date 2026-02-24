@@ -1,7 +1,7 @@
-#########################
-# DESARROLLADOR
-# RMPG - LUIS ANGEL VALLEJO PEREZ 
-#########################
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import sys
 import os
 from datetime import datetime
@@ -11,11 +11,9 @@ from PyQt6 import  *
 from PyQt6.QtCore import Qt, QPointF
 from PyQt6.QtWidgets import QMainWindow
 from PyQt6.QtGui import QIcon, QPixmap
-# comment importamos concesionarios
 from  .Rio_Bravo.Home_KWRB import *
 from  .KREI.Home_KREI import *
 from  .Kenworth_Sonora.Home_KWSonora import *
-#-----------
 from  .globalModulesShare.ContenedorVariables import Variables
 from  .ventanaspy.VPrincipal import Ui_VPrincipal 
 from .globalModulesShare.documentos_json import creacion_json
@@ -30,7 +28,6 @@ class PrincipalWindow(QMainWindow):
         self.setWindowFlags(self.windowFlags() | Qt.WindowType.FramelessWindowHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setWindowTitle("Menu de Sucursales")
-        # self.ui.centralwidget.setStyleSheet("background-color:rgb(255, 255, 255);")
         self.ui.imgPrincipalMenu.setPixmap(QPixmap(":/Source/DevRous2.png"))
         self.setWindowIcon(QIcon(":/Source/LOGO_KREI_3.ico"))
         self.ui.btc_btc_cerrar.setIcon(QIcon(":Source/Icon_Close.png"))
@@ -66,7 +63,6 @@ class PrincipalWindow(QMainWindow):
     def minimizar(self):
         self.showMinimized()
 
-    # EVENTOS DEL MOUSE
     def mousePressEvent(self, event):
         if event.buttons() & Qt.MouseButton.LeftButton:
             self.drag_start_position = event.globalPosition() - QPointF(self.pos())

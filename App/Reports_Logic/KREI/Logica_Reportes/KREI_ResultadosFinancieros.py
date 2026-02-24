@@ -1,7 +1,7 @@
-#########################
-# DESARROLLADOR
-# RMPG - LUIS ANGEL VALLEJO PEREZ
-#########################
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import os
 import pandas as pd
 from ...globalModulesShare.ContenedorVariables import Variables
@@ -44,7 +44,6 @@ class ResultadosFinancierosKREI(Variables):
     def ReporteFinancieroKWESTE_KREI(self):
         self.nombre_doc = 'RFEKREI.xlsx'
         path = os.path.join(self.variables.ruta_Trabajos_krei, self.nombre_doc)
-        # LEEMOS EL DOCUMENTO
         df = pd.read_excel(path, sheet_name="Hoja2")
         df.columns = df.columns.str.replace(" ", "_")
         
@@ -52,29 +51,23 @@ class ResultadosFinancierosKREI(Variables):
         
         if df_funcional <=0:
             return
-        # creamos la tabla pivote, con el fin de obtener las unidades facturadas
         pivot = pd.pivot_table(df,
                         index=['Numarticulo', 'Modelo', 'Sucursal', 'idCliente', 'NombreCte', 'idClienteAsignatario', 'NombreCteAsignatario', 'NumCategoria'],
                         values=['cantidad', 'Venta', 'NC_Bonif', 'VentasNetas', 'CostoTotal', 'UtilidadBruta', 'Compras', 'VtasInternas', 'NCreddeProv', 'NCargodeProv', 'ProvNCargoCargo', 'ProvNCargoAbono', 'ProvNCredCargo', 'ProvNCredAbono', 'NotaCargoCte', 'CondicionUnidad', 'NomDepto', 'Vendedor'],
                         aggfunc='sum'
                         )
         
-        # eliminamos el formato de la tabla pivote, con la finalidas de aparecer los numeros que la tabla pivote maneja como vacios
         pivot.reset_index(inplace=True)
         
         pivot = pivot.query("cantidad != 0")
         
-        # Identificar los 'Numarticulo' que tienen cantidades negativas
         numarticulos_con_cantidades_negativas = pivot[pivot['cantidad'] < 0]['Numarticulo'].unique()
 
-        # Eliminar todas las filas que contienen esos 'Numarticulo' con cantidad negativa
         pivot = pivot[~pivot['Numarticulo'].isin(numarticulos_con_cantidades_negativas)]
         
         pivot = pivot[self.columnas]
 
         if (len(pivot) == 0):
-            # GUARDAMOS EL ARCHIVO
-            # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
             self.variables.guardar_datos_dataframe(self.nombre_doc, pivot, self.concesionario)
             
         else:
@@ -133,14 +126,12 @@ class ResultadosFinancierosKREI(Variables):
 
             pivot.columns = pivot.columns.str.replace("_", " ")
 
-            # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
             self.variables.guardar_datos_dataframe(self.nombre_doc, pivot, self.concesionario)
 
 
     def ReporteFinancieroKWSUR_KREI(self):
         self.nombre_doc = 'RFSKREI.xlsx'
         path = os.path.join(self.variables.ruta_Trabajos_krei, self.nombre_doc)
-        # LEEMOS EL DOCUMENTO
         df = pd.read_excel(path, sheet_name="Hoja2")
         df.columns = df.columns.str.replace(" ", "_")
         
@@ -148,29 +139,23 @@ class ResultadosFinancierosKREI(Variables):
         
         if df_funcional <=0:
             return
-        # creamos la tabla pivote, con el fin de obtener las unidades facturadas
         pivot = pd.pivot_table(df,
                         index=['Numarticulo', 'Modelo', 'Sucursal', 'idCliente', 'NombreCte', 'idClienteAsignatario', 'NombreCteAsignatario', 'NumCategoria'],
                         values=['cantidad', 'Venta', 'NC_Bonif', 'VentasNetas', 'CostoTotal', 'UtilidadBruta', 'Compras', 'VtasInternas', 'NCreddeProv', 'NCargodeProv', 'ProvNCargoCargo', 'ProvNCargoAbono', 'ProvNCredCargo', 'ProvNCredAbono', 'NotaCargoCte', 'CondicionUnidad', 'NomDepto', 'Vendedor'],
                         aggfunc='sum'
                         )
         
-        # eliminamos el formato de la tabla pivote, con la finalidas de aparecer los numeros que la tabla pivote maneja como vacios
         pivot.reset_index(inplace=True)
         
         pivot = pivot.query("cantidad != 0")
         
-        # Identificar los 'Numarticulo' que tienen cantidades negativas
         numarticulos_con_cantidades_negativas = pivot[pivot['cantidad'] < 0]['Numarticulo'].unique()
 
-        # Eliminar todas las filas que contienen esos 'Numarticulo' con cantidad negativa
         pivot = pivot[~pivot['Numarticulo'].isin(numarticulos_con_cantidades_negativas)]
         
         pivot = pivot[self.columnas]
 
         if (len(pivot) == 0):
-            # GUARDAMOS EL ARCHIVO
-            # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
             self.variables.guardar_datos_dataframe(self.nombre_doc, pivot, self.concesionario)
             
         else:
@@ -228,12 +213,10 @@ class ResultadosFinancierosKREI(Variables):
 
             pivot.columns = pivot.columns.str.replace("_", " ")
 
-            # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
             self.variables.guardar_datos_dataframe(self.nombre_doc, pivot, self.concesionario)
 
 
     def obtenerDepartamento(self,valor):
-            # currentYear = self.variables.fecha_hoy.year
             if (valor.lower() == "usado"):
                 return "SEMINUEVAS"
             else:

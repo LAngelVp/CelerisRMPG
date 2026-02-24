@@ -1,7 +1,7 @@
-# DESARROLLADOR
-# LUIS A. PEREZ
-###################
-################
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import sys
 import socket
 from tkinter import messagebox
@@ -68,7 +68,6 @@ class InicioSesion(QWidget):
     def Aceptar_callback(self):
         pass
 
-    # EVENTOS DEL MOUSE
     def mousePressEvent(self, event):
         if event.buttons() & Qt.MouseButton.LeftButton:
             self.drag_start_position = event.globalPosition() - QPointF(self.pos())

@@ -1,8 +1,7 @@
-#########################
-# DESARROLLADOR
-# RMPG - LUIS ANGEL VALLEJO PEREZ
-#########################
-# importamos librerias
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import os
 import pandas as pd
 from datetime import *
@@ -45,15 +44,12 @@ class VentasServicio(Variables):
                 else:
                     pass
 
-        #COMMENT:OBTENEMOS LAS COLUMNAS BOOL A STR
         columnas_bol=df.select_dtypes(include=bool).columns.tolist()
         df[columnas_bol] = df[columnas_bol].astype(str)
 
-        #COMMENT: MOVEMOS LA COLUMNA DE MOVIMIENTO A SU LUGAR
         df.insert(29, "Departamento Venta", df.pop("Departamento Venta"))
         df.insert(30, "Depa", df.pop("Depa"))
 
-        # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc, df, self.concesionario)
 
 

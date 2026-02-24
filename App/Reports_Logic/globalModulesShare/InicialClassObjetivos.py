@@ -1,7 +1,7 @@
-#########################
-# DESARROLLADOR
-# RMPG - LUIS ANGEL VALLEJO PEREZ
-#########################
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import sys
 import os
 import json
@@ -44,8 +44,6 @@ class ClassPrincipalObjPagos(QMainWindow):
     def aceptarCallback(self):
         pass
 
-# // Mostrar las sucursales en el ComboBox
-
     def mostrar_Sucursales(self):
         self.UI.CB_Sucursales.clear()
         numDatos = len(creacion_json(self.ruta, self.nameJson).comprobar_existencia)
@@ -55,8 +53,6 @@ class ClassPrincipalObjPagos(QMainWindow):
             nom_sucursal = obj["nombre"]
             self.UI.CB_Sucursales.addItem(nom_sucursal)
 
-#-------------------------------------------
-# COMPROBAMOS QUE ESTE SELECCIONADO UN RADIO BOTON PARA REALIZAR LAS ACCIONES
     def ComprobarCheck(self):
         if self.UI.RB_Agregar.isChecked():
             self.AgregarObjeto()
@@ -76,8 +72,6 @@ class ClassPrincipalObjPagos(QMainWindow):
             )
         self.mostrar_Sucursales()
     
-#--------------------------------------------
-# AGREGAR
     def AgregarObjeto(self):
         sucursal = self.UI.LE_Sucursal.text().strip()
         objetivo = self.UI.LE_Objetivo.text().strip()
@@ -99,9 +93,6 @@ class ClassPrincipalObjPagos(QMainWindow):
             )
         self.limpiarCampos()
         self.mostrar_Sucursales()
-
-#-------------------------------------------
-# MODIFICAR SUCURSALES
 
     def modificar_objetivos(self):
         keyId = {
@@ -132,18 +123,13 @@ class ClassPrincipalObjPagos(QMainWindow):
         self.mostrar_Sucursales()
     
         
-# ELIMINAR
-
     def EliminarObjeto(self):
         idElementDelete = {"id" : self.UI.labelId.text()}
         creacion_json(self.ruta, self.nameJson, idElementDelete).eliminar_datos_json
         self.limpiarCampos()
         self.mostrar_Sucursales()
 
-
-# SELECCION DE ELEMENTOS
-
-    def seleccionarSucursal(self):
+    def seleccionarSucursal(self): 
         elemento = self.UI.CB_Sucursales.currentText()
         for i in creacion_json(self.ruta, self.nameJson).comprobar_existencia:
             keyId = i["id"]

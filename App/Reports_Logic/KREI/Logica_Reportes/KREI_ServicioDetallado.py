@@ -1,7 +1,7 @@
-#########################
-# DESARROLLADOR
-# RMPG - LUIS ANGEL VALLEJO PEREZ
-#########################
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import os
 import pandas as pd
 from ...globalModulesShare.ContenedorVariables import Variables
@@ -19,7 +19,6 @@ class ServicioDetalladoKWESTEKREI(Variables):
         df = pd.read_excel(path, sheet_name='Hoja2')
         df = df.replace(to_replace=';', value='-', regex=True)
 
-        # # NOTE Cambiamos el titulo de la columna.
         df = df.rename(columns={'Número Orden':'NO','Unidad':'U'})
 
         df.insert(
@@ -31,7 +30,6 @@ class ServicioDetalladoKWESTEKREI(Variables):
         
         df["Columna_Fantasma2"] = ""
         df["Fecha_Movimiento"] = self.variables.date_movement_config_document()
-        # NOTE Creamos la columna con la fecha actual
         
         df.insert(
             loc = 18,
@@ -47,7 +45,6 @@ class ServicioDetalladoKWESTEKREI(Variables):
         )
         df.drop(['Hora Docto.','NO','U','Fecha Cancelación','Fecha Inicio Garantía','Fecha Fin Garantía','Id. Paquete','Paquete','Descripción Paquete','Cantidad Paquete',"Subtotal Paquete",'Saldo'], axis=1, inplace=True)
 
-        # NOTE INTENTAMOS HACER LOS CAMBIOS DE FORMATO PARA LAS FECHAS EN PYTHON
         for column_name in df.columns:
                 if "fecha" in column_name.lower():
                     df = self.variables.global_date_format_america(df, column_name)
@@ -60,7 +57,6 @@ class ServicioDetalladoKWESTEKREI(Variables):
         columnas_bol=df.select_dtypes(include=bool).columns.tolist()
         df[columnas_bol] = df[columnas_bol].astype(str)
 
-        # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc, df, self.concesionario)
 
     def ServicioDetalladoKWSUR_KREI(self):
@@ -70,7 +66,6 @@ class ServicioDetalladoKWESTEKREI(Variables):
         df = df.replace(to_replace=';', value='-', regex=True)
 
         
-        # # NOTE Cambiamos el titulo de la columna.
         df = df.rename(columns={'Número Orden':'NO','Unidad':'U'})
 
         df.insert(
@@ -82,7 +77,6 @@ class ServicioDetalladoKWESTEKREI(Variables):
         
         df["Columna_Fantasma2"] = ""
         df["Fecha_Movimiento"] = self.variables.date_movement_config_document()
-        # NOTE Creamos la columna con la fecha actual
         
         df.insert(
             loc = 18,
@@ -98,7 +92,6 @@ class ServicioDetalladoKWESTEKREI(Variables):
         )
         df.drop(['Hora Docto.','NO','U','Fecha Cancelación','Fecha Inicio Garantía','Fecha Fin Garantía','Id. Paquete','Paquete','Descripción Paquete','Cantidad Paquete',"Subtotal Paquete",'Saldo'], axis=1, inplace=True)
 
-        # NOTE INTENTAMOS HACER LOS CAMBIOS DE FORMATO PARA LAS FECHAS EN PYTHON
         for column_name in df.columns:
                 if "fecha" in column_name.lower():
                     df = self.variables.global_date_format_america(df, column_name)
@@ -111,5 +104,4 @@ class ServicioDetalladoKWESTEKREI(Variables):
         columnas_bol=df.select_dtypes(include=bool).columns.tolist()
         df[columnas_bol] = df[columnas_bol].astype(str)
 
-        # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc, df, self.concesionario)

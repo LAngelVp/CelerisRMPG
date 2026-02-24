@@ -1,7 +1,7 @@
-#########################
-# DESARROLLADOR
-# RMPG - LUIS ANGEL VALLEJO PEREZ
-#########################
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import os
 import pandas as pd
 from datetime import*
@@ -26,8 +26,6 @@ class Refacciones(Variables):
         df["Departamento Venta"] = ""
         df["Depa"] = ""
 
-        #COMMENT: clasificacion de los vendedores
-        #COMMENT: sucursal cananea - mostrador
         df[["Departamento Venta","Depa"]] = df.apply(
             lambda fila: pd.Series(
                 self.clasificacion_vendedores(fila["Vendedor"], fila["Sucursal"])
@@ -45,7 +43,6 @@ class Refacciones(Variables):
         columnas_bol=df.select_dtypes(include=bool).columns.tolist()
         df[columnas_bol] = df[columnas_bol].astype(str)
 
-        # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc, df, self.concesionario)
         
     def clasificacion_vendedores(self, vendedor, sucursal):

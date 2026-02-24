@@ -1,7 +1,7 @@
-#########################
-# DESARROLLADOR
-# RMPG - LUIS ANGEL VALLEJO PEREZ
-#########################
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import os
 import pandas as pd
 from ...globalModulesShare.ContenedorVariables import Variables
@@ -13,7 +13,6 @@ class ServicioDetallado(Variables):
         self.concesionario = Concesionarios().concesionarioSonora
 
         self.variables = Variables()
-        # array_columns = ['ObjRefacc','ObjUBTRef','ObjMO', 'ObjUTBMO','Clasificacion Cliente']
         array_Garantia = ["KENWORTH MEXICANA", "PACCAR PARTS MEXICO", "DISTRIBUIDORA MEGAMAK"]
         array_PLM = ["PACCAR FINANCIAL MEXICO", "PACLEASE MEXICANA"]
         
@@ -41,7 +40,6 @@ class ServicioDetallado(Variables):
         df.insert(3,"Clasificacion Cliente","CLIENTES GENERALES",allow_duplicates=False)
 
         df["Cliente"].fillna("", inplace=True)
-        #CLASIFICACION DEL CLIENTE (NORMAL)
         df.loc[df["Cliente"].str.contains("KENWORTH") & ~df["Cliente"].str.contains("KENWORTH MEXICANA") & ~df["Cliente"].str.contains("KENWORTH DISTRIBUIDORA DE SONORA"), "Clasificacion Cliente"] = "CONCESIONARIOS"
         df.loc[df["Cliente"].str.contains("|".join(array_Garantia)),"Clasificacion Cliente"] = "GARANTIA"
         df.loc[df["Cliente"].str.contains("|".join(array_PLM)),"Clasificacion Cliente"] = "PLM"
@@ -59,7 +57,6 @@ class ServicioDetallado(Variables):
             lambda fila: pd.Series(self.obtener(fila["Vendedor"])), axis=1
         )
         
-        #COMMENT: MOVEMOS LAS COLUMNAS DE DEPARTAMENTO
         columna_depaventa = df.pop("Depa Venta")
         columna_depa = df.pop("Depa")
         df.insert(
@@ -85,10 +82,8 @@ class ServicioDetallado(Variables):
 
         df.drop(['Hora Docto.','Fecha Cancelación','Id. Paquete','Paquete','Descripción Paquete','Cantidad Paquete',"Subtotal Paquete",'Saldo'], axis=1, inplace=True)
 
-        # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc, df, self.concesionario)
 
-    #COMMENT_FUNCTION: FUNCION PARA CLASIFICAR VENDEDORES EN SUS DEPARTAMENTOS
     def obtener(self, vendedor):
         for index, fila in self.json_vendedores.iterrows():
             vendedor_actual = fila["Vendedor"]
@@ -98,5 +93,4 @@ class ServicioDetallado(Variables):
             if vendedor == vendedor_actual:
                 return departamento_venta, departamento
 
-        #COMMENT: SI NO ENCUENTRA VALORES, RETORNE VACIO
         return "", ""

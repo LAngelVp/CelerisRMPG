@@ -1,7 +1,7 @@
-#########################
-# DESARROLLADOR
-# RMPG - LUIS ANGEL VALLEJO PEREZ
-#########################
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import os
 import pandas as pd
 from datetime import *
@@ -48,7 +48,6 @@ class InventarioUnidades(Variables):
         df1[columnas_bol] = df1[columnas_bol].astype(str)
         df1.columns = df1.columns.str.replace("_", " ")
 
-        # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc, df1, self.concesionario)
     
     def ClasificacionTipoInv(self, valor):

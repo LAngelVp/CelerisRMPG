@@ -1,3 +1,7 @@
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
@@ -30,18 +34,14 @@ class Web_scraping:
             messagebox.showerror("Error al obtener los dolares en el DOF", 
                          "No se logró obtener la información del DOF. Puede ser por problemas de conexión o fallos en la plataforma. Intente más tarde.")
             
-            # Cerrar la aplicación de Tkinter
             root.quit()
             return None
         
-        # Crear el rango de fechas completo
         rango_completo_fechas = pd.date_range(start=self.fecha_inicial_rango_fechas, end=self.fecha_final_rango_fechas, freq='D')
         df_completo_fechas = pd.DataFrame(rango_completo_fechas, columns=['Fecha'])
         
-        # Merge de las fechas con los valores
         juntar_dos = pd.merge(df_completo_fechas, df, on='Fecha', how='left')
         
-        # Rellenar los NaN con el valor anterior
         juntar_dos['Valor'] = juntar_dos['Valor'].ffill()
         
         if juntar_dos["Valor"].isna().any():
@@ -57,7 +57,6 @@ class Web_scraping:
         return juntar_dos
 
     def completar_datos_en_valor(self, dataframe):
-        # Ajustar las fechas para obtener datos del mes anterior
         self.fecha_inicial_mes_anterior = self.fecha_inicial_rango_fechas - pd.DateOffset(months=1)
         self.fecha_final_mes_anterior = self.fecha_inicial_rango_fechas - pd.Timedelta(days=1)
         
@@ -78,10 +77,8 @@ class Web_scraping:
         else:
             ruta_dof = f'https://www.dof.gob.mx/indicadores_detalle.php?cod_tipo_indicador=158&dfecha={self.fecha_inicial_mes_anterior.strftime("%d/%m/%Y")}&hfecha={self.fecha_final_mes_anterior.strftime("%d/%m/%Y")}#gsc.tab=0'
         
-        # Silenciar la advertencia de SSL
         requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-        # Realizar la solicitud con SSL deshabilitado
         response = requests.get(ruta_dof, verify=False)
 
         if response.status_code == 200:

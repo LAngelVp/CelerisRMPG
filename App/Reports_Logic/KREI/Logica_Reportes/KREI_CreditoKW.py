@@ -1,7 +1,7 @@
-#########################
-# DESARROLLADOR
-# RMPG - LUIS ANGEL VALLEJO PEREZ
-#########################
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import os
 import pandas as pd
 from ...globalModulesShare.ContenedorVariables import Variables
@@ -15,9 +15,7 @@ class CreditoKWESTEKREI(Variables):
     def CreditoKWESTE_KREI(self):
         self.nombre_doc = 'CEKREI.xlsx'
         path =  os.path.join(self.variables.ruta_Trabajos_krei, self.nombre_doc)
-        # leer el documento.
         df = pd.read_excel(path, sheet_name="Hoja2")
-        # obtenemos las columnas que se van a utilizar
         df2 = df[df.columns[0:52]].copy()
         df2 = df2.replace(to_replace = ";", value = "_", regex = True)
 
@@ -30,22 +28,17 @@ class CreditoKWESTEKREI(Variables):
                 else:
                     pass
 
-        # columna del mes actual
         df2["Mes"] = self.variables.nombre_mes_actual_abreviado()
         
         columnas_bol=df2.select_dtypes(include=bool).columns.tolist()
         df2[columnas_bol] = df2[columnas_bol].astype(str)
-
-        # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc, df2, self.concesionario)
 
 
     def CreditoKWSUR_KREI(self):
         self.nombre_doc = 'CSKREI.xlsx'
         path =  os.path.join(self.variables.ruta_Trabajos_krei, self.nombre_doc)
-        # leer el documento.
         df = pd.read_excel(path, sheet_name="Hoja2")
-        # obtenemos las columnas que se van a utilizar
         df2 = df[df.columns[0:52]].copy()
         df2 = df2.replace(to_replace = ";", value = "_", regex = True)
 
@@ -58,11 +51,8 @@ class CreditoKWESTEKREI(Variables):
                 else:
                     pass
         
-        # columna del mes actual
         df2["Mes"] = self.variables.nombre_mes_actual_abreviado()
 
         columnas_bol=df2.select_dtypes(include=bool).columns.tolist()
         df2[columnas_bol] = df2[columnas_bol].astype(str)
-
-        # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc, df2, self.concesionario)

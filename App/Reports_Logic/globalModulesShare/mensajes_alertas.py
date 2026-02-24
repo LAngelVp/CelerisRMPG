@@ -1,7 +1,10 @@
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import os
 import json
 import sys
-# from Reports_Logic.globalModulesShare.resources import *
 from PyQt6.QtWidgets import QApplication, QMessageBox, QPushButton
 from PyQt6.QtGui import QIcon
 
@@ -41,8 +44,6 @@ class Mensajes_Alertas:
             self.Ventana.setDetailedText(self.Texto_Detallado)
         else:
             self.Ventana.setDetailedText('Desarrollador: Luis Angel Vallejo Pérez\nNúmero de Celular: 2713997432\nCorreo Electronico: angelvallejop9610@gmail.com')
-        # for texto, rol in botones:
-        #     self.Ventana.addButton(QPushButton(texto), rol)
         for texto, callback in self.Botones:
             texto_boton = QPushButton(texto)
             texto_boton.clicked.connect(callback)

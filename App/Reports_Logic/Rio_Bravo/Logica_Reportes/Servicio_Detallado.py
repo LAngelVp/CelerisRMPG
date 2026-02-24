@@ -1,7 +1,7 @@
-#########################
-# DESARROLLADOR
-# RMPG - LUIS ANGEL VALLEJO PEREZ
-#########################
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import os
 import pandas as pd
 from ...globalModulesShare.ContenedorVariables import Variables
@@ -14,12 +14,9 @@ class ServioDetallado(Variables):
         path = os.path.join(self.variables.ruta_Trabajos_kwrb, self.nombre_doc)
         df = pd.read_excel(path, sheet_name='Hoja2')
         df = df.replace(to_replace=';', value='-', regex=True)
-#NOTE : LISTA DE CLASIFICACION DE CLIENTES
         lista_garantia = ["KENWORTH MEXICANA", "ALESSO", "PACCAR PARTS MEXICO"]
         lista_plm = ["PACCAR FINANCIAL MEXICO", "PACLEASE MEXICANA"]
-# NOTE: LISTA DE TIPO SERVIIO (TALLER MOVIL)
         tipo_servicio_taller_movil = ["TM", "Taller Movil"]
-# NOTE CREAMOS LAS 5 COLUMNAS DESPUES DE "CLIENTE"
         array_columns = ['ObjRefacc','ObjUBTRef','ObjMO', 'ObjUTBMO','Clasificacion Cliente']
 
         x = 3
@@ -39,7 +36,6 @@ class ServioDetallado(Variables):
                     allow_duplicates = False
                 )
             x = x+1
-# NOTE CREAMOS LAS COLUMNAS DESPUES DE "VENDEDOR"
         array_columns2 = ['Departamento Venta', 'Departamento']
         y = 22
         for i in array_columns2:
@@ -55,7 +51,6 @@ class ServioDetallado(Variables):
         df["Unidad"] = df["Unidad"].fillna("")
         unidad = "UN-" + df["Unidad"]
         df["Unidad"] = unidad
-# NOTE CLASIFICACIONES POR CLIENTE
         df["Cliente"] = df["Cliente"].fillna("")
         df.loc[df["Cliente"].str.contains("KENWORTH"), "Clasificacion Cliente"] = "CONCESIONARIOS"
         df.loc[df["Cliente"] == "", "Clasificacion Cliente"] = "CI"
@@ -100,10 +95,8 @@ class ServioDetallado(Variables):
                 df = self.variables.global_date_format_america(df, column_name)
                 df = self.variables.global_date_format_dmy_mexican(df, column_name)
                 
-# COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc, df, self.concesionario)
         
-#NOTE : FUNCION PARA CLASIFICACION DE LOS DEPARTAMENTOS (SERVICIO)
     def clasificacion_servicio(self, sucursal = None):
         if sucursal == "MATAMOROS":
             return "Servicio Matamoros"

@@ -1,7 +1,7 @@
-#########################
-# DESARROLLADOR
-# RMPG - LUIS ANGEL VALLEJO PEREZ
-#########################
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import os
 import pandas as pd
 from ...globalModulesShare.ContenedorVariables import Variables
@@ -37,13 +37,8 @@ class Credito(Variables):
         arr_clientes_nogene = ['KENWORTH', 'PACCAR PARTS MEXICO','ALESSO','PACCAR FINANCIAL MEXICO','PACLEASE MEXICANA']
         clientesg = df2[~df2.Cliente.str.contains('|'.join(arr_clientes_nogene))].copy()
 
-        # CONCATENAR LAS CLASIFICACIONES
         df_complete = pd.concat([concesionarios, kenmex, paccarp, plm, alesso, clientesg], join='inner').copy()
 
-        # devolver las columnas de tipo fecha al formato "dia,mes,año"
-        # EXCEPTO...
-        # Las columnas de "fecha documento y fecha factura",
-        # su formato debe de ser "mes,dia,año"
         for column_name in df_complete.columns:
             if "fecha" in column_name.lower():
                 df_complete = self.variables.global_date_format_america(df_complete, column_name)
@@ -55,7 +50,6 @@ class Credito(Variables):
         df_complete[columnas_bol] = df_complete[columnas_bol].astype(str)
 
         
-        # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc, df_complete, self.concesionario)
         
         self.nombre_doc2 = 'CRG.xlsx'
@@ -63,5 +57,4 @@ class Credito(Variables):
         CreditoGlobal.drop(["Clasificacion"], axis=1, inplace=True)
         CreditoGlobal["Mes"] = self.variables.nombre_mes_actual_abreviado()
 
-        # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc2, CreditoGlobal, self.concesionario)

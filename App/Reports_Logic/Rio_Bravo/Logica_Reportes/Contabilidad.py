@@ -1,3 +1,7 @@
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import os
 import pandas as pd
 from ...globalModulesShare.ContenedorVariables import Variables
@@ -11,7 +15,7 @@ class ContabilidadAnalisis:
     def anexos_moimientos_gastos(self):
         def cuentas_sucursal(cuenta, sucursales):
             try:
-                clave = cuenta[5:7]  # toma posición 5 y 6: dos caracteres desde el 6to
+                clave = cuenta[5:7]  
                 for _, fila in sucursales.iterrows():
                     if fila["numCuentaSucursal"] == clave:
                         return fila["sucursal"]
@@ -21,7 +25,7 @@ class ContabilidadAnalisis:
         
         def cuentas_departamento(cuenta, departamentos):
             try:
-                clave = cuenta[7:9]  # toma posición 5 y 6: dos caracteres desde el 6to
+                clave = cuenta[7:9]  
                 for _, fila in departamentos.iterrows():
                     if fila["numCuentaDepartamento"] == clave:
                         return fila["departamento"]
@@ -39,9 +43,6 @@ class ContabilidadAnalisis:
         documento_json = pd.read_json(os.path.join(self.variables.help_directory, "anexos_movimientos_gastos.json"), typ="series")
         sucursales_frame = pd.DataFrame(documento_json["sucursales"])
         departamento_frame = pd.DataFrame(documento_json["departamentos"])
-        print(sucursales_frame)
-        print("..................")
-        print(departamento_frame)
         data["Sucursal"] = data["Cuenta"].apply(lambda x: cuentas_sucursal(x, sucursales_frame))
         data["Departamento"] = data["Cuenta"].apply(lambda x: cuentas_departamento(x, departamento_frame))
         

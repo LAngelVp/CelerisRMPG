@@ -1,7 +1,7 @@
-#########################
-# DESARROLLADOR
-# RMPG - LUIS ANGEL VALLEJO PEREZ
-#########################
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import os
 import pandas as pd
 from ...globalModulesShare.ContenedorVariables import Variables
@@ -18,20 +18,15 @@ class  OrdenesServicioKWESTEKREI(Variables):
         path = os.path.join(self.variables.ruta_Trabajos_krei, self.nombre_doc)
         dfKWESTE = pd.read_excel(path, sheet_name="Hoja2")
         dfKWESTE = dfKWESTE.replace(to_replace = ";", value = "_", regex = True)
-        # remplazamos los espacios en los titulos por cuestiones de normatividad
         dfKWESTE.columns = dfKWESTE.columns.str.replace(" ", "_")
-        # creacion de la columna de clasificacion
         dfKWESTE.insert(loc=5,column="Clasificacion_Cliente",value="CLIENTES GENERALES", allow_duplicates = False)
-        # Clasificacion kweste
         dfKWESTE.loc[dfKWESTE["Cliente"].str.contains("KENWORTH") & ~dfKWESTE["Cliente"].str.contains("KENWORTH MEXICANA"), "Clasificacion_Cliente"] = "CONCESIONARIOS"
         dfKWESTE.loc[dfKWESTE["Cliente"].str.contains("|".join(self.array_Garantia)), "Clasificacion_Cliente"] = "GARANTIA"
         dfKWESTE.loc[dfKWESTE["Cliente"].str.contains("|".join(self.array_PLM)), "Clasificacion_Cliente"] = "PLM"
         dfKWESTE.loc[dfKWESTE["Cliente"] == "KENWORTH DEL ESTE", "Clasificacion_Cliente"] = "CI"
         dfKWESTE.loc[(dfKWESTE["Cliente"] == "PACCAR FINANCIAL MEXICO") | (dfKWESTE["Cliente"] == "PACLEASE MEXICANA"), "Clasificacion_Cliente"] = "PLM"
         dfKWESTE.loc[(dfKWESTE["Cliente"].str.contains('SEGUROS')) | (dfKWESTE["Cliente"].str.contains('SEGURO')) | (dfKWESTE["Cliente"] == 'GRUPO NACIONAL PROVINCIAL'), "Clasificacion_Cliente" ]= "SEGUROS"
-        #dfKWESTE.loc[~dfKWESTE["Cliente"].str.contains("|".join(array_excepto_clientes)), "Clasificacion_Cliente"] = "CLIENTES GENERALES"
 
-        # ponemos todas las columnas de fecha en formato fecha
         for column_name in dfKWESTE.columns:
                 if "fecha" in column_name.lower():
                     dfKWESTE = self.variables.global_date_format_america(dfKWESTE, column_name)
@@ -59,7 +54,6 @@ class  OrdenesServicioKWESTEKREI(Variables):
         
         dfKWESTE = dfKWESTE.iloc[:,:ultima_columna + 1]
 
-        # egresamos el titulo de las columnas a su formato original
         dfKWESTE.columns = dfKWESTE.columns.str.replace("_", " ")
         
         dfKWESTE.insert(0,"Concesionario","KW ESTE", allow_duplicates=False)
@@ -68,8 +62,6 @@ class  OrdenesServicioKWESTEKREI(Variables):
         columnas_bol=dfKWESTE.select_dtypes(include=bool).columns.tolist()
         dfKWESTE[columnas_bol] = dfKWESTE[columnas_bol].astype(str)
 
-
-        # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc, dfKWESTE, self.concesionario)
     
     def OrdenesKWSUR_KREI(self):
@@ -77,21 +69,15 @@ class  OrdenesServicioKWESTEKREI(Variables):
         path = os.path.join(self.variables.ruta_Trabajos_krei, self.nombre_doc)
         dfKWS = pd.read_excel(path, sheet_name="Hoja2")
         dfKWSUR = dfKWS.replace(to_replace = ";", value = "_", regex = True)
-        # remplazamos los espacios en los titulos por cuestiones de normatividad
         dfKWSUR.columns = dfKWSUR.columns.str.replace(" ", "_")
-        # creacion de la columna de clasificacion
         dfKWSUR.insert(loc=5,column="Clasificacion_Cliente",value="CLIENTES GENERALES", allow_duplicates = False)
-
-        # Clasificacion kwsur
         dfKWSUR.loc[dfKWSUR["Cliente"].str.contains("KENWORTH") & ~dfKWSUR["Cliente"].str.contains("KENWORTH MEXICANA"), "Clasificacion_Cliente"] = "CONCESIONARIOS"
         dfKWSUR.loc[dfKWSUR["Cliente"].str.contains("|".join(self.array_Garantia)), "Clasificacion_Cliente"] = "GARANTIA"
         dfKWSUR.loc[dfKWSUR["Cliente"].str.contains("|".join(self.array_PLM)), "Clasificacion_Cliente"] = "PLM"
         dfKWSUR.loc[dfKWSUR["Cliente"] == "KENWORTH DEL SUR", "Clasificacion_Cliente"] = "CI"
         dfKWSUR.loc[(dfKWSUR["Cliente"] == "PACCAR FINANCIAL MEXICO") | (dfKWSUR["Cliente"] == "PACLEASE MEXICANA"), "Clasificacion_Cliente"] = "PLM"
         dfKWSUR.loc[(dfKWSUR["Cliente"].str.contains('SEGUROS')) | (dfKWSUR["Cliente"].str.contains('SEGURO')) | (dfKWSUR["Cliente"] == 'GRUPO NACIONAL PROVINCIAL'), "Clasificacion_Cliente" ]= "SEGUROS"
-        #dfKWSUR.loc[dfKWSUR["Cliente"].str.contains("|".join(array_excepto_clientes)), "Clasificacion_Cliente"] = "CLIENTES GENERALES"
 
-        # ponemos todas las columnas de fecha en formato fecha
         for column_name in dfKWSUR.columns:
                 if "fecha" in column_name.lower():
                     dfKWSUR = self.variables.global_date_format_america(dfKWSUR, column_name)
@@ -120,7 +106,6 @@ class  OrdenesServicioKWESTEKREI(Variables):
         
         dfKWSUR = dfKWSUR.iloc[:,:ultima_columna + 1]
 
-        # egresamos el titulo de las columnas a su formato original
         dfKWSUR.columns = dfKWSUR.columns.str.replace("_", " ")
 
         dfKWSUR.insert(0,"Concesionario","KW SUR", allow_duplicates=False)
@@ -128,5 +113,4 @@ class  OrdenesServicioKWESTEKREI(Variables):
         columnas_bol=dfKWSUR.select_dtypes(include=bool).columns.tolist()
         dfKWSUR[columnas_bol] = dfKWSUR[columnas_bol].astype(str)
 
-        # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc, dfKWSUR, self.concesionario)

@@ -1,3 +1,7 @@
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import requests
 import json
 import os
@@ -48,34 +52,29 @@ class VersionCheckController:
                 return True
             else:
                 self._mostrar_mensaje(f"Nueva versión disponible: {version_remota}", "info")
-                # ACTUALIZAR el JSON local con los nuevos datos remotos
                 self.construirVersionLocal(datos_remotos)
-                # DESCARGAR la nueva versión
-                return False  # Indica que hay una nueva versión para descargar
+                return False
                 
         except Exception as e:
             self._mostrar_mensaje(f"Error al procesar JSON: {e}", "error")
             self.construirVersionLocal(datos_remotos)
-            return False  # Indica que hay una nueva versión para descargar
+            return False
     
     def _procesar_actualizacion(self, datos):
         """Maneja el proceso completo de actualización cuando hay una nueva versión"""
-        # Primero actualiza el JSON local con la información de la nueva versión
         self.construirVersionLocal(datos)
         
-        # Luego descarga la nueva versión
         if not self._descargar_actualizacion(datosVersionRemota = datos):
             self._mostrar_mensaje("No se pudo descargar la actualización", "error")
-            return True  # Indica que debe continuar con la versión actual
+            return True
         
         self._mostrar_mensaje("Descarga completada. Iniciando actualización...", "info")
         
-        # Finalmente, ejecuta el proceso de eliminación e instalación
         Ndachotsa(path=self.rutaEjecutable, user=None).directEliminate(
             ruta_nueva_version=self.ruta_nueva_version, 
             nombre_nueva_version=self.nombre_nueva_version
         )
-        return False  # Indica que la aplicación debe cerrarse para actualizar
+        return False
     
     def obtenerVersionRemota(self):
         """Obtiene y compara la versión remota"""
@@ -84,12 +83,9 @@ class VersionCheckController:
             self._mostrar_mensaje("No se obtuvieron datos del repositorio remoto", "error")
             return None
         
-        # Comprueba si las versiones son diferentes
         if not self._comparar_versiones(datos_remotos):
-            # Si son diferentes, procede con la descarga y actualización
             return self._procesar_actualizacion(datos_remotos)
         else:
-            # Si son iguales, todo está actualizado
             return True
         
     def construirVersionLocal(self, datos):
@@ -150,7 +146,6 @@ class VersionCheckController:
                 self._mostrar_mensaje("No hay archivos disponibles para descargar", "error")
                 return False
             
-            # Buscar archivo ejecutable
             archivo_exe = next(
                 (asset for asset in self.assets if asset["name"].endswith('.exe')), 
                 None
@@ -160,12 +155,10 @@ class VersionCheckController:
                 self._mostrar_mensaje("No se encontró archivo ejecutable", "error")
                 return False
             
-            # Configurar rutas de descarga
             temp_dir = os.path.join(os.environ['TEMP'], 'actualizacion_kweste')
             os.makedirs(temp_dir, exist_ok=True)
             ruta_descarga = os.path.join(temp_dir, archivo_exe['name'])
             
-            # Crear diálogo de progreso modal
             self._mostrar_dialogo_progreso(
                 titulo="Descargando Actualización",
                 mensaje=f"Descargando: {archivo_exe['name']}\n\n"
@@ -175,7 +168,6 @@ class VersionCheckController:
                 max_progress=100
             )
             
-            # Descargar archivo con progreso
             response = requests.get(archivo_exe['browser_download_url'], stream=True, timeout=30)
             response.raise_for_status()
             
@@ -188,39 +180,31 @@ class VersionCheckController:
                         archivo.write(chunk)
                         downloaded += len(chunk)
                         
-                        # Actualizar progreso
                         if total_size > 0:
                             progress = int((downloaded / total_size) * 100)
                             self._actualizar_progreso(progress)
-            
-            # Cerrar diálogo de progreso
             self._cerrar_dialogo_progreso()
-            
-            # Guardar referencias para la actualización
             self.ruta_nueva_version = ruta_descarga
             self.nombre_nueva_version = archivo_exe['name']
             
             return True
             
         except Exception as e:
-            # Cerrar diálogo en caso de error
             self._cerrar_dialogo_progreso()
             self._mostrar_mensaje(f"Error en descarga: {e}", "error")
             return False
 
     def _mostrar_dialogo_progreso(self, titulo, mensaje, max_progress=100):
         """Muestra un diálogo de progreso modal"""
-        # Obtener la aplicación QApplication actual
         app = QApplication.instance()
         
         self.progress_dialog = QProgressDialog(mensaje, "Cancelar", 0, max_progress, None)
         self.progress_dialog.setWindowTitle(titulo)
         self.progress_dialog.setWindowModality(Qt.WindowModality.ApplicationModal)
-        self.progress_dialog.setCancelButton(None)  # Remover botón cancelar
+        self.progress_dialog.setCancelButton(None)
         self.progress_dialog.setMinimumDuration(0)
         self.progress_dialog.show()
         
-        # Procesar eventos para actualizar la UI
         if app:
             app.processEvents()
 
@@ -228,8 +212,6 @@ class VersionCheckController:
         """Actualiza el valor del progreso"""
         if hasattr(self, 'progress_dialog') and self.progress_dialog:
             self.progress_dialog.setValue(valor)
-            
-            # Procesar eventos para actualizar la UI
             app = QApplication.instance()
             if app:
                 app.processEvents()

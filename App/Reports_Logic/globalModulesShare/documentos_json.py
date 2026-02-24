@@ -1,3 +1,7 @@
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import os
 import json
 import random
@@ -5,7 +9,7 @@ import string
 from PyQt6.QtWidgets import QMessageBox
 from .mensajes_alertas import Mensajes_Alertas
 class creacion_json():
-    def __init__(self, ruta = None, nombre = None, objeto = None): #comment : ingresamos la ruta del documento y el objeto a crear.
+    def __init__(self, ruta = None, nombre = None, objeto = None):
         super().__init__()
         self.ruta = ruta
         self.nombre = nombre
@@ -19,7 +23,6 @@ class creacion_json():
     def deleteDocument(self, documento):
         os.remove(documento)
         self.comprobar_existencia
-#comment: comprueba si existe un documento
     @property
     def comprobar_existencia(self):
         if os.path.exists(self.direccion):
@@ -34,7 +37,6 @@ class creacion_json():
                     None,
                     botones = [
                         ("Construir" , self.aceptarCallback)
-                        # ("Construir" , self.buildDocument(self.direccion))
                     ]
                 )
             except ValueError as error:
@@ -95,15 +97,9 @@ class creacion_json():
             self.nuevo_objeto = {"id": self.id}
             self.nuevo_objeto.update(self.objeto)
             
-            # MODIFICACIÓN PRINCIPAL: Reemplazar todo el contenido
-            # En lugar de usar append, reemplazamos la lista completa
-            self.__contenido_vacio_json = [self.nuevo_objeto]  # Lista con un solo elemento
+            self.__contenido_vacio_json = [self.nuevo_objeto] 
             
-            # Sobrescribir el archivo con el nuevo contenido
             self.sobre_escribir_json(self.__contenido_vacio_json)
-            
-            # # Actualizar comprobar_existencia para reflejar el cambio
-            # self.comprobar_existencia = self.__contenido_vacio_json
             
             
         except Exception as e:
@@ -136,10 +132,8 @@ class creacion_json():
                 return elemento
 
     def actualizar_datos(self, nuevos_datos):
-        # Cargar el JSON desde el archivo
         datos = self.comprobar_existencia
         
-        # Buscar el registro con el ID buscado y actualizar sus datos
         for registro in datos:
             if registro["id"] == self.objeto["id"]:
                 registro.update(nuevos_datos)

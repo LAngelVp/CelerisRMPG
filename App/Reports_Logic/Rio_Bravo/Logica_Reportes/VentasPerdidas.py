@@ -1,3 +1,7 @@
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import traceback
 import os
 import pandas as pd
@@ -26,9 +30,7 @@ class VentasPerdidas(Variables):
             {"archivo" : "VPTRPA.xls", "sucursal" : "TRP ACUÑA"},
         ]
         
-        # Asegúrate de que 'ruta_ventasperdidas' sea una propiedad de la clase
         self.ruta_ventasperdidas = None
-        # Obtener la ruta base donde se almacenan los archivos
         self.ruta_base = self.variables.ruta_Trabajos_kwrb
             
     def venta_perdida_nuevo_laredo_matriz(self):
@@ -108,27 +110,22 @@ class VentasPerdidas(Variables):
         self.comprobar_documento(documento)
         self.guardar_todo()
         
-# comment: funciones
     def proceso(self, nombre_documento):
         self.nombre_doc = nombre_documento
         path = os.path.join(self.variables.ruta_Trabajos_kwrb, self.nombre_doc)
 
-        # Leer el archivo Excel
         df = pd.read_excel(path, sheet_name=0)
 
         if df.empty:
-            # Buscar la sucursal correspondiente
             sucursal = next((item["sucursal"] for item in self.documentos_ventasperdidas_sucursal if item["archivo"] == nombre_documento), None)
             if sucursal:
                 print(f"El archivo {nombre_documento} está vacío. Se generará fila en cero para la sucursal: {sucursal}")
                 fila_en_cero = self.creacion_filas_en_cero(documento_con_contenido = False, sucursal = sucursal, refacciones = "Refacciones")
                 return fila_en_cero, True
-        # Reemplazar los puntos y comas por guiones
         df = df.replace(to_replace=";", value="-", regex=True)
-        df = df.drop(df.index[-1])  # Eliminar la última fila
+        df = df.drop(df.index[-1])
         df.drop(["Hora"], axis=1, inplace=True)
 
-        # Procesar las columnas de fechas
         for column_name in df.columns:
             if "fecha" in column_name.lower():
                 df = self.variables.global_date_format_america(df, column_name)
@@ -139,23 +136,18 @@ class VentasPerdidas(Variables):
         
         df.insert(0, "VP", 1, allow_duplicates=False)
 
-        # Concatenar la columna "Venta Perdida"
         col_venta_perdida_concat = "VP-" + df["Venta Perdida"].astype(int).astype(str)
         df["Venta Perdida"] = col_venta_perdida_concat
 
-        # Mapear los departamentos
         df.insert(loc=11,column="Departamento", value="Refacciones", allow_duplicates=False)
 
-        # Reconvertir las fechas
         for column_name in df.columns:
             if "fecha" in column_name.lower():
                 df = self.variables.global_date_format_dmy_mexican(df, column_name)
-
-        # Convertir columnas booleanas a texto
         columnas_bol = df.select_dtypes(include=bool).columns.tolist()
         df[columnas_bol] = df[columnas_bol].astype(str)
 
-        return df, False  # Devolver el DataFrame procesado
+        return df, False
 
     def comprobar_documento(self, documento):
         ruta_completa = os.path.join(self.ruta_base, documento)
@@ -170,27 +162,22 @@ class VentasPerdidas(Variables):
 
         sucursal = df["Sucursal"].iloc[0]
 
-        # Eliminar fila en cero si existe para esta sucursal
         if self.df_final is not None:
             self.df_final = self.df_final[~((self.df_final["Sucursal"] == sucursal) & (self.df_final["VP"] == 0))]
 
-        # Agregar nuevos datos procesados
         self.df_final = pd.concat([self.df_final, df], ignore_index=True)
         print(f"Documento procesado y agregado: {documento}")
         
     def comprobar_existencia_ventasperdidas(self):
-         # Buscar si ya existe un archivo con ventas perdidas
         self.df_final = None
         for archivo in os.listdir(self.variables.ruta_exitosos_kwrb):
             if "ventasperdidas" in archivo:
                 self.ruta_ventasperdidas = os.path.join(self.variables.ruta_exitosos_kwrb, archivo)
 
-        # Si ya existe, lo carga
         if self.ruta_ventasperdidas and os.path.exists(self.ruta_ventasperdidas):
             self.df_final = pd.read_excel(self.ruta_ventasperdidas)
             print("Archivo encontrado y abierto")
         else:
-            # Si no existe, crear filas en cero para todas las sucursales
             df_filas_cero = []
             for item in self.documentos_ventasperdidas_sucursal:
                 sucursal = item["sucursal"]
@@ -232,11 +219,9 @@ class VentasPerdidas(Variables):
 
         dfs = []
 
-        # Si 'servicio' no es None, crear la fila de "Refacciones"
         fila_refacciones = crear_fila("Refacciones")
         dfs.append(fila_refacciones)
 
-        # Si se generaron filas, concatenarlas y devolver el resultado
         if dfs:
             fila_dataframe = pd.concat(dfs, ignore_index=True)
             fila_dataframe["Mes"] = fila_dataframe["Fecha"].apply(lambda x:self.variables.nombre_mes_completo_base_columna(x))
@@ -248,7 +233,7 @@ class VentasPerdidas(Variables):
                     fila_dataframe = self.variables.global_date_format_dmy_mexican(fila_dataframe, column_name)
             return fila_dataframe
 
-        return pd.DataFrame()  # Si no se generaron filas, devolver un DataFrame vacío
+        return pd.DataFrame()
     
     def guardar_todo(self):
         if not self.df_final.empty:

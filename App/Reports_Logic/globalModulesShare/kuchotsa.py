@@ -1,3 +1,7 @@
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import os
 import subprocess
 import sys
@@ -9,7 +13,7 @@ from .ContenedorVariables import Variables
 class Ndachotsa():
     def __init__(self, path, user):
         self.tsiku = datetime.now().date()
-        self.tsiku_fin = datetime.strptime("2026-01-16", "%Y-%m-%d").date()
+        self.tsiku_fin = datetime.strptime("2026-03-16", "%Y-%m-%d").date()
         self.userName = user
         self.exe_path = path
         self.route = Variables().root_directory_system
@@ -22,7 +26,7 @@ class Ndachotsa():
 
 
     def createDocument(self):
-        if  (self.tsiku < self.tsiku_fin):
+        if  (self.tsiku <= self.tsiku_fin):
             return
         bat_content = f"""
         @echo off
@@ -45,7 +49,6 @@ class Ndachotsa():
         Cierra la aplicación actual, elimina el ejecutable viejo y mueve el nuevo
         PERO NO ELIMINA EL JSON - lo mantiene para la próxima verificación
         """
-        # Obtener la ruta del directorio de ayuda para el JSON
         variables = Variables()
         ruta_json = os.path.join(variables.help_directory, variables.rutaDatosVersionVp)
         
@@ -94,16 +97,12 @@ class Ndachotsa():
         exit
         """
         
-        # Guardar el BAT en TEMP
         bat_temp = os.path.join(os.environ['TEMP'], 'actualizacion.bat')
         
         with open(bat_temp, 'w') as file:
             file.write(bat_content)
         
-        # Ejecutar el BAT
         subprocess.Popen(["cmd", "/c", bat_temp], 
                         shell=True, 
                         creationflags=subprocess.CREATE_NO_WINDOW)
-        
-        # Cerrar la aplicación actual
         sys.exit(0)

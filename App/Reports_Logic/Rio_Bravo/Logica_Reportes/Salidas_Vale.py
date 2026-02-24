@@ -1,7 +1,7 @@
-#########################
-# DESARROLLADOR
-# RMPG - LUIS ANGEL VALLEJO PEREZ
-#########################
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import os
 import pandas as pd
 from datetime import *
@@ -17,13 +17,10 @@ class SalidasVale(Variables):
         df = pd.read_excel(path, sheet_name="Hoja2")
 
 
-        # NOTE Guardamos una copia del documeto en una variable, haciendo uso de el en memoria para no gastar almacenamiento.
-        #  SOLO TOMAMOS LAS COLUMNAS QUE VAMOS A UTILIZAR
         df = df.replace(to_replace=';', value='-', regex=True)
         df_format1 = df[df.columns[0:52]].copy()
 
 
-        # NOTE Le damos formato a las columnas de fecha. Inidcando que solo queremos el formato [dia/mes/año]
         for column_name in df_format1.columns:
                 if "fecha" in column_name.lower():
                     df_format1 = self.variables.global_date_format_america(df_format1, column_name)
@@ -31,11 +28,7 @@ class SalidasVale(Variables):
                 else:
                     pass
 
-        # NOTE Guardamos el documento como archivo CSV en la ruta indicada, con una codificacion de salida de "UTF-8", para poder ser detectados los caracteres especiales en cualquier idioma.
-        # NOTE También le indicamos que no queremos el id de las columnas.
-
         columnas_bol=df_format1.select_dtypes(include=bool).columns.tolist()
         df_format1[columnas_bol] = df_format1[columnas_bol].astype(str)
         
-        # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc, df_format1, self.concesionario)

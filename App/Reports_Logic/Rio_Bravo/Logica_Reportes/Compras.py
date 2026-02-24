@@ -1,8 +1,7 @@
-#########################
-# DESARROLLADOR
-# RMPG - LUIS ANGEL VALLEJO PEREZ
-#########################
-# importamos librerias.
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import os
 import pandas as pd
 from datetime import *
@@ -12,13 +11,10 @@ class Compras(Variables):
     def __init__(self):
         self.concesionario = Concesionarios().concesionarioRioBravo
         self.variables = Variables()
-        # obtenemos la ruta del documento.
-        # leemos el archivo.
         self.nombre_doc = 'CDR.xlsx'
         path = os.path.join(self.variables.ruta_Trabajos_kwrb, self.nombre_doc)
         df = pd.read_excel(path, sheet_name='Hoja2')
         df = df.replace(to_replace=';', value='-', regex=True)
-        # copiamos el data original.
         df2 = df.copy()
 
         df2["Fecha_Hoy"] =  self.variables.date_movement_config_document()
@@ -31,16 +27,12 @@ class Compras(Variables):
 
         antiguedad = (df2['Fecha Captura'] - df2['Fecha Docto.'])
         antiguedad_factura = (df2['Fecha_Hoy'] - df2['Fecha Docto.'])
-        # insertamos la columna de antigüedad, con la resta del 
-        # fecha factura - fecha documento.
         df2.insert(
             loc = 7,
             column = 'Antigüedad',
             value = antiguedad,
             allow_duplicates = False
         )
-        # insertamos la columna de "Antigüedad Factura", con la resta,
-        # fecha actual - fecha documento
         df2.insert(
             loc = 8,
             column = 'Antigüedad Fact',
@@ -72,7 +64,6 @@ class Compras(Variables):
 
         dfCompleto = df2.copy()
 
-        # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc, dfCompleto, self.concesionario)
 
     def convertir_a_cero(self, valor):

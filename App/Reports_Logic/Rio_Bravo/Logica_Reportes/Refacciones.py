@@ -1,7 +1,7 @@
-#########################
-# DESARROLLADOR
-# RMPG - LUIS ANGEL VALLEJO PEREZ
-#########################
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import os
 import pandas as pd
 from datetime import*
@@ -40,7 +40,6 @@ class Refacciones(Variables):
         df.loc[(df["Depa"] == "Mostrador"), "Area"] = "Refacc Mostrador"
         df.loc[(df["Depa"] == "Servicio"), "Area"] = "Refacc Servicio"
 
-        # columna de Número de factura
         column_bill_number = df["Número Factura"].map(str) + df["Serie Factura"].map(str)
 
         df.drop(['Número Factura','Serie Factura'], axis=1, inplace=True)
@@ -50,7 +49,6 @@ class Refacciones(Variables):
         columnas_bol=df.select_dtypes(include=bool).columns.tolist()
         df[columnas_bol] = df[columnas_bol].astype(str)
 
-        # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc, df, self.concesionario)
 
 

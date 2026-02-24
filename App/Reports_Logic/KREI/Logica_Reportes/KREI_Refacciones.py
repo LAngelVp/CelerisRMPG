@@ -1,7 +1,7 @@
-#########################
-# DESARROLLADOR
-# RMPG - LUIS ANGEL VALLEJO PEREZ
-#########################
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import os
 import numpy as np
 import pandas as pd
@@ -20,12 +20,9 @@ class RefaccionesKWESTEKREI(Variables):
     def RefaccionesKWESTE_KREI(self):
         self.nombre_doc = 'REKREI.xlsx'
         path = os.path.join(self.variables.ruta_Trabajos_krei, self.nombre_doc)
-        # NOTE Leer el archivo
         df = pd.read_excel(path, sheet_name='Hoja2')
         df = df.replace(to_replace=';', value='-', regex=True)
-        # NOTE  ELIMINAMOS LAS COLUMNAS NECESARIAS
         df.drop(['% Margen', 'Meta Ventas Por Vendedor', 'Meta Margen Por Vendedor', 'Meta Cantidad Por Vendedor', 'Meta Ventas Por Sucursal', 'Meta Margen Por Sucursal', 'Meta Cantidad Por Sucursal', '% Comisión Por Margen', '% Comisión Por Ventas', 'Comisión Por Margen', 'Comisión Por Ventas', 'EsBonificacion', 'IdUsuario', 'IdPaquete', 'Paquete', 'Descripción Paquete', 'Cantidad Paquete', 'Subtotal Paquete', 'Potencial Total', 'Tipo de Cambio del día', 'OCCliente', '% Margen Sin Descuento'], axis=1, inplace=True)
-        # NOTE SELECCIONAMOS LAS COLUMNAS CON LAS CUALES TRABAJAR
         df_nuevo = df[df.columns[0:93]].copy()
 
         df_nuevo.insert(0,"Concesionario","KW ESTE", allow_duplicates=False)
@@ -46,19 +43,15 @@ class RefaccionesKWESTEKREI(Variables):
         df_nuevo[columnas_bol] = df_nuevo[columnas_bol].astype(str)
         
 
-        # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc, df_nuevo, self.concesionario)
 
 
     def RefaccionesKWSUR_KREI(self):
         self.nombre_doc = 'RSKREI.xlsx'
         path = os.path.join(self.variables.ruta_Trabajos_krei, self.nombre_doc)
-        # NOTE Leer el archivo
         df = pd.read_excel(path, sheet_name='Hoja2')
         df = df.replace(to_replace=';', value='-', regex=True)
-        # NOTE  ELIMINAMOS LAS COLUMNAS NECESARIAS
         df.drop(['% Margen', 'Meta Ventas Por Vendedor', 'Meta Margen Por Vendedor', 'Meta Cantidad Por Vendedor', 'Meta Ventas Por Sucursal', 'Meta Margen Por Sucursal', 'Meta Cantidad Por Sucursal', '% Comisión Por Margen', '% Comisión Por Ventas', 'Comisión Por Margen', 'Comisión Por Ventas', 'EsBonificacion', 'IdUsuario', 'IdPaquete', 'Paquete', 'Descripción Paquete', 'Cantidad Paquete', 'Subtotal Paquete', 'Potencial Total', 'Tipo de Cambio del día', 'OCCliente', '% Margen Sin Descuento'], axis=1, inplace=True)
-        # NOTE SELECCIONAMOS LAS COLUMNAS CON LAS CUALES TRABAJAR
         df_nuevo = df[df.columns[0:93]].copy()
 
         df_nuevo.insert(0,"Concesionario","KW SUR", allow_duplicates=False)
@@ -78,5 +71,4 @@ class RefaccionesKWESTEKREI(Variables):
         columnas_bol=df_nuevo.select_dtypes(include=bool).columns.tolist()
         df_nuevo[columnas_bol] = df_nuevo[columnas_bol].astype(str)
 
-        # COMMENT: COMPROBACION DEL NOMBRE DEL DOCUMENTO PARA GUARDARLO
         self.variables.guardar_datos_dataframe(self.nombre_doc, df_nuevo, self.concesionario)

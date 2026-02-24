@@ -1,3 +1,7 @@
+"""
+DESARROLLADOR
+LUIS A. PEREZ
+"""
 import sys
 from Reports_Logic.globalModulesShare.resources import *
 from PyQt6.QtCore import *
@@ -37,7 +41,6 @@ class rutas(QMainWindow):
             1, QHeaderView.ResizeMode.Stretch
         )
 
-        # self.actualizar_tabla()
         self.ui.tabla_rutas.itemClicked.connect(self.clic_celda)
 
         self.eliminar = self.ui.rb_rb_eliminar
@@ -87,18 +90,15 @@ class rutas(QMainWindow):
         fila = item.row()
         columna = item.column()
         
-        # Obtener el nombre y la ruta de la fila seleccionada
-        nombre = self.ui.tabla_rutas.item(fila, 0).text()  # Columna 0 para el nombre
-        ruta = self.ui.tabla_rutas.item(fila, 1).text()   # Columna 1 para la ruta
+        nombre = self.ui.tabla_rutas.item(fila, 0).text()
+        ruta = self.ui.tabla_rutas.item(fila, 1).text()
         
-        # Buscar el ID correspondiente al nombre y la ruta
         id_objeto = None
         for objeto in self.json.comprobar_existencia:
             if objeto["nombre"] == nombre and objeto["path"] == ruta:
                 id_objeto = objeto["id"]
                 break
 
-        # Verificar si se encontró el ID
         if id_objeto is not None:
             self.ui.labelId.setText(id_objeto)
         else:
@@ -112,7 +112,6 @@ class rutas(QMainWindow):
                 ]
             )
         
-        # Actualizar los campos de texto con el nombre y la ruta
         self.ui.txt_nombre.setText(nombre.split(".")[0])
         self.ui.txt_ruta.setText(ruta)
 
