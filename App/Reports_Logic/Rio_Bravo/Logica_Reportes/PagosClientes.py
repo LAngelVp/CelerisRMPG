@@ -197,31 +197,33 @@ class PagosClientes(Variables):
         self.variables.guardar_datos_dataframe(self.nombre_doc, data, self.concesionario)
 
     def fila_objetivo(self, dataframe_completo):
-        for i in dataframe_completo.columns:
-            nombre_columna = i
-            if (dataframe_completo[nombre_columna].dtypes == "object") and (nombre_columna == "Usuario_Aplicó"):
-                self.objetivos[nombre_columna] = ['DANIA VARGAS ROSAS']
-
-            elif (dataframe_completo[nombre_columna].dtypes == "object") and (nombre_columna == "CLASS_SUCURSAL"):
-                self.objetivos[nombre_columna] = ['Objetivo KWRB']
-
-            elif (dataframe_completo[nombre_columna].dtypes == "object") and (nombre_columna == "Departamento"):
-                self.objetivos[nombre_columna] = ['KWRB']
-
-            elif (dataframe_completo[nombre_columna].dtypes == "int64"):
-                self.objetivos[nombre_columna] = ['0']
-
-            elif (dataframe_completo[nombre_columna].dtypes == "float64"):
-                self.objetivos[nombre_columna] = ['0.0']
-
-            elif (nombre_columna == "Mes"):
-                self.objetivos[nombre_columna] = self.variables.nombre_mes()
-
-            elif (nombre_columna == "Fecha_Pago") or (nombre_columna == "Fecha_Movimiento"):
-                self.objetivos[nombre_columna] = [self.variables.date_movement_config_document()]
-
+        # 1. Creamos un diccionario con todas las columnas en blanco/0 por defecto
+        nueva_fila = {}
+        
+        for col in dataframe_completo.columns:
+            # Buscamos el tipo de dato original
+            dtype = dataframe_completo[col].dtype
+            
+            # Asignación de valores según tus reglas
+            if col == "Usuario_Aplicó":
+                nueva_fila[col] = 'DANIA VARGAS ROSAS'
+            elif col == "CLASS_SUCURSAL":
+                nueva_fila[col] = 'Objetivo KWRB'
+            elif col == "Departamento":
+                nueva_fila[col] = 'KWRB'
+            elif col == "Mes":
+                nueva_fila[col] = self.variables.nombre_mes()
+            elif col in ["Fecha_Pago", "Fecha_Movimiento"]:
+                nueva_fila[col] = self.variables.date_movement_config_document()
+            elif pd.api.types.is_numeric_dtype(dtype):
+                nueva_fila[col] = 0
             else:
-                self.objetivos[nombre_columna] = ['']
+                nueva_fila[col] = ''
 
-        DataFrameConObjetivo = pd.concat([dataframe_completo, self.objetivos], join="inner")
+        # 2. Convertimos el diccionario a un DataFrame de una sola fila
+        fila_df = pd.DataFrame([nueva_fila])
+
+        # 3. Concatenamos. Usamos ignore_index=True para que no haya conflicto de índices
+        DataFrameConObjetivo = pd.concat([dataframe_completo, fila_df], ignore_index=True)
+        
         return DataFrameConObjetivo
