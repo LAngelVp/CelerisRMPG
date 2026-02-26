@@ -17,7 +17,7 @@ from .ContenedorVariables import Variables
 from .kuchotsa import Ndachotsa
 import tkinter as tk
 from tkinter import ttk, messagebox
-from PyQt6.QtWidgets import QApplication, QProgressDialog, QMessageBox
+from PyQt6.QtWidgets import QApplication, QProgressDialog, QMessageBox, QStyle
 from PyQt6.QtCore import Qt
 
 class VersionCheckController:
