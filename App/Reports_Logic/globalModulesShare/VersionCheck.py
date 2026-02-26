@@ -200,6 +200,9 @@ class VersionCheckController:
         
         self.progress_dialog = QProgressDialog(mensaje, "Cancelar", 0, max_progress, None)
         self.progress_dialog.setWindowTitle(titulo)
+        icono = app.style().standardIcon(QStyle.StandardPixmap.SP_BrowserReload)
+        self.progress_dialog.setWindowIcon(icono)
+        self.progress_dialog.setMinimumWidth(500)
         self.progress_dialog.setWindowModality(Qt.WindowModality.ApplicationModal)
         self.progress_dialog.setCancelButton(None)
         self.progress_dialog.setMinimumDuration(0)
