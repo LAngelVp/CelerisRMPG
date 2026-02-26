@@ -131,4 +131,44 @@ class ServioDetallado(Variables):
             return "MO Taller Movil"
         elif departamento_detalle == "TALLER DE SERVICIO" and departamento_venta == "Servicio":
             return "MO Servicio"
-        
+
+class VentasServicioKWRB:
+    def __init__(self):
+        super().__init__()
+        self.concesionario = Concesionarios().concesionarioRioBravo
+
+        self.variables = Variables()
+        self.nombre_doc = 'VSR.xlsx'
+        path = os.path.join(self.variables.ruta_Trabajos_kwrb, self.nombre_doc)
+        df = pd.read_excel(path, sheet_name='Hoja2')
+        df = df.replace(to_replace=';', value='-', regex=True)
+        df = df.astype(object).fillna("")
+
+        df.insert(
+            loc=5,
+            column='Fecha Hoy',
+            value=self.variables.date_movement_config_document(),
+            allow_duplicates=False
+        )
+
+        # df["Número Orden"].fillna("", inplace=True)
+        self.numero_orden = 'OS-' + df["Número Orden"].astype(str).str.split(".").str[0]
+
+        # df["Unidad"].fillna("", inplace=True)
+        self.unidad = 'UN-' + df["Unidad"].astype(str)
+
+        df['Número Orden'] = self.numero_orden
+        df["Unidad"] = self.unidad
+
+        for column_name in df.columns:
+                if "fecha" in column_name.lower():
+                    df = self.variables.global_date_format_america(df, column_name)
+                    df = self.variables.global_date_format_dmy_mexican(df, column_name)
+                else:
+                    pass
+
+        columnas_bol=df.select_dtypes(include=bool).columns.tolist()
+        df[columnas_bol] = df[columnas_bol].astype(str)
+
+        self.variables.guardar_datos_dataframe(self.nombre_doc, df, self.concesionario)
+

@@ -20,6 +20,7 @@ from .Logica_Reportes.InventarioUnidades import InventarioUnidades
 from .Logica_Reportes.Financiero import ResultadosFinancieros
 from .Logica_Reportes.Contabilidad import ContabilidadAnalisis
 from .Logica_Reportes.VentasPerdidas import VentasPerdidas
+from .Logica_Reportes.Servicio_Detallado import VentasServicioKWRB
 
 class KenworthConnect():
     def SalidasEnVale(self):
@@ -70,3 +71,5 @@ class KenworthConnect():
         VentasPerdidas().venta_perdida_trp_nuevo_laredo()
     def VentasPerdidasTrpAcuña(self):
         VentasPerdidas().venta_perdida_trp_acuña()
+    def VentasServicio(self):
+        VentasServicioKWRB()

@@ -398,6 +398,7 @@ class trabajohilo(QThread):
             "VPTRPR.xls" : KenworthConnect().VentasPerdidasTrpReynosa,
             "VPTRPNL.xls" : KenworthConnect().VentasPerdidasTrpNuevoLaredo,
             "VPTRPA.xls" : KenworthConnect().VentasPerdidasTrpAcuña,
+            "VSR.xlsx": KenworthConnect().VentasServicio
         }
         while True:
             carpeta_de_trabajos = os.listdir(self.variables.ruta_Trabajos_kwrb)

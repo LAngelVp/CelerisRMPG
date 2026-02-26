@@ -237,7 +237,7 @@ class VentasPerdidas(Variables):
     
     def guardar_todo(self):
         if not self.df_final.empty:
-            self.variables.guardar_xls("ventasperdidas.xls", self.df_final, self.concesionario)
+            self.variables.guardar_xls("ventasperdidas", self.df_final, self.concesionario)
             print("Archivo final de ventas perdidas guardado correctamente.")
         else:
             print("No hay datos para guardar.")

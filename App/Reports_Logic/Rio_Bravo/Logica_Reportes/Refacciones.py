@@ -40,6 +40,13 @@ class Refacciones(Variables):
         df.loc[(df["Depa"] == "Mostrador"), "Area"] = "Refacc Mostrador"
         df.loc[(df["Depa"] == "Servicio"), "Area"] = "Refacc Servicio"
 
+        mask = df["Centro de Costo"].str.lower() == "requisiciones"
+        df.loc[mask, "DepartamentoDocto"] = "TALLER DE SERVICIO"
+        df.loc[mask, "Departamento Venta"] = df.loc[mask, "Departamento Venta"].str.replace("Mostrador", "Servicio")
+        df.loc[mask, "Depa"] = df.loc[mask, "Depa"].replace("Mostrador", "Servicio")
+        df.loc[mask, "Area"] = df.loc[mask, "Area"].str.replace("Mostrador", "Servicio")
+
+
         column_bill_number = df["Número Factura"].map(str) + df["Serie Factura"].map(str)
 
         df.drop(['Número Factura','Serie Factura'], axis=1, inplace=True)
