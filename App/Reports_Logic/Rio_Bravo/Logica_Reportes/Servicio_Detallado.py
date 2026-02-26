@@ -6,6 +6,7 @@ import os
 import pandas as pd
 from ...globalModulesShare.ContenedorVariables import Variables
 from ...globalModulesShare.ConcesionariosModel import Concesionarios
+
 class ServioDetallado(Variables):
     def __init__(self):
         self.concesionario = Concesionarios().concesionarioRioBravo
@@ -132,6 +133,8 @@ class ServioDetallado(Variables):
         elif departamento_detalle == "TALLER DE SERVICIO" and departamento_venta == "Servicio":
             return "MO Servicio"
 
+
+pd.set_option('display.max_columns', None)
 class VentasServicioKWRB:
     def __init__(self):
         super().__init__()
@@ -142,8 +145,8 @@ class VentasServicioKWRB:
         path = os.path.join(self.variables.ruta_Trabajos_kwrb, self.nombre_doc)
         df = pd.read_excel(path, sheet_name='Hoja2')
         df = df.replace(to_replace=';', value='-', regex=True)
-        df = df.astype(object).fillna("")
-
+        
+        print(df["Multiservice"].dtypes)
         df.insert(
             loc=5,
             column='Fecha Hoy',
@@ -166,9 +169,9 @@ class VentasServicioKWRB:
                     df = self.variables.global_date_format_dmy_mexican(df, column_name)
                 else:
                     pass
-
         columnas_bol=df.select_dtypes(include=bool).columns.tolist()
         df[columnas_bol] = df[columnas_bol].astype(str)
+        df = df.astype(object).fillna("")
 
         self.variables.guardar_datos_dataframe(self.nombre_doc, df, self.concesionario)
 
