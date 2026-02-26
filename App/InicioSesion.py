@@ -56,8 +56,8 @@ class InicioSesion(QWidget):
             os.makedirs(self.variables.help_directory, exist_ok=True)
         else:
             pass
-        # self.excepsion()
-        # self.comprobateVersion()
+        self.excepsion()
+        self.comprobateVersion()
 
     def cerrar(self):
         self.close()
