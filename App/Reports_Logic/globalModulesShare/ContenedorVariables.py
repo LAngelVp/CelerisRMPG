@@ -175,47 +175,75 @@ class Variables:
         año = valor.strftime(f'%Y').replace(".","")
         return año
     
-    def parse_date_safe(self, date_str):
-        try:
-            parsed_date = parser.parse(date_str, dayfirst=True)
-            if parsed_date:
-                date_only = parsed_date.date()
-                datetime_with_midnight = parser.parse(str(date_only))
-                return datetime_with_midnight
-            else:
-                return None
-        except (parser.ParserError, TypeError, ValueError):
-            return None
+    # def parse_date_safe(self, date_str):
+    #     try:
+    #         parsed_date = parser.parse(date_str, dayfirst=True)
+    #         if parsed_date:
+    #             date_only = parsed_date.date()
+    #             datetime_with_midnight = parser.parse(str(date_only))
+    #             return datetime_with_midnight
+    #         else:
+    #             return None
+    #     except (parser.ParserError, TypeError, ValueError):
+    #         return None
         
+    # def global_date_format_america(self, data, name_column=None):
+    #     if name_column in data.columns:
+    #         if pd.api.types.is_datetime64_any_dtype(data[name_column]):
+    #             try:
+    #                 data[name_column] = pd.to_datetime(data[name_column]).dt.date
+    #                 data[name_column] = pd.to_datetime(data[name_column], dayfirst=True)
+    #             except:
+    #                 pass
+    #         elif pd.api.types.is_object_dtype(data[name_column]):
+    #                 data[name_column] = data[name_column].astype(str)
+    #                 data[name_column] = data[name_column].apply(self.parse_date_safe)
+    #         else:
+    #             pass
+    #     return data
+    
+    # def global_date_format_mdy_america(self, data, name_column=None):
+    #     if name_column in data.columns:
+    #         if pd.api.types.is_datetime64_any_dtype(data[name_column]) or pd.api.types.is_object_dtype(data[name_column]):
+    #             data[name_column] = data[name_column].apply(lambda x: x.strftime("%m/%d/%Y") if not pd.isnull(x) else pd.NaT)
+    #         else:
+    #             pass
+    #     return data
+    
+    # def global_date_format_dmy_mexican(self, data, name_column=None):
+    #     if name_column in data.columns:
+    #         if pd.api.types.is_datetime64_any_dtype(data[name_column]) or pd.api.types.is_object_dtype(data[name_column]):
+    #             data[name_column] = data[name_column].apply(lambda x: x.strftime("%d/%m/%Y") if not pd.isnull(x) else pd.NaT)
+    #         else:
+    #             pass
+    #     return data
+
+    def parse_date_safe(self, date_str):
+    # Simplificado: to_datetime es más robusto y rápido que parser.parse manual
+        try:
+            return pd.to_datetime(date_str, dayfirst=True, errors='coerce')
+        except:
+            return None
+
     def global_date_format_america(self, data, name_column=None):
         if name_column in data.columns:
-            if pd.api.types.is_datetime64_any_dtype(data[name_column]):
-                try:
-                    data[name_column] = pd.to_datetime(data[name_column]).dt.date
-                    data[name_column] = pd.to_datetime(data[name_column], dayfirst=True)
-                except:
-                    pass
-            elif pd.api.types.is_object_dtype(data[name_column]):
-                    data[name_column] = data[name_column].astype(str)
-                    data[name_column] = data[name_column].apply(self.parse_date_safe)
-            else:
-                pass
+            # Convertimos a datetime real y normalizamos (quita horas/minutos/segundos)
+            # errors='coerce' reemplaza los errores por NaT (equivalente a tu None)
+            data[name_column] = pd.to_datetime(data[name_column], dayfirst=True, errors='coerce').dt.normalize()
         return data
-    
+
     def global_date_format_mdy_america(self, data, name_column=None):
         if name_column in data.columns:
-            if pd.api.types.is_datetime64_any_dtype(data[name_column]) or pd.api.types.is_object_dtype(data[name_column]):
-                data[name_column] = data[name_column].apply(lambda x: x.strftime("%m/%d/%Y") if not pd.isnull(x) else pd.NaT)
-            else:
-                pass
+            # Usamos .dt.strftime que es 10 veces más rápido que .apply(lambda...)
+            # Solo funciona si la columna es tipo datetime (por eso el paso anterior es vital)
+            if pd.api.types.is_datetime64_any_dtype(data[name_column]):
+                data[name_column] = data[name_column].dt.strftime("%m/%d/%Y")
         return data
-    
+
     def global_date_format_dmy_mexican(self, data, name_column=None):
         if name_column in data.columns:
-            if pd.api.types.is_datetime64_any_dtype(data[name_column]) or pd.api.types.is_object_dtype(data[name_column]):
-                data[name_column] = data[name_column].apply(lambda x: x.strftime("%d/%m/%Y") if not pd.isnull(x) else pd.NaT)
-            else:
-                pass
+            if pd.api.types.is_datetime64_any_dtype(data[name_column]):
+                data[name_column] = data[name_column].dt.strftime("%d/%m/%Y")
         return data
 
     def clasificacion_vendedores_departamentos_refacciones(self):

@@ -21,7 +21,7 @@ class Compras(Variables):
         df2 = df.copy()
       
         df2["Fecha_Hoy"] =  self.variables.date_movement_config_document()
-
+        
         for column_name in df2.columns:
             if "fecha" in column_name.lower():
                 df2 = self.variables.global_date_format_america(df2, column_name)

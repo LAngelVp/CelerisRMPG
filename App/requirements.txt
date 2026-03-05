@@ -12,3 +12,4 @@ selenium
 lxml
 psutil
 xlrd
+cython

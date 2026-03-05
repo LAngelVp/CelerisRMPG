@@ -134,7 +134,7 @@ class ServioDetallado(Variables):
             return "MO Servicio"
 
 
-pd.set_option('display.max_columns', None)
+
 class VentasServicioKWRB:
     def __init__(self):
         super().__init__()
@@ -146,7 +146,6 @@ class VentasServicioKWRB:
         df = pd.read_excel(path, sheet_name='Hoja2')
         df = df.replace(to_replace=';', value='-', regex=True)
         
-        print(df["Multiservice"].dtypes)
         df.insert(
             loc=5,
             column='Fecha Hoy',
@@ -154,21 +153,20 @@ class VentasServicioKWRB:
             allow_duplicates=False
         )
 
-        # df["Número Orden"].fillna("", inplace=True)
         self.numero_orden = 'OS-' + df["Número Orden"].astype(str).str.split(".").str[0]
 
-        # df["Unidad"].fillna("", inplace=True)
         self.unidad = 'UN-' + df["Unidad"].astype(str)
 
         df['Número Orden'] = self.numero_orden
         df["Unidad"] = self.unidad
-
-        for column_name in df.columns:
-                if "fecha" in column_name.lower():
-                    df = self.variables.global_date_format_america(df, column_name)
-                    df = self.variables.global_date_format_dmy_mexican(df, column_name)
-                else:
-                    pass
+        EXCLUDE_COLUMN_DATE = ["edo. docto. fecha"]
+        COLUMNS_DATE = [col for col in df.columns 
+                        if "fecha" in col.lower() and col.lower().strip() not in EXCLUDE_COLUMN_DATE
+                        ]
+        for column_name in COLUMNS_DATE:
+            df = self.variables.global_date_format_america(df, column_name)
+            df = self.variables.global_date_format_dmy_mexican(df, column_name)
+            
         columnas_bol=df.select_dtypes(include=bool).columns.tolist()
         df[columnas_bol] = df[columnas_bol].astype(str)
         df = df.astype(object).fillna("")

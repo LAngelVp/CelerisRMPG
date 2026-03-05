@@ -57,6 +57,7 @@ class OrdenesDeServicio(Variables):
         claficicacion_tipo_servicio = claficicacion_tipo_servicio.iloc[:,:ultima_columna + 1]
         Clasificacion_Venta = claficicacion_tipo_servicio["Clasificacion_Cliente"]
         claficicacion_tipo_servicio.insert(6,"Clasificacion_Venta",Clasificacion_Venta,allow_duplicates=False)
+        
 
         for column_name in claficicacion_tipo_servicio.columns:
             if "fecha" in column_name.lower():
@@ -72,6 +73,7 @@ class OrdenesDeServicio(Variables):
         claficicacion_tipo_servicio['Total OS Pde Fact'] = claficicacion_tipo_servicio['Total OS Pde Fact'].astype(float).fillna(0)
 
         claficicacion_tipo_servicio.columns = claficicacion_tipo_servicio.columns.str.replace('_', ' ')
+        claficicacion_tipo_servicio["Cantidad_Trabajos"] = 1
 
         for column_name in claficicacion_tipo_servicio.columns:
             if "fecha" in column_name.lower():

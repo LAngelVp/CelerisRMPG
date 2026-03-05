@@ -63,6 +63,9 @@ class InventarioCosteado(Variables):
         columnas_bol=df_inventarioCosteadoxDia.select_dtypes(include=bool).columns.tolist()
         df_inventarioCosteadoxDia[columnas_bol] = df_inventarioCosteadoxDia[columnas_bol].astype(str)
 
+        columnas_bol=df_inventarioCosteado.select_dtypes(include=bool).columns.tolist()
+        df_inventarioCosteado[columnas_bol] = df_inventarioCosteado[columnas_bol].astype(str)
+
         for column_name in df_inventarioCosteado.columns:
             if "fecha entrada" in column_name.lower():
                 df_inventarioCosteado = self.variables.global_date_format_mdy_america(df_inventarioCosteado, column_name)

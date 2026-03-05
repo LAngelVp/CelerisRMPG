@@ -22,6 +22,10 @@ class Refacciones(Variables):
         df = df.replace(to_replace=';', value='-', regex=True)
         df.drop(['% Margen', 'Meta Ventas Por Vendedor', 'Meta Margen Por Vendedor', 'Meta Cantidad Por Vendedor', 'Meta Ventas Por Sucursal', 'Meta Margen Por Sucursal', 'Meta Cantidad Por Sucursal', '% Comisión Por Margen', '% Comisión Por Ventas', 'Comisión Por Margen', 'Comisión Por Ventas', 'EsBonificacion', 'IdUsuario', 'IdPaquete', 'Paquete', 'Descripción Paquete', 'Cantidad Paquete', 'Subtotal Paquete', 'Potencial Total', 'Tipo de Cambio del día', 'OCCliente', '% Margen Sin Descuento'], axis=1, inplace=True)
         df= df[df.columns[0:93]].copy()
+        EXCLUDE_COLUMN_DATE = ["estado factura fecha"]
+        COLUMNS_DATE = [col for col in df.columns 
+                        if "fecha" in col.lower() and col.lower().strip() not in EXCLUDE_COLUMN_DATE
+                        ]
 
         df["Departamento Venta"] = ""
         df["Depa"] = ""
@@ -33,12 +37,9 @@ class Refacciones(Variables):
             axis=1,
         )
 
-        for column_name in df.columns:
-            if "fecha" in column_name.lower():
-                df = self.variables.global_date_format_america(df, column_name)
-                df = self.variables.global_date_format_dmy_mexican(df, column_name)
-            else:
-                pass
+        for column_name in COLUMNS_DATE:
+            df = self.variables.global_date_format_america(df, column_name)
+            df = self.variables.global_date_format_dmy_mexican(df, column_name)
         
         columnas_bol=df.select_dtypes(include=bool).columns.tolist()
         df[columnas_bol] = df[columnas_bol].astype(str)

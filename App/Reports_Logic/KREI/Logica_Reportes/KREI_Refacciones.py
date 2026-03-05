@@ -26,12 +26,15 @@ class RefaccionesKWESTEKREI(Variables):
         df_nuevo = df[df.columns[0:93]].copy()
 
         df_nuevo.insert(0,"Concesionario","KW ESTE", allow_duplicates=False)
-        for column_name in df_nuevo.columns:
-                if "fecha" in column_name.lower():
-                    df_nuevo = self.variables.global_date_format_america(df_nuevo, column_name)
-                    df_nuevo = self.variables.global_date_format_dmy_mexican(df_nuevo, column_name)
-                else:
-                    pass
+        EXCLUDE_COLUMN_DATE = ["estado factura fecha"]
+        COLUMNS_DATE = [col for col in df_nuevo.columns 
+                        if "fecha" in col.lower() and col.lower().strip() not in EXCLUDE_COLUMN_DATE
+                        ]
+        print(COLUMNS_DATE)
+        for column_name in COLUMNS_DATE:
+            df_nuevo = self.variables.global_date_format_america(df_nuevo, column_name)
+            df_nuevo = self.variables.global_date_format_dmy_mexican(df_nuevo, column_name)
+
         if self.dolares is not None:
             df_nuevo = df_nuevo.merge(self.dolares, on='Fecha', how='left')
             df_nuevo["Subtotal Dolares"] = np.divide(df_nuevo['Subtotal'], df_nuevo['Valor'])
@@ -56,12 +59,14 @@ class RefaccionesKWESTEKREI(Variables):
 
         df_nuevo.insert(0,"Concesionario","KW SUR", allow_duplicates=False)
 
-        for column_name in df_nuevo.columns:
-                if "fecha" in column_name.lower():
-                    df_nuevo = self.variables.global_date_format_america(df_nuevo, column_name)
-                    df_nuevo = self.variables.global_date_format_dmy_mexican(df_nuevo, column_name)
-                else:
-                    pass
+        EXCLUDE_COLUMN_DATE = ["estado factura fecha"]
+        COLUMNS_DATE = [col for col in df_nuevo.columns 
+                        if "fecha" in col.lower() and col.lower().strip() not in EXCLUDE_COLUMN_DATE
+                        ]
+        for column_name in COLUMNS_DATE:
+            df_nuevo = self.variables.global_date_format_america(df_nuevo, column_name)
+            df_nuevo = self.variables.global_date_format_dmy_mexican(df_nuevo, column_name)
+
         if self.dolares is not None:
             df_nuevo = df_nuevo.merge(self.dolares, on='Fecha', how='left')
             df_nuevo["Subtotal Dolares"] = np.divide(df_nuevo['Subtotal'], df_nuevo['Valor'])

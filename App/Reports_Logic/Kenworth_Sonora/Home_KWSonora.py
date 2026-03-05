@@ -370,7 +370,7 @@ class Home_KenworthSonora(QMainWindow):
 
 class trabajohilo(QThread):
     signal = pyqtSignal()
-    signalDocumentosErroneos = pyqtSignal(str)
+    signalDocumentosErroneos = pyqtSignal(str, str)
     signalShowTrabajos = pyqtSignal()
     signalShowProcesados = pyqtSignal()
     signalNombreArchivo =  pyqtSignal(str)

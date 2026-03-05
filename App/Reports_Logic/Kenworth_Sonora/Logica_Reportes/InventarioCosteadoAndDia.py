@@ -41,14 +41,10 @@ class InventarioCosteado(Variables):
                 pass
         
         df2["ClasDias"] = df2["Antigüedad"].apply(lambda x:self.ClasDias(x))
-        for column_name in df2.columns:
-            if "fecha entrada" in column_name.lower():
-                df2 = self.variables.global_date_format_mdy_america(df2, column_name)
-            elif "fecha" in column_name.lower():
-                df2 = self.variables.global_date_format_dmy_mexican(df2, column_name)
+        
         df2.drop(["Fecha_Hoy"], axis=1, inplace=True)
         df_inventarioCosteado = df2.copy()
-        self.variables.guardar_datos_dataframe(self.nombre_doc, df_inventarioCosteado, self.concesionario)
+        
 
         df_inventarioCosteadoxDia = df2.copy()
         df_inventarioCosteadoxDia= self.variables.global_date_format_america(df_inventarioCosteadoxDia, "Fecha Entrada")
@@ -63,10 +59,24 @@ class InventarioCosteado(Variables):
 
         df_inventarioCosteadoxDia["Mes"] = self.variables.nombre_mes_actual_abreviado()
 
-        df_inventarioCosteadoxDia= self.variables.global_date_format_america(df_inventarioCosteadoxDia, "Fecha_Dias")
+        columnas_bol=df_inventarioCosteadoxDia.select_dtypes(include=bool).columns.tolist()
+        df_inventarioCosteadoxDia[columnas_bol] = df_inventarioCosteadoxDia[columnas_bol].astype(str)
 
-        df_inventarioCosteadoxDia= self.variables.global_date_format_dmy_mexican(df_inventarioCosteadoxDia, "Fecha_Dias")
+        columnas_bol=df_inventarioCosteado.select_dtypes(include=bool).columns.tolist()
+        df_inventarioCosteado[columnas_bol] = df_inventarioCosteado[columnas_bol].astype(str)
 
+        for column_name in df_inventarioCosteado.columns:
+            if "fecha entrada" in column_name.lower():
+                df_inventarioCosteado = self.variables.global_date_format_mdy_america(df_inventarioCosteado, column_name)
+            elif "fecha" in column_name.lower():
+                df_inventarioCosteado = self.variables.global_date_format_dmy_mexican(df_inventarioCosteado, column_name)
+        
+        for column_name in df_inventarioCosteadoxDia.columns:
+            if "fecha" in column_name.lower():
+                df_inventarioCosteadoxDia = self.variables.global_date_format_dmy_mexican(df_inventarioCosteadoxDia, column_name)
+
+        self.variables.guardar_datos_dataframe(self.nombre_doc, df_inventarioCosteado, self.concesionario)
+        
         self.variables.guardar_datos_dataframe(self.nombre_doc2, df_inventarioCosteadoxDia, self.concesionario)
 
     def ClasDias(self, valor):

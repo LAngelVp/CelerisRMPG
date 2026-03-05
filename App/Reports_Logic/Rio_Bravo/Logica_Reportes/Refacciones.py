@@ -25,13 +25,13 @@ class Refacciones(Variables):
         df = dfa[dfa.columns[0:93]].copy()
         df = pd.concat([df, dfa['ECommerce']], axis=1)
 
-        
-        for column_name in df.columns:
-                if "fecha" in column_name.lower():
-                    df = self.variables.global_date_format_america(df, column_name)
-                    df = self.variables.global_date_format_dmy_mexican(df, column_name)
-                else:
-                    pass
+        EXCLUDE_COLUMN_DATE = ["estado factura fecha"]
+        COLUMNS_DATE = [col for col in df.columns 
+                        if "fecha" in col.lower() and col.lower().strip() not in EXCLUDE_COLUMN_DATE
+                        ]
+        for column_name in COLUMNS_DATE:
+            df = self.variables.global_date_format_america(df, column_name)
+            df = self.variables.global_date_format_dmy_mexican(df, column_name)
         
         df["Departamento Venta"], df["Depa"] = zip(*df.apply(lambda fila: self.Clasificacion_departamentos_refacciones(fila["Sucursal"], fila["DepartamentoDocto"]), axis=1))
 
