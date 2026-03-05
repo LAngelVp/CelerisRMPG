@@ -8,6 +8,7 @@ from .Logica_Reportes.KREI_InventarioKW import *
 from .Logica_Reportes.KREI_Refacciones import *
 from .Logica_Reportes.KREI_ServicioDetallado import *
 from .Logica_Reportes.KREI_ResultadosFinancieros import *
+from .Logica_Reportes.KREI_Compras import *
 
 class KenworthConnect():
     def OrdenesServicioKREIKWESTE(self):
@@ -45,3 +46,6 @@ class KenworthConnect():
         
     def ResultadosFinancierosSurKREI(self):
         ResultadosFinancierosKREI().ReporteFinancieroKWSUR_KREI()
+    
+    def ComprasDetalladoSurKREI(self):
+        ComprasKREI().ComprasSur()

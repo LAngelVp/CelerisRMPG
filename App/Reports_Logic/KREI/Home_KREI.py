@@ -376,7 +376,8 @@ class trabajohilo(QThread):
             "SDEKREI.xlsx" : KenworthConnect().ServicioDetalladoKREIKWESTE,
             "SDSKREI.xlsx" : KenworthConnect().ServicioDetalladoKREIKWSUR,
             "RFEKREI.xlsx" : KenworthConnect().ResultadosFinancierosEsteKREI,
-            "RFSKREI.xlsx" : KenworthConnect().ResultadosFinancierosSurKREI
+            "RFSKREI.xlsx" : KenworthConnect().ResultadosFinancierosSurKREI,
+            "CDSKREI.xlsx" : KenworthConnect().ComprasDetalladoSurKREI
 
         }
         while True:
