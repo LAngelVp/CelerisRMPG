@@ -46,7 +46,7 @@ class InicioSesion(QWidget):
         self.ui.w_login.setGraphicsEffect(QGraphicsDropShadowEffect(blurRadius=45, xOffset=0, yOffset=0))
         self.__User__ = os.getenv('USERNAME')
         self.__Password__ = os.getenv('APP_PASSWORD')
-        self.ui.btn_aceptar_ingreso.clicked.connect(self.Ingresar)
+        self.ui.btn_aceptar_ingreso.clicked.connect(self.ingresar)
         self.ui.btn_manejoventana_2.clicked.connect(self.cerrar)
         self.ui.btn_manejoventana.clicked.connect(self.minimizar)
         self.ui.txt_usuario.setStyleSheet("color:#000000;")
@@ -56,13 +56,13 @@ class InicioSesion(QWidget):
             os.makedirs(self.variables.help_directory, exist_ok=True)
         else:
             pass
-        # self.excepsion()
-        # self.comprobateVersion()
+        self.excepsion()
+        self.comprobateVersion()
 
-    def cerrar(self):
+    def cerrar(self, checked=False):
         self.close()
 
-    def minimizar(self):
+    def minimizar(self, checked=False):
         self.showMinimized()
 
     def Aceptar_callback(self):
@@ -78,7 +78,7 @@ class InicioSesion(QWidget):
                 new_pos = event.globalPosition() - self.drag_start_position
                 self.move(new_pos.toPoint())
         
-    def Ingresar(self):
+    def ingresar(self, checked=False):
         user = self.ui.txt_usuario.text()
         password = self.ui.txt_usuarioPassword.text()
         if all((user, password)):

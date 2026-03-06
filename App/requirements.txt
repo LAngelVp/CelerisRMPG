@@ -12,4 +12,6 @@ selenium
 lxml
 psutil
 xlrd
-cython
+nuitka
+tkinter
+zstandard
