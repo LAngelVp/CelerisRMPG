@@ -165,6 +165,24 @@ class PagosClientes(Variables):
             "CLASS_SUCURSAL",
         ] = "06 CONTADO"
 
+        d.loc[
+            (credito)
+            & (d["Id_Cliente_Pago"].isin([1580])),
+            "CLASS_SUCURSAL",
+        ] = "05 CLIENTE ESPECIAL"
+
+        d.loc[
+            (credito)
+            & (d["Id_Cliente_Pago"].isin([1357])),
+            "CLASS_SUCURSAL",
+        ] = "01 NUEVO LAREDO"
+
+        d.loc[
+            (credito)
+            & (d["Usuario_Aplicó"].isin(["MERCEDES DEL MILAGRO PEREZ PER"])),
+            "CLASS_SUCURSAL",
+        ] = "04 PIEDRAS NEGRAS"
+
         data = self.fila_objetivo(d)
 
         for column_name in data.columns:

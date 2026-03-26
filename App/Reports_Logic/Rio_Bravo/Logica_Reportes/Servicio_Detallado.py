@@ -145,6 +145,7 @@ class VentasServicioKWRB:
         path = os.path.join(self.variables.ruta_Trabajos_kwrb, self.nombre_doc)
         df = pd.read_excel(path, sheet_name='Hoja2')
         df = df.replace(to_replace=';', value='-', regex=True)
+        tipo_servicio_taller_movil = ["TM", "Taller Movil"]
         
         df.insert(
             loc=5,
@@ -153,7 +154,7 @@ class VentasServicioKWRB:
             allow_duplicates=False
         )
 
-        self.numero_orden = 'OS-' + df["Número Orden"].astype(str).str.split(".").str[0]
+        self.numero_orden = 'OS' + df["Número Orden"].astype(str).str.split(".").str[0]
 
         self.unidad = 'UN-' + df["Unidad"].astype(str)
 
@@ -163,6 +164,21 @@ class VentasServicioKWRB:
         COLUMNS_DATE = [col for col in df.columns 
                         if "fecha" in col.lower() and col.lower().strip() not in EXCLUDE_COLUMN_DATE
                         ]
+
+        df["Departamento Venta"] = "Servicio"
+        df["Departamento"] = ""
+        df["Departamento"] = df.apply(lambda fila: self.clasificacion_servicio(fila["Sucursal"]), axis=1)
+        pattern = "|".join(tipo_servicio_taller_movil)
+        df[["Departamento Venta", "Departamento"]] = df.apply(
+            lambda fila: (
+                self.clasificacion_taller_movil(fila["Sucursal"]) 
+                if pd.Series(str(fila["Tipo Servicio"])).str.contains(pattern, case=False, regex=True).any()
+                else [fila["Departamento Venta"], fila["Departamento"]]
+            ),
+            axis=1,
+            result_type="expand"
+        )
+
         for column_name in COLUMNS_DATE:
             df = self.variables.global_date_format_america(df, column_name)
             df = self.variables.global_date_format_dmy_mexican(df, column_name)
@@ -173,3 +189,29 @@ class VentasServicioKWRB:
 
         self.variables.guardar_datos_dataframe(self.nombre_doc, df, self.concesionario)
 
+    def clasificacion_servicio(self, sucursal = None):
+        if sucursal == "MATAMOROS":
+            return "Servicio Matamoros"
+        elif sucursal == "NUEVO LAREDO (AEROPUERTO)":
+            return "Servicio NL Matriz"
+        elif sucursal == "NUEVO LAREDO (MATRIZ)":
+            return "Servicio NL Matriz"
+        elif sucursal == "PIEDRAS NEGRAS":
+            return "Servicio Piedras Negras"
+        elif sucursal == "POZA RICA":
+            return "Servicio Poza Rica"
+        elif sucursal == "REYNOSA":
+            return "Servicio Reynosa"
+        return ""
+
+    def clasificacion_taller_movil(self, sucursal):
+        if sucursal == "NUEVO LAREDO (AEROPUERTO)":
+            return "Taller Movil", "TM NL Aereopuerto"
+        if sucursal == "NUEVO LAREDO (MATRIZ)":
+            return "Taller Movil", "TM NL Matriz"
+        if sucursal == "MATAMOROS":
+            return "Taller Movil", "TM Matamoros"
+        if sucursal == "PIEDRAS NEGRAS":
+            return "Taller Movil", "TM Piedras Negras"
+        if sucursal == "REYNOSA":
+            return "Taller Movil", "TM Reynosa"

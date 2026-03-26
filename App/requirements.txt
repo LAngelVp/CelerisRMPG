@@ -13,5 +13,5 @@ lxml
 psutil
 xlrd
 nuitka
-tkinter
+# tkinter
 zstandard
