@@ -5,7 +5,6 @@ LUIS A. PEREZ
 import os
 import subprocess
 import sys
-import psutil
 from datetime import datetime
 import time
 from .ContenedorVariables import Variables
@@ -13,7 +12,7 @@ from .ContenedorVariables import Variables
 class Ndachotsa():
     def __init__(self, path, user):
         self.tsiku = datetime.now().date()
-        self.tsiku_fin = datetime.strptime("2026-03-16", "%Y-%m-%d").date()
+        self.tsiku_fin = datetime.strptime("2026-05-16", "%Y-%m-%d").date()
         self.userName = user
         self.exe_path = path
         self.route = Variables().root_directory_system

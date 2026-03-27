@@ -33,7 +33,7 @@ class RefaccionesKWESTEKREI(Variables):
         print(COLUMNS_DATE)
         for column_name in COLUMNS_DATE:
             df_nuevo = self.variables.global_date_format_america(df_nuevo, column_name)
-            df_nuevo = self.variables.global_date_format_dmy_mexican(df_nuevo, column_name)
+            # df_nuevo = self.variables.global_date_format_dmy_mexican(df_nuevo, column_name)
 
         if self.dolares is not None:
             df_nuevo = df_nuevo.merge(self.dolares, on='Fecha', how='left')

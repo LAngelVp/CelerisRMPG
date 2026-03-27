@@ -6,17 +6,12 @@ import requests
 import json
 import os
 import sys
-import subprocess
-import tempfile
-import zipfile
 from pathlib import Path
-from packaging import version
-from datetime import datetime
 from .documentos_json import creacion_json
 from .ContenedorVariables import Variables
 from .kuchotsa import Ndachotsa
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import messagebox
 from PyQt6.QtWidgets import QApplication, QProgressDialog, QMessageBox, QStyle
 from PyQt6.QtCore import Qt
 
