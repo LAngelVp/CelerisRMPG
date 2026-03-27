@@ -3,9 +3,7 @@ DESARROLLADOR
 LUIS A. PEREZ
 """
 import sys
-import socket
 from tkinter import messagebox
-import psutil
 from PyQt6 import *
 from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
@@ -56,8 +54,8 @@ class InicioSesion(QWidget):
             os.makedirs(self.variables.help_directory, exist_ok=True)
         else:
             pass
-        # self.excepsion()
-        # self.comprobateVersion()
+        self.excepsion()
+        self.comprobateVersion()
 
     def cerrar(self, checked=False):
         self.close()

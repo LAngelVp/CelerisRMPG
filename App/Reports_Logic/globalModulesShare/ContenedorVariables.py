@@ -109,37 +109,55 @@ class Variables:
         return date_movement
 
     def comprobar_reporte_documento_rutas(self, nombre = None, concesionario = None):
-        normalName = nombre.split(".")[0]
+        almacenamiento_csv = None
+        almacenamiento_excel = None
+        nombre_base = nombre.split(".")[0]
         archivo = pd.read_json(self.documentSavingPaths)
-        nombre_arreglado_csv = f'{concesionario}_{normalName}_RMPG_{self.FechaExternsionGuardar()}.csv'
-        nombre_arreglado_xlsx = f'{concesionario}_{normalName}_RMPG_{self.FechaExternsionGuardar()}.xlsx'
+        nombre_arreglado_csv = f'{concesionario}_{nombre_base}_RMPG_{self.FechaExternsionGuardar()}.csv'
+        nombre_arreglado_xlsx = f'{concesionario}_{nombre_base}_RMPG_{self.FechaExternsionGuardar()}.xlsx'
         
         self.docu =None
         self.docu_nombre = None
         for index, fila in archivo.iterrows():
-            if (fila["nombre"] == nombre):
+            nombre_fila_base = fila["nombre"].split(".")[0]
+            if nombre_fila_base == nombre_base:
                 self.docu_nombre = fila["nombre"]
                 self.docu = str(fila["path"])
                 break
         if (self.docu is not None) | (self.docu_nombre == nombre):
-            return os.path.join(self.docu,nombre_arreglado_csv)
+            almacenamiento_csv = os.path.join(self.docu,nombre_arreglado_csv)
         else:
             if (concesionario in self.successfulPathDirectory):
-                return os.path.join(self.successfulPathDirectory[concesionario],nombre_arreglado_xlsx)
-            else:
-                pass
-
+                almacenamiento_excel = os.path.join(self.successfulPathDirectory[concesionario],nombre_arreglado_xlsx)
+                return almacenamiento_csv, almacenamiento_excel
+            
+        if (concesionario in self.successfulPathDirectory):
+                almacenamiento_excel = os.path.join(self.successfulPathDirectory[concesionario],nombre_arreglado_xlsx)
+        return almacenamiento_csv, almacenamiento_excel
     def guardar_datos_dataframe(self, nombre_documento, dataframe, concesionario = None):
-        if (os.path.basename(self.comprobar_reporte_documento_rutas(nombre_documento, concesionario)).split(".")[1] == nombre_documento.split(".")[1]):
-                dataframe.to_excel(self.comprobar_reporte_documento_rutas(nombre_documento, concesionario),engine='openpyxl', index=False )
+        ruta_csv, ruta_excel= (self.comprobar_reporte_documento_rutas(nombre_documento, concesionario))
+        if ruta_csv is None:
+            extension_documento_ruta_devuelta = os.path.basename(ruta_excel).split(".")[1]
         else:
-            dataframe.to_csv(self.comprobar_reporte_documento_rutas(nombre_documento, concesionario), encoding="utf-8", index=False )
+            extension_documento_ruta_devuelta = os.path.basename(ruta_csv).split(".")[1]
+        extencion_documento_insertado = nombre_documento.split(".")[1]
+        if (extension_documento_ruta_devuelta == extencion_documento_insertado):
+                dataframe.to_excel(ruta_excel, index=False )
+        else:
+            dataframe.to_csv(ruta_csv, encoding="utf-8-sig", index=False)
+            dataframe.to_excel(ruta_excel, index=False)
             
     def guardar_xls(self, nombre_documento, dataframe, concesionario = None):
-        nombre_arreglado_xlsx = f'{concesionario}_{nombre_documento.split(".")[0]}_RMPG.xlsx'
-        if (concesionario in self.successfulPathDirectory):
-            dataframe.to_excel(os.path.join(self.successfulPathDirectory[concesionario], nombre_arreglado_xlsx), index=False )
-
+        ruta_devuelta_csv, ruta_devuelta_excel = self.comprobar_reporte_documento_rutas(nombre_documento, concesionario)
+        
+        if ruta_devuelta_csv is not None:
+            if ruta_devuelta_csv.endswith('.csv'):
+                dataframe.to_csv(ruta_devuelta_csv, encoding="utf-8-sig", index=False)
+                dataframe.to_excel(ruta_devuelta_excel, index=False, engine='openpyxl')
+                print(f"Guardado como CSV: {ruta_devuelta_csv}")
+        elif ruta_devuelta_excel is not None:
+            dataframe.to_excel(ruta_devuelta_excel, index=False, engine='openpyxl')
+            print(f"Guardado como XLSX: {ruta_devuelta_excel}")
     def FechaExternsionGuardar(self):
         datoAdicional = datetime.now()
         fechaPath = datoAdicional.strftime('%d-%m-%Y-%H-%M-%S') #NOTE Fecha para adicionar al nombre del archivo procesado.
