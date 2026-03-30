@@ -2,4 +2,3 @@
 build/
 tests/
 dist/
-*.spec
