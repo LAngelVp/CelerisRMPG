@@ -1,6 +1,6 @@
 ![Kenworth del este](https://github.com/LAngelVp/programakw/blob/master/App/Source/LOGO_KWE.png)
 
-# **KWDataProcessRMPG73**
+# **CelerisRMPG**
 # **Automatización de reportes**
 Esta aplicación esta desarrollada con el lenguaje de programación **Python**, librerias de analisis de datos **Pandas**, libreria de desarrollo de interfaz de escritorio **PyQT5**.
 
@@ -52,7 +52,7 @@ Dentro de cada una de estas carpetas se encuentra la logica de su IU y proceso d
 ## **Comandos de soporte:**
 ~~~~~
 Ejecutable de la aplicación:
-[pyinstaller --onefile --name "KWDataProcessRMPG73" --icon="LKW.ico" --windowed "Home.py"]
+[pyinstaller --onefile --name "CelerisRMPG" --icon="LKW.ico" --windowed "Home.py"]
 ~~~~~
 ~~~
 Transformar archivo .qrc a .py, por ejemplo para las imagenes.
