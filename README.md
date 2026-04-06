@@ -1,4 +1,12 @@
 ![Kenworth del este](https://github.com/LAngelVp/programakw/blob/master/App/Source/LOGO_KWE.png)
+<div style="pointer-events: none;" align="center">
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/PyQt-41CD52?style=for-the-badge&logo=qt&logoColor=white" alt="PyQt">
+  <img src="https://img.shields.io/badge/Pandas-150458?style=for-the-badge&logo=pandas&logoColor=white" alt="Pandas">
+  <img src="https://img.shields.io/badge/Web_Scraping-FF6600?style=for-the-badge&logo=target&logoColor=white" alt="Web Scraping">
+  <img src="https://img.shields.io/badge/Excel-217346?style=for-the-badge&logo=microsoft-excel&logoColor=white" alt="Excel">
+  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" alt="Git">
+</div>
 
 # **CelerisRMPG**
 # **Automatización de reportes**
@@ -77,5 +85,4 @@ Para poder hacer una ventana con bordes redondeados, debemos de hacer lo siguien
     2.- Posteriormente a eso, debemos de darle un border-radius al widget principal que contendra todos los controles de la ventana y estipulando que la ventana principal se vea totalmente transparente con el siguiente codigo:
     self.setAttribute(Qt.WA_TranslucentBackground)
 ~~~
-![Python](https://codetorial.net/pyqt5/_images/0_pyqt_logo.png)
-![Pandas](https://www.kindpng.com/picc/m/159-1595924_python-logo-clipart-easy-pandas-python-logo-hd.png)
+
