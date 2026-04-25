@@ -63,7 +63,7 @@ class InicioSesion(QWidget):
     def minimizar(self, checked=False):
         self.showMinimized()
 
-    def Aceptar_callback(self):
+    def Aceptar_callback(self, clicked=False):
         pass
 
     def mousePressEvent(self, event):

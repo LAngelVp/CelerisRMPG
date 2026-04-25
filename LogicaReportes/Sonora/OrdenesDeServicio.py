@@ -84,4 +84,6 @@ class OrdenesDeServicio(Variables):
         columnas_bol=claficicacion_tipo_servicio.select_dtypes(include=bool).columns.tolist()
         claficicacion_tipo_servicio[columnas_bol] = claficicacion_tipo_servicio[columnas_bol].astype(str)
 
+        claficicacion_tipo_servicio['Id_Personalizado'] = claficicacion_tipo_servicio['Num Orden'] + ' - ' + claficicacion_tipo_servicio['Sucursal']
+
         self.variables.guardar_datos_dataframe(self.nombre_doc, claficicacion_tipo_servicio, self.concesionario)

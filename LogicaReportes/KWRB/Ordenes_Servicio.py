@@ -110,5 +110,6 @@ class OrdenesServicio(Variables):
         ultima_columna = df_clasificadoPorTiposervicio.columns.get_loc("Estado Orden Global")
         
         df_clasificadoPorTiposervicio = df_clasificadoPorTiposervicio.iloc[:,:ultima_columna + 1]
+        df_clasificadoPorTiposervicio['Id_Personalizado'] = df_clasificadoPorTiposervicio['Num Orden'] + ' - ' + df_clasificadoPorTiposervicio['Sucursal']
 
         self.variables.guardar_datos_dataframe(self.nombre_doc, df_clasificadoPorTiposervicio, self.concesionario)
