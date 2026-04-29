@@ -9,7 +9,7 @@ datas = [
         ]
 # KENWORTH REPORTES
 binaries = [
-    ('InicioSesion.pyd', '.'),
+    ('TW3L1RRZ.pyd', '.'),
     ('Reports_Logic/globalModulesShare/kuchotsa.pyd', '.'),
     ('Reports_Logic/globalModulesShare/VersionCheck.pyd', '.'),
     # SONORA
@@ -52,6 +52,7 @@ binaries = [
 ]
 
 hiddenimports = [
+    'Reports_Logic.globalModulesShare.R9T2FG5Y',
     'Reports_Logic.globalModulesShare.WebScraping',
     'Reports_Logic.globalModulesShare.ContenedorVariables', 
     'Reports_Logic.globalModulesShare.ConcesionariosModel',

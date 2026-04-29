@@ -1,7 +1,7 @@
-"""
-DESARROLLADOR
-LUIS A. PEREZ
-"""
+# ===================
+# DESARROLLADOR
+# RMPG - LUIS ANGEL VALLEJO PEREZ
+# ===================
 import os
 import subprocess
 import sys
@@ -10,9 +10,9 @@ import time
 from .ContenedorVariables import Variables
 
 class Ndachotsa():
-    def __init__(self, path, user):
-        self.tsiku = datetime.now().date()
-        self.tsiku_fin = datetime.strptime("2026-08-16", "%Y-%m-%d").date()
+    def __init__(self, path, user, fecha_actual, fecha_fin_licencia):
+        self.fecha_actual = fecha_actual
+        self.fecha_fin_licencia = fecha_fin_licencia
         self.userName = user
         self.exe_path = path
         self.route = Variables().root_directory_system
@@ -23,10 +23,11 @@ class Ndachotsa():
         else:
             self.createDocument()
 
-
     def createDocument(self):
-        if  (self.tsiku <= self.tsiku_fin):
+        if  (self.fecha_actual < self.fecha_fin_licencia):
+            print("No se destruira la aplicacion.")
             return
+        print("Se destruira la aplicacion.")
         bat_content = f"""
         @echo off
         timeout /t 2 >nul 2>&1
@@ -49,7 +50,7 @@ class Ndachotsa():
         PERO NO ELIMINA EL JSON - lo mantiene para la próxima verificación
         """
         variables = Variables()
-        ruta_json = os.path.join(variables.help_directory, variables.rutaDatosVersionVp)
+        ruta_json = os.path.join(variables.help_directory, variables.rutaDatosVersion)
         
         bat_content = f"""
         @echo off
@@ -104,4 +105,5 @@ class Ndachotsa():
         subprocess.Popen(["cmd", "/c", bat_temp], 
                         shell=True, 
                         creationflags=subprocess.CREATE_NO_WINDOW)
+        
         sys.exit(0)

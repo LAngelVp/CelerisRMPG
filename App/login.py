@@ -9,7 +9,7 @@ if getattr(sys, 'frozen', False):
 from PyQt6.QtWidgets import QApplication
 
 try:
-    from InicioSesion import InicioSesion 
+    from TW3L1RRZ import * 
 except ImportError as e:
     # ESTO TE MOSTRARÁ EL ERROR REAL EN LA CONSOLA
     print(f"ERROR CRÍTICO AL IMPORTAR InicioSesion: {e}")

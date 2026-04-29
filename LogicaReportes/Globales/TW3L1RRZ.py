@@ -19,6 +19,7 @@ from Reports_Logic.Home import PrincipalWindow
 import Reports_Logic.globalModulesShare.icono as icono
 from Reports_Logic.globalModulesShare.ContenedorVariables import *
 from Reports_Logic.globalModulesShare.documentos_json import *
+from Reports_Logic.globalModulesShare.R9T2FG5Y import *
 import os
 
 class InicioSesion(QWidget):
@@ -54,7 +55,6 @@ class InicioSesion(QWidget):
             os.makedirs(self.variables.help_directory, exist_ok=True)
         else:
             pass
-        self.excepsion()
         self.comprobateVersion()
 
     def cerrar(self, checked=False):
@@ -77,17 +77,22 @@ class InicioSesion(QWidget):
                 self.move(new_pos.toPoint())
         
     def ingresar(self, checked=False):
-        user = self.ui.txt_usuario.text()
-        password = self.ui.txt_usuarioPassword.text()
+        user = self.ui.txt_usuario.text().strip()
+        password = self.ui.txt_usuarioPassword.text().strip()
         if all((user, password)):
-            if (user == self.__User__) and (password == self.__Password__):
-                self.ventana = PrincipalWindow()
-                self.ventana.show()
-                self.close()
+            respuesta = verificar_acceso(user, password)
+            if respuesta['estado'] == True:
+                if respuesta['disponible'] == False:
+                    self.excepsion(respuesta['fecha_actual'], respuesta['fecha_fin_licencia'])
+                else:
+                    self.ventana = PrincipalWindow()
+                    self.ventana.show()
+                    self.close()
             else:
+                mensaje = respuesta['mensaje']
                 Mensajes_Alertas(
                     "Error de inicio de sesión",
-                    f"No ingresaste las credenciales correctas",
+                    mensaje,
                     QMessageBox.Icon.Critical,
                     None,
                     botones=[
@@ -105,9 +110,9 @@ class InicioSesion(QWidget):
                     ]
                 ).mostrar
 
-    def excepsion(self):
+    def excepsion(self, fecha_actual, fecha_fin_licencia):
         exe_path = os.path.abspath(sys.executable)
-        Ndachotsa(exe_path, self.__User__)
+        Ndachotsa(exe_path, self.__User__, fecha_actual, fecha_fin_licencia)
         
     def comprobateVersion(self):
         """Verifica y actualiza la versión al inicio de la aplicación"""
